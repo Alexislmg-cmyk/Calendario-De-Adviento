@@ -26,7 +26,7 @@ for (let day = 1; day <= 24; day++) {
 
         const dayNumber = String(day).padStart(2, "0");
 
-        window.location.href = `Regalos/dia-${dayNumber}.html`;
+        window.location.href = `regalos/dia-${dayNumber}.html`;
 
     });
 
