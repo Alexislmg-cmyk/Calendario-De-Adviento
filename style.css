@@ -1,0 +1,182 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top, #301631 0%, transparent 55%),
+        linear-gradient(160deg, #09070d, #160d20, #08070c);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 55px 20px 30px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.small-title {
+    color: #e8a9d9;
+    letter-spacing: 5px;
+    font-size: 11px;
+}
+
+.header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(45px, 9vw, 75px);
+    color: #ffc8ed;
+    margin: 15px 0;
+    text-shadow: 0 0 25px #e45bbd;
+}
+
+.dedication {
+    max-width: 550px;
+    margin: auto;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(21px, 4vw, 29px);
+    line-height: 1.5;
+    color: #f5d9ed;
+}
+
+.separator {
+    color: #e99bd8;
+    margin: 25px 0;
+    letter-spacing: 10px;
+    font-size: 22px;
+}
+
+.header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    color: #fff0fa;
+}
+
+.subtitle {
+    color: #bba7c5;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.door {
+    position: relative;
+    min-height: 145px;
+    border: 1px solid #9d5a9e;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #28172f, #130d1c);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    transition: .3s ease;
+    box-shadow: 0 0 15px #a43e8730;
+    color: white;
+}
+
+.door:hover {
+    transform: translateY(-7px);
+    border-color: #ffb4e5;
+    box-shadow: 0 0 25px #d85bbd70;
+}
+
+.door .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 43px;
+    color: #ffc1ed;
+}
+
+.door .gift {
+    font-size: 25px;
+}
+
+.door .status {
+    font-size: 10px;
+    color: #c5a6cc;
+    letter-spacing: 1px;
+}
+
+.door.locked {
+    opacity: .65;
+    cursor: pointer;
+}
+
+.door.opened {
+    background: linear-gradient(145deg, #54234f, #26152e);
+    border-color: #ffb4e5;
+}
+
+footer {
+    text-align: center;
+    margin-top: 55px;
+    color: #c8a6c9;
+    font-size: 12px;
+    line-height: 2;
+}
+
+footer span {
+    color: #ff9bdf;
+}
+
+.snow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -15px;
+    color: white;
+    opacity: .65;
+    animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+@media (max-width: 650px) {
+    .calendar {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 11px;
+    }
+
+    .door {
+        min-height: 120px;
+    }
+
+    .door .number {
+        font-size: 35px;
+    }
+}
+
+@media (max-width: 380px) {
+    .calendar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

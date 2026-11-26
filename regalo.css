@@ -1,0 +1,245 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top, #391a3c, transparent 65%),
+        linear-gradient(150deg, #09070d, #1b1022, #08070c);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.page {
+    min-height: 100vh;
+    padding: 25px 18px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back {
+    align-self: flex-start;
+    color: #e8b6df;
+    text-decoration: none;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.back:hover {
+    color: white;
+}
+
+.gift-container {
+    width: 100%;
+    max-width: 650px;
+    padding: 35px 25px;
+    text-align: center;
+    border: 1px solid #a35c9d;
+    border-radius: 22px;
+    background: #170e20d9;
+    box-shadow: 0 0 40px #c04da52b;
+    backdrop-filter: blur(10px);
+}
+
+.top-decoration {
+    color: #eaa6db;
+    letter-spacing: 12px;
+    font-size: 22px;
+}
+
+.eyebrow {
+    color: #dba5d6;
+    font-size: 10px;
+    letter-spacing: 4px;
+    margin-top: 20px;
+}
+
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 65px;
+    color: #ffc4eb;
+    text-shadow: 0 0 20px #db5cb8;
+    margin: 8px 0;
+}
+
+.gift-icon {
+    font-size: 75px;
+    margin: 15px 0;
+    filter: drop-shadow(0 0 15px #f17acb);
+    animation: float 3s ease-in-out infinite;
+}
+
+h2 {
+    font-family: 'Cormorant Garamond', serif;
+    color: #ffe1f5;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.description {
+    color: #cbb6d0;
+    font-size: 13px;
+    line-height: 1.9;
+    max-width: 430px;
+    margin: 0 auto 30px;
+}
+
+.countdown-label {
+    color: #e8a6d9;
+    letter-spacing: 3px;
+    font-size: 10px;
+    margin-bottom: 18px;
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.time-box {
+    background: linear-gradient(145deg, #402346, #21142d);
+    border: 1px solid #985b9c;
+    border-radius: 12px;
+    padding: 16px 5px;
+    box-shadow: 0 0 15px #b44a9c25;
+}
+
+.time-box span {
+    display: block;
+    color: #ffc5ed;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+}
+
+.time-box small {
+    color: #d4b3d5;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.little-message {
+    color: #d9afd7;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    margin-top: 25px;
+}
+
+.surprise {
+    margin-top: 25px;
+    animation: appear 1s ease;
+}
+
+.unlocked {
+    color: #ffb5e5;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.surprise-content {
+    color: #f0d9ee;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 23px;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.bottom-heart {
+    color: #ff9fda;
+    font-size: 28px;
+    margin-top: 25px;
+    animation: heartbeat 1.5s infinite;
+}
+
+.bottom-decoration {
+    margin-top: 40px;
+    color: #b991c0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.snow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.snowflake {
+    position: absolute;
+    top: -20px;
+    color: white;
+    opacity: .6;
+    animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media(max-width: 450px) {
+    .gift-container {
+        padding: 30px 15px;
+    }
+
+    h1 {
+        font-size: 55px;
+    }
+
+    h2 {
+        font-size: 27px;
+    }
+
+    .countdown {
+        gap: 6px;
+    }
+
+    .time-box {
+        padding: 12px 2px;
+    }
+
+    .time-box span {
+        font-size: 29px;
+    }
+
+    .time-box small {
+        font-size: 8px;
+    }
+}

@@ -1,0 +1,1166 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 10 | Nuestro árbol del amor</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at bottom,
+        #281137,
+        #050308 80%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    max-width: 500px;
+    margin: auto;
+    padding: 35px 10px;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9a6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 31px;
+    line-height: 1.4;
+    text-shadow: 0 0 20px #ff49ac;
+}
+
+.message {
+    color: #f3c8ed;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 24px;
+    line-height: 1.8;
+    margin: 25px auto;
+}
+
+/* ÁRBOL */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 15px auto;
+}
+
+.tree {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.branch {
+    fill: none;
+    stroke: url(#wood);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tree-glow {
+    opacity: .2;
+    transition: opacity 2s;
+}
+
+.scene.complete .tree-glow {
+    opacity: .85;
+}
+
+/* CAPULLOS INTERACTIVOS */
+
+.bud {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    z-index: 3;
+}
+
+.bud svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.bud-core {
+    animation: budPulse 1.8s infinite;
+    transform-origin: center;
+}
+
+.bud.opened .bud-core {
+    display: none;
+}
+
+.rose {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center;
+    transition:
+        transform .9s cubic-bezier(.2,1.5,.5,1),
+        opacity .5s;
+}
+
+.bud.opened .rose {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.bud.selected .rose {
+    filter: drop-shadow(0 0 8px white);
+}
+
+/* CONTADOR */
+
+.counter {
+    display: inline-block;
+    padding: 10px 22px;
+    border: 1px solid #a96ec5;
+    border-radius: 30px;
+    color: #e6b7ff;
+    background: #ffffff08;
+    font-size: 15px;
+}
+
+#instruction {
+    color: #ffc1e3;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+/* RAZONES */
+
+.reason-card {
+    padding: 24px 18px;
+    margin: 25px auto;
+    border: 1px solid #b16eea;
+    border-radius: 23px;
+    background: linear-gradient(
+        145deg,
+        #32173f,
+        #160c20
+    );
+    box-shadow: 0 0 25px #b16eea30;
+}
+
+.reason-card.animate {
+    animation: appear .7s ease;
+}
+
+#reasonNumber {
+    color: #d9a6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+#reasonTitle {
+    color: #ffc1e3;
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+#reasonText {
+    color: #f5d8ed;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* GOTITAS */
+
+.couple {
+    opacity: 0;
+    transform: translateY(15px);
+    transition:
+        opacity 2s,
+        transform 2s;
+}
+
+.scene.complete .couple {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.couple-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.6s infinite;
+}
+
+/* FINAL */
+
+#final {
+    margin-top: 35px;
+    animation: appear 1.5s ease;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 27px;
+    line-height: 1.6;
+    text-shadow: 0 0 20px #ff49ac;
+}
+
+.final-heart {
+    font-size: 70px;
+    color: #ff9bd5;
+    text-shadow:
+        -8px 0 25px #48baff,
+        8px 0 25px #ff49ac;
+    animation: heartbeat 1.6s infinite;
+}
+
+.back {
+    display: inline-block;
+    margin: 30px auto 0;
+    padding: 13px 25px;
+    color: #ffc6e6;
+    border: 1px solid #d680c9;
+    border-radius: 30px;
+    text-decoration: none;
+    background: #ffffff08;
+}
+
+/* PARTÍCULAS */
+
+.snowflake {
+    position: fixed;
+    top: -25px;
+    pointer-events: none;
+    animation: snow linear infinite;
+}
+
+.particle {
+    position: fixed;
+    bottom: -40px;
+    pointer-events: none;
+    z-index: 5;
+    animation: rise 6s ease-out forwards;
+}
+
+@keyframes budPulse {
+    0%, 100% {
+        transform: scale(.85);
+        opacity: .75;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 1;
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes snow {
+    to {
+        transform: translateY(115vh);
+    }
+}
+
+@keyframes rise {
+    to {
+        transform: translateY(-115vh) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">10 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Nuestro arbolito del amor 🔒</h1>
+
+        <p class="message">
+            Hay diez pequeñas razones esperando
+            florecer para ti, mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1>Diez razones por las que te elijo</h1>
+
+        <p class="message">
+            Hoy quiero que hagamos florecer
+            nuestro pequeño arbolito del amor.
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg class="tree" viewBox="0 0 360 420">
+
+                <defs>
+
+                    <linearGradient id="wood"
+                                    x1="0" y1="0"
+                                    x2="1" y2="0">
+
+                        <stop offset="0%"
+                              stop-color="#593253"/>
+
+                        <stop offset="50%"
+                              stop-color="#aa7298"/>
+
+                        <stop offset="100%"
+                              stop-color="#49233f"/>
+
+                    </linearGradient>
+
+                    <radialGradient id="ground">
+
+                        <stop offset="0%"
+                              stop-color="#bb6dff"
+                              stop-opacity=".5"/>
+
+                        <stop offset="100%"
+                              stop-color="#bb6dff"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="treeLight">
+
+                        <stop offset="0%"
+                              stop-color="#f28acb"
+                              stop-opacity=".3"/>
+
+                        <stop offset="100%"
+                              stop-color="#bd83ef"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop offset="0%"
+                              stop-color="#c1f5ff"/>
+
+                        <stop offset="40%"
+                              stop-color="#55caff"/>
+
+                        <stop offset="100%"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop offset="0%"
+                              stop-color="#ffe0f3"/>
+
+                        <stop offset="40%"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="100%"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <filter id="blueGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="5"
+                            flood-color="#38baff"/>
+
+                    </filter>
+
+                    <filter id="pinkGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="5"
+                            flood-color="#ff62be"/>
+
+                    </filter>
+
+                </defs>
+
+                <!-- RESPLANDOR DEL ÁRBOL -->
+
+                <ellipse class="tree-glow"
+                         cx="180" cy="150"
+                         rx="175" ry="155"
+                         fill="url(#treeLight)"/>
+
+                <!-- SUELO -->
+
+                <ellipse cx="180" cy="379"
+                         rx="170" ry="32"
+                         fill="url(#ground)"/>
+
+                <!-- TRONCO -->
+
+                <path class="branch"
+                      d="M180 365
+                         Q168 308 180 247
+                         Q190 188 178 120
+                         Q173 76 180 35"
+                      stroke-width="17"/>
+
+                <!-- RAMAS IZQUIERDAS -->
+
+                <path class="branch"
+                      d="M180 245 Q120 230 85 180
+                         Q65 156 35 145"
+                      stroke-width="10"/>
+
+                <path class="branch"
+                      d="M125 220 Q95 223 55 230"
+                      stroke-width="6"/>
+
+                <path class="branch"
+                      d="M180 188 Q124 160 95 110
+                         Q75 85 60 75"
+                      stroke-width="9"/>
+
+                <path class="branch"
+                      d="M116 141 Q84 137 40 110"
+                      stroke-width="5"/>
+
+                <path class="branch"
+                      d="M178 120 Q140 95 125 48"
+                      stroke-width="6"/>
+
+                <!-- RAMAS DERECHAS -->
+
+                <path class="branch"
+                      d="M180 245 Q245 230 275 180
+                         Q295 156 325 145"
+                      stroke-width="10"/>
+
+                <path class="branch"
+                      d="M235 220 Q265 223 305 230"
+                      stroke-width="6"/>
+
+                <path class="branch"
+                      d="M180 188 Q236 160 265 110
+                         Q285 85 300 75"
+                      stroke-width="9"/>
+
+                <path class="branch"
+                      d="M244 141 Q276 137 320 110"
+                      stroke-width="5"/>
+
+                <path class="branch"
+                      d="M178 120 Q220 95 235 48"
+                      stroke-width="6"/>
+
+                <!-- RAÍCES -->
+
+                <path class="branch"
+                      d="M180 350 Q155 367 125 370"
+                      stroke-width="8"/>
+
+                <path class="branch"
+                      d="M180 350 Q205 367 235 370"
+                      stroke-width="8"/>
+
+                <!-- NUESTRAS GOTITAS -->
+
+                <g class="couple">
+
+                    <!-- GOTITA AZUL -->
+
+                    <g transform="translate(143 326)">
+
+                        <ellipse cy="47"
+                                 rx="34" ry="6"
+                                 fill="#48cfff"
+                                 opacity=".3"/>
+
+                        <g fill="url(#blueDrop)"
+                           filter="url(#blueGlow)">
+
+                            <ellipse cy="18"
+                                     rx="24" ry="28"/>
+
+                            <ellipse cx="-15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="-25" cy="18"
+                                     rx="9" ry="17"/>
+
+                            <ellipse cy="-22"
+                                     rx="34" ry="34"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-38"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-10" cy="-19"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="10" cy="-19"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                    <!-- GOTITA ROSA -->
+
+                    <g transform="translate(213 326)">
+
+                        <ellipse cy="47"
+                                 rx="34" ry="6"
+                                 fill="#ff79cb"
+                                 opacity=".3"/>
+
+                        <g fill="url(#pinkDrop)"
+                           filter="url(#pinkGlow)">
+
+                            <ellipse cy="18"
+                                     rx="24" ry="28"/>
+
+                            <ellipse cx="-15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="25" cy="18"
+                                     rx="9" ry="17"/>
+
+                            <ellipse cy="-22"
+                                     rx="34" ry="34"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-38"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-10" cy="-19"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="10" cy="-19"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                    <!-- ABRAZO -->
+
+                    <path d="M160 340 Q180 358 203 339"
+                          stroke="url(#blueDrop)"
+                          stroke-width="14"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M198 350 Q180 365 157 350"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="13"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <!-- CORAZÓN -->
+
+                    <path class="couple-heart"
+                          d="M178 278
+                             C168 270 151 260 151 247
+                             C151 231 169 230 178 243
+                             C187 230 205 231 205 247
+                             C205 260 188 270 178 278Z"
+                          fill="#ff9bd5"
+                          filter="url(#pinkGlow)"/>
+
+                </g>
+
+            </svg>
+
+            <!-- LOS DIEZ CAPULLOS SE CREAN CON JS -->
+
+            <div id="buds"></div>
+
+        </div>
+
+        <p id="instruction">
+            Presiona cada capullito
+            para hacerlo florecer. 🌹
+        </p>
+
+        <div class="counter">
+            ♡ <span id="score">0</span> / 10 flores ♡
+        </div>
+
+        <!-- RAZONES -->
+
+        <div class="reason-card"
+             id="reasonCard" hidden>
+
+            <p id="reasonNumber"></p>
+
+            <h2 id="reasonTitle"></h2>
+
+            <p id="reasonText" aria-live="polite"></p>
+
+        </div>
+
+        <!-- MENSAJE FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="final-heart">♥</div>
+
+            <h2 class="highlight">
+                Mira lo bonito que floreció
+                nuestro arbolito.
+            </h2>
+
+            <p class="message">
+                Hoy te di diez razones por las que te elijo,
+                pero no significa que solamente existan diez.
+            </p>
+
+            <p class="message">
+                Cada día contigo encuentro
+                una nueva razón para hacerlo.
+            </p>
+
+            <p class="message">
+                Quiero que sigamos cuidando
+                nuestro amor, creciendo juntos
+                y haciendo florecer muchos
+                momentos bonitos.
+            </p>
+
+            <h2 class="highlight">
+                Te sigo eligiendo a ti.
+            </h2>
+
+            <p class="message">
+                Te amo, mi hermosa gotita rosa.
+            </p>
+
+            <p class="message">
+                💙 + 🩷
+            </p>
+
+            <p class="message">
+                Todavía te esperan 14 sorpresas más...
+            </p>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 10, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const buds = document.getElementById("buds");
+const score = document.getElementById("score");
+
+const reasonCard = document.getElementById("reasonCard");
+const reasonNumber = document.getElementById("reasonNumber");
+const reasonTitle = document.getElementById("reasonTitle");
+const reasonText = document.getElementById("reasonText");
+
+const instruction = document.getElementById("instruction");
+const final = document.getElementById("final");
+
+let started = false;
+let completed = false;
+
+const opened = new Set();
+
+/* LAS DIEZ RAZONES */
+
+const reasons = [
+
+    {
+        title: "Por tu forma de ser",
+        text: "Porque no necesito que seas diferente. Me encanta conocerte tal y como eres."
+    },
+
+    {
+        title: "Por tu sonrisa",
+        text: "Porque verte sonreír es una de esas pequeñas cosas que hacen más bonito mi día."
+    },
+
+    {
+        title: "Por tus abrazos",
+        text: "Porque me encanta estar entre tus bracitos y quisiera que esos momentos duraran un poquito más."
+    },
+
+    {
+        title: "Por nuestros momentos juntos",
+        text: "Porque hasta estar acostaditos sin hacer nada se convierte en un momento especial cuando estoy contigo."
+    },
+
+    {
+        title: "Por tu cariño",
+        text: "Porque valoro cada pequeño gesto con el que me demuestras lo que sientes por mí."
+    },
+
+    {
+        title: "Por lo que hemos vivido",
+        text: "Porque tenemos recuerdos que me hacen sonreír cada vez que pienso en ellos."
+    },
+
+    {
+        title: "Por lo que me inspiras",
+        text: "Porque estar contigo me inspira a crecer, aprender y esforzarme por ser una mejor persona."
+    },
+
+    {
+        title: "Por poder consentirte",
+        text: "Porque me encanta sorprenderte con tus chocolatitos, tus donitas, tus Takis y todas esas cositas que te gustan."
+    },
+
+    {
+        title: "Por lo que nos falta vivir",
+        text: "Porque todavía hay muchos lugares, aventuras y recuerdos que me encantaría compartir contigo."
+    },
+
+    {
+        title: "Porque eres tú",
+        text: "Porque eres mi princesa, mi hermosa gotita rosa, y me encanta seguir descubriendo nuevas cosas de ti."
+    }
+
+];
+
+/* COLORES DE LAS FLORES */
+
+const colors = [
+    "#ff8acb",
+    "#c18aff",
+    "#69ceff",
+    "#ffb4df",
+    "#b68aff",
+    "#80cfff",
+    "#ff79bd",
+    "#d3a0ff",
+    "#9ddfff",
+    "#ff9bd5"
+];
+
+/* POSICIONES DE LOS CAPULLOS */
+
+const positions = [
+
+    [35, 145],
+    [55, 230],
+    [60, 75],
+    [40, 110],
+    [125, 48],
+
+    [235, 48],
+    [300, 75],
+    [320, 110],
+    [325, 145],
+    [305, 230]
+
+];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createBuds();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* CREAR LOS DIEZ CAPULLOS */
+
+function createBuds() {
+
+    positions.forEach((position, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "bud";
+
+        button.style.left =
+            position[0] / 360 * 100 + "%";
+
+        button.style.top =
+            position[1] / 420 * 100 + "%";
+
+        button.setAttribute(
+            "aria-label",
+            "Hacer florecer la razón " + (index + 1)
+        );
+
+        const color = colors[index];
+
+        button.innerHTML = `
+
+            <svg viewBox="-30 -30 60 60">
+
+                <defs>
+
+                    <radialGradient id="rose${index}">
+
+                        <stop offset="0%"
+                              stop-color="white"/>
+
+                        <stop offset="45%"
+                              stop-color="${color}"/>
+
+                        <stop offset="100%"
+                              stop-color="${color}"
+                              stop-opacity=".8"/>
+
+                    </radialGradient>
+
+                </defs>
+
+                <!-- CAPULLO CERRADO -->
+
+                <g class="bud-core"
+                   style="filter:drop-shadow(0 0 7px ${color})">
+
+                    <path d="M0 15
+                             C-20 3 -13 -16 0 -19
+                             C13 -16 20 3 0 15Z"
+                          fill="${color}"
+                          stroke="#ffffff"
+                          stroke-width="1"/>
+
+                    <path d="M0 15
+                             Q-15 12 -15 3
+                             Q-3 3 0 15
+                             Q3 3 15 3
+                             Q15 12 0 15Z"
+                          fill="#759a88"/>
+
+                    <ellipse cx="-4" cy="-9"
+                             rx="3" ry="6"
+                             fill="white"
+                             opacity=".6"/>
+
+                </g>
+
+                <!-- ROSA ABIERTA -->
+
+                <g class="rose"
+                   style="filter:drop-shadow(0 0 8px ${color})">
+
+                    ${Array.from({length: 8}, (_, i) => `
+
+                        <ellipse cx="0" cy="-12"
+                                 rx="11" ry="15"
+                                 transform="rotate(${i * 45})"
+                                 fill="url(#rose${index})"
+                                 stroke="${color}"
+                                 stroke-width=".8"/>
+
+                    `).join("")}
+
+                    ${Array.from({length: 5}, (_, i) => `
+
+                        <ellipse cx="0" cy="-6"
+                                 rx="8" ry="10"
+                                 transform="rotate(${i * 72 + 20})"
+                                 fill="${color}"
+                                 stroke="#ffffff"
+                                 stroke-opacity=".5"
+                                 stroke-width=".8"/>
+
+                    `).join("")}
+
+                    <path d="M-7 0
+                             C-7 -9 9 -9 9 0
+                             C9 9 -5 9 -5 1
+                             C-5 -4 4 -4 4 1
+                             Q4 5 0 3"
+                          stroke="#ffffff"
+                          stroke-opacity=".8"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                </g>
+
+            </svg>
+
+        `;
+
+        button.querySelector(".bud-core")
+            .style.animationDelay = index * .15 + "s";
+
+        button.addEventListener("click", () => {
+
+            openFlower(index, button);
+
+        });
+
+        buds.appendChild(button);
+
+    });
+
+}
+
+/* HACER FLORECER UNA ROSA */
+
+function openFlower(index, button) {
+
+    if (Date.now() < unlockDate) return;
+
+    const isNew = !opened.has(index);
+
+    opened.add(index);
+
+    document.querySelectorAll(".bud")
+        .forEach(bud => {
+
+            bud.classList.remove("selected");
+
+        });
+
+    button.classList.add("opened", "selected");
+
+    button.setAttribute("aria-pressed", "true");
+
+    reasonNumber.textContent =
+        "RAZÓN " + (index + 1) + " DE 10";
+
+    reasonTitle.textContent = reasons[index].title;
+
+    reasonTitle.style.color = colors[index];
+
+    reasonText.textContent = reasons[index].text;
+
+    reasonCard.hidden = false;
+
+    reasonCard.classList.remove("animate");
+
+    void reasonCard.offsetWidth;
+
+    reasonCard.classList.add("animate");
+
+    score.textContent = opened.size;
+
+    if (isNew) {
+
+        createParticles(7);
+
+    }
+
+    /* ÁRBOL COMPLETAMENTE FLORECIDO */
+
+    if (opened.size === 10 && !completed) {
+
+        completed = true;
+
+        instruction.textContent =
+            "Hiciste florecer nuestro arbolito, mi amor.";
+
+        scene.classList.add("complete");
+
+        setTimeout(() => {
+
+            final.hidden = false;
+
+            createParticles(65);
+
+        }, 2200);
+
+    }
+
+}
+
+/* PÉTALOS Y CORAZONES FLOTANTES */
+
+function createParticles(amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        setTimeout(() => {
+
+            const particle = document.createElement("span");
+
+            particle.className = "particle";
+
+            particle.textContent = [
+                "❀", "✿", "♡", "♥", "✧"
+            ][Math.floor(Math.random() * 5)];
+
+            particle.style.color =
+                colors[Math.floor(Math.random() * colors.length)];
+
+            particle.style.textShadow =
+                "0 0 12px currentColor";
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+            particle.style.fontSize =
+                12 + Math.random() * 25 + "px";
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => particle.remove(), 6000);
+
+        }, i * 65);
+
+    }
+
+}
+
+/* NIEVE DE FONDO */
+
+for (let i = 0; i < 35; i++) {
+
+    const snow = document.createElement("span");
+
+    snow.className = "snowflake";
+
+    snow.textContent = "❄";
+
+    snow.style.color = "#e5c9ff";
+
+    snow.style.left =
+        Math.random() * 100 + "vw";
+
+    snow.style.fontSize =
+        5 + Math.random() * 12 + "px";
+
+    snow.style.opacity =
+        Math.random() * .6;
+
+    snow.style.animationDuration =
+        6 + Math.random() * 12 + "s";
+
+    snow.style.animationDelay =
+        -Math.random() * 18 + "s";
+
+    document.body.appendChild(snow);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

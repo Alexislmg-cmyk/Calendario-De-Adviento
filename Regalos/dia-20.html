@@ -1,0 +1,1523 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 20 | Dulces sueños</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #292039,
+        #050308 85%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    transition: background 3s;
+}
+
+body.night {
+    background: #050713;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    width: 95%;
+    max-width: 520px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #c7b3e7;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd50;
+}
+
+h2 {
+    color: #ffc1e3;
+    line-height: 1.6;
+}
+
+.message {
+    color: #f1d9ee;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* HABITACIÓN */
+
+.scene {
+    position: relative;
+    width: 100%;
+    margin: 20px auto;
+    border: 1px solid #b48dc850;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 0 30px #9d6bc330;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+#instruction {
+    min-height: 85px;
+    color: #f2cde8;
+    font-size: 19px;
+    line-height: 1.6;
+}
+
+/* GOTITAS */
+
+.pink-position {
+    transform: translate(190px, 216px);
+    transition: transform 2s ease;
+}
+
+.blue-position {
+    transform: translate(310px, 250px);
+    transition: transform 2.5s ease;
+}
+
+.scene.tucked .pink-position {
+    transform: translate(190px, 184px);
+}
+
+.scene.kissing .blue-position {
+    transform: translate(245px, 174px);
+}
+
+.scene.together .blue-position {
+    transform: translate(121px, 184px);
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.blanket {
+    transform: translateY(38px);
+    transition: transform 2s ease;
+}
+
+.scene.tucked .blanket {
+    transform: translateY(0);
+}
+
+.open-eyes,
+.closed-eyes {
+    transition: opacity 1s;
+}
+
+.closed-eyes {
+    opacity: 0;
+}
+
+.scene.dark .open-eyes {
+    opacity: 0;
+}
+
+.scene.dark .closed-eyes {
+    opacity: 1;
+}
+
+/* BESITO */
+
+.kiss {
+    opacity: 0;
+    transition: opacity .6s;
+}
+
+.scene.kissing .kiss {
+    opacity: 1;
+}
+
+.scene.together .kiss {
+    opacity: 0;
+}
+
+/* ABRACITO */
+
+.hug {
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+.scene.together .hug {
+    opacity: 1;
+}
+
+.heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 2s infinite;
+}
+
+/* LÁMPARA */
+
+.lamp-glow {
+    opacity: 1;
+    transition: opacity 2s;
+}
+
+.lamp-shade {
+    fill: #ffdda1;
+    transition: fill 2s;
+}
+
+.darkness {
+    opacity: 0;
+    transition: opacity 2s;
+    pointer-events: none;
+}
+
+.moonlight {
+    opacity: .12;
+    transition: opacity 2s;
+}
+
+.scene.dark .lamp-glow {
+    opacity: 0;
+}
+
+.scene.dark .lamp-shade {
+    fill: #76657f;
+}
+
+.scene.dark .darkness {
+    opacity: .55;
+}
+
+.scene.dark .moonlight {
+    opacity: .5;
+}
+
+.lamp-button {
+    position: absolute;
+    top: 37%;
+    left: 76%;
+    width: 22%;
+    height: 28%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lamp-button.ready {
+    animation: lampPulse 2s infinite;
+}
+
+.lamp-button:disabled {
+    cursor: default;
+}
+
+.scene.dark .lamp-button {
+    animation: none;
+}
+
+/* GATITOS */
+
+.cat {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 2.8s infinite;
+}
+
+.cat-tail {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: tail 2.5s infinite alternate;
+}
+
+.sleep-symbol {
+    opacity: 0;
+}
+
+.scene.dark .sleep-symbol {
+    animation: sleep 3.5s infinite;
+    animation-delay: var(--delay);
+}
+
+.star {
+    animation: twinkle 2.5s infinite alternate;
+}
+
+/* FINAL */
+
+#final {
+    animation: appear 3s ease both;
+}
+
+.final-heart {
+    font-size: 75px;
+    color: #ffc1e3;
+    text-shadow:
+        -10px 0 25px #48baff,
+        10px 0 25px #ff49ac;
+    animation: heartbeat 2s infinite;
+}
+
+.divider {
+    color: #d9b6ff;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+button,
+.back {
+    display: inline-block;
+    padding: 13px 25px;
+    margin: 15px auto;
+    border: 1px solid #b68ad5;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    color: #c7b3e7;
+    animation: twinkle 3s infinite alternate;
+}
+
+.floating-heart {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    color: #ffc1e3;
+    text-shadow: 0 0 12px currentColor;
+    animation: floatUp linear forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .97);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes tail {
+    from {
+        transform: rotate(-5deg);
+    }
+
+    to {
+        transform: rotate(8deg);
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: .2;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes sleep {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+}
+
+@keyframes lampPulse {
+    0%, 100% {
+        box-shadow: 0 0 5px #ffdda130;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #ffdda180;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatUp {
+    to {
+        transform: translate(var(--drift), -110vh);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .heart,
+    .cat,
+    .cat-tail,
+    .star,
+    .sparkle,
+    .final-heart,
+    .lamp-button.ready {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">20 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Dulces sueños, mi princesa 🔒</h1>
+
+        <p class="message">
+            Un regalito para acompañarte
+            antes de dormir.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Ya es hora de dormir, mi princesa
+        </h1>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 340"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+
+                    <linearGradient id="wall"
+                                    x2="0%" y2="100%">
+
+                        <stop stop-color="#342842"/>
+
+                        <stop offset="1"
+                              stop-color="#201a30"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="blanketColor"
+                                    x2="0%" y2="100%">
+
+                        <stop stop-color="#efa9d2"/>
+
+                        <stop offset="1"
+                              stop-color="#93578f"/>
+
+                    </linearGradient>
+
+                    <radialGradient id="lampLight">
+
+                        <stop stop-color="#ffdb9c"
+                              stop-opacity=".65"/>
+
+                        <stop offset="1"
+                              stop-color="#ffdb9c"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="moonLight">
+
+                        <stop stop-color="#a8caff"
+                              stop-opacity=".6"/>
+
+                        <stop offset="1"
+                              stop-color="#a8caff"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="blue"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#d2f8ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pink"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe5f4"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="love">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                    <clipPath id="windowClip">
+
+                        <rect x="28" y="25"
+                              width="126" height="112"
+                              rx="5"/>
+
+                    </clipPath>
+
+                </defs>
+
+                <!-- PARED Y PISO -->
+
+                <rect width="360" height="340"
+                      fill="url(#wall)"/>
+
+                <rect y="275" width="360" height="65"
+                      fill="#211926"/>
+
+                <path d="M0 275 H360"
+                      stroke="#70556e"
+                      stroke-width="4"/>
+
+                <!-- VENTANA -->
+
+                <rect x="28" y="25"
+                      width="126" height="112"
+                      rx="5"
+                      fill="#09132b"
+                      stroke="#77658d"
+                      stroke-width="5"/>
+
+                <g clip-path="url(#windowClip)">
+
+                    <g id="windowStars"></g>
+
+                    <circle cx="111" cy="56"
+                            r="20"
+                            fill="#fff0ca"/>
+
+                    <circle cx="119" cy="48"
+                            r="18"
+                            fill="#09132b"/>
+
+                </g>
+
+                <path d="M91 25 V137 M28 81 H154"
+                      stroke="#77658d"
+                      stroke-width="4"/>
+
+                <!-- CORTINAS -->
+
+                <path d="
+                    M22 19 Q49 75 27 146
+                    H12 V19Z
+                    M159 19 Q132 75 154 146
+                    H170 V19Z
+                "
+                fill="#805c91"/>
+
+                <path d="M12 19 H170"
+                      stroke="#c5a0bf"
+                      stroke-width="5"
+                      stroke-linecap="round"/>
+
+                <!-- CUADRO DE CORAZÓN -->
+
+                <rect x="217" y="35"
+                      width="70" height="68"
+                      rx="5"
+                      fill="#8d658b"
+                      stroke="#d2a3bf"
+                      stroke-width="3"/>
+
+                <rect x="224" y="42"
+                      width="56" height="54"
+                      rx="3"
+                      fill="#39243e"/>
+
+                <path d="
+                    M252 86
+                    C212 62 239 45 252 61
+                    C265 45 292 62 252 86Z
+                "
+                fill="url(#love)"/>
+
+                <!-- MESITA -->
+
+                <rect x="277" y="210"
+                      width="70" height="80"
+                      rx="5"
+                      fill="#74536f"/>
+
+                <rect x="283" y="217"
+                      width="58" height="26"
+                      rx="4"
+                      fill="#986e91"/>
+
+                <circle cx="312" cy="230"
+                        r="3"
+                        fill="#e9bd91"/>
+
+                <!-- LÁMPARA -->
+
+                <ellipse class="lamp-glow"
+                         cx="312" cy="172"
+                         rx="100" ry="125"
+                         fill="url(#lampLight)"/>
+
+                <path d="M312 170 V206 M296 207 H328"
+                      stroke="#d6ac84"
+                      stroke-width="5"
+                      stroke-linecap="round"/>
+
+                <path class="lamp-shade"
+                      d="M298 137 H326 L340 174 H284Z"/>
+
+                <!-- CAMITA -->
+
+                <rect x="30" y="151"
+                      width="235" height="149"
+                      rx="24"
+                      fill="#75527e"/>
+
+                <rect x="37" y="171"
+                      width="221" height="122"
+                      rx="18"
+                      fill="#d7b6d8"/>
+
+                <!-- ALMOHADAS -->
+
+                <rect x="65" y="166"
+                      width="87" height="62"
+                      rx="18"
+                      fill="#f5d8e9"/>
+
+                <rect x="153" y="166"
+                      width="87" height="62"
+                      rx="18"
+                      fill="#f5d8e9"/>
+
+                <!-- GOTITA ROSA -->
+
+                <g class="pink-position">
+
+                    <g class="breathe">
+
+                        <g fill="url(#pink)">
+
+                            <ellipse cy="28"
+                                     rx="25" ry="32"/>
+
+                            <ellipse cx="-24" cy="24"
+                                     rx="9" ry="15"/>
+
+                            <ellipse cx="24" cy="24"
+                                     rx="9" ry="15"/>
+
+                            <ellipse cy="-3"
+                                     rx="35" ry="35"/>
+
+                        </g>
+
+                        <ellipse cx="-13" cy="-19"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".5"/>
+
+                        <g class="open-eyes"
+                           fill="#161323">
+
+                            <ellipse cx="-11" cy="-1"
+                                     rx="4" ry="8"/>
+
+                            <ellipse cx="11" cy="-1"
+                                     rx="4" ry="8"/>
+
+                        </g>
+
+                        <path class="closed-eyes"
+                              d="
+                                  M-19 -1 Q-12 6 -5 -1
+                                  M5 -1 Q12 6 19 -1
+                              "
+                              stroke="#161323"
+                              stroke-width="3"
+                              stroke-linecap="round"
+                              fill="none"/>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA AZUL -->
+
+                <g class="blue-position">
+
+                    <g class="breathe">
+
+                        <g fill="url(#blue)">
+
+                            <ellipse cy="28"
+                                     rx="25" ry="32"/>
+
+                            <ellipse cx="-12" cy="54"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="12" cy="54"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="-24" cy="24"
+                                     rx="9" ry="15"/>
+
+                            <ellipse cx="24" cy="24"
+                                     rx="9" ry="15"/>
+
+                            <ellipse cy="-3"
+                                     rx="35" ry="35"/>
+
+                        </g>
+
+                        <ellipse cx="-13" cy="-19"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".5"/>
+
+                        <g class="open-eyes"
+                           fill="#161323">
+
+                            <ellipse cx="-11" cy="-1"
+                                     rx="4" ry="8"/>
+
+                            <ellipse cx="11" cy="-1"
+                                     rx="4" ry="8"/>
+
+                        </g>
+
+                        <path class="closed-eyes"
+                              d="
+                                  M-19 -1 Q-12 6 -5 -1
+                                  M5 -1 Q12 6 19 -1
+                              "
+                              stroke="#161323"
+                              stroke-width="3"
+                              stroke-linecap="round"
+                              fill="none"/>
+
+                    </g>
+
+                </g>
+
+                <!-- BESITO EN LA FRENTE -->
+
+                <g class="kiss">
+
+                    <text x="211" y="145"
+                          font-size="23"
+                          text-anchor="middle"
+                          fill="#ffb7dd">♥</text>
+
+                    <text x="190" y="164"
+                          font-size="13"
+                          text-anchor="middle">💋</text>
+
+                </g>
+
+                <!-- ABRAZO -->
+
+                <g class="hug">
+
+                    <path d="M139 207 Q157 220 181 206"
+                          fill="none"
+                          stroke="url(#blue)"
+                          stroke-width="13"
+                          stroke-linecap="round"/>
+
+                    <g transform="translate(155 132)">
+
+                        <path class="heart"
+                              d="
+                                  M0 12
+                                  C-30 -5 -15 -23 0 -10
+                                  C15 -23 30 -5 0 12Z
+                              "
+                              fill="#ffb5df"/>
+
+                    </g>
+
+                </g>
+
+                <!-- COBIJITA -->
+
+                <g class="blanket">
+
+                    <rect x="37" y="218"
+                          width="221" height="83"
+                          rx="15"
+                          fill="url(#blanketColor)"/>
+
+                    <path d="M39 229 H256"
+                          stroke="#ffd2e9"
+                          stroke-width="6"/>
+
+                    <g id="blanketHearts"></g>
+
+                </g>
+
+                <!-- LOS CINCO GATITOS -->
+
+                <g id="cats"></g>
+
+                <!-- LUZ DE LUNA -->
+
+                <ellipse class="moonlight"
+                         cx="105" cy="180"
+                         rx="160" ry="200"
+                         fill="url(#moonLight)"/>
+
+                <!-- OSCURIDAD -->
+
+                <rect class="darkness"
+                      width="360" height="340"
+                      fill="#04091e"/>
+
+                <!-- SUEÑITOS -->
+
+                <g fill="#d7c7ff">
+
+                    <text class="sleep-symbol"
+                          style="--delay:0s"
+                          x="137" y="145"
+                          font-size="15">Z</text>
+
+                    <text class="sleep-symbol"
+                          style="--delay:.8s"
+                          x="199" y="138"
+                          font-size="18">Z</text>
+
+                    <text class="sleep-symbol"
+                          style="--delay:1.5s"
+                          x="240" y="228"
+                          font-size="12">z</text>
+
+                    <text class="sleep-symbol"
+                          style="--delay:2s"
+                          x="78" y="240"
+                          font-size="12">z</text>
+
+                </g>
+
+            </svg>
+
+            <button class="lamp-button"
+                    id="lamp"
+                    aria-label="Apagar la lámpara"
+                    disabled>
+            </button>
+
+        </div>
+
+        <p id="instruction">
+            Ven, mi princesa...
+            Ya es hora de descansar.
+        </p>
+
+        <!-- DEDICATORIA FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ☾ ✧</div>
+
+            <h2>Dulces sueños, mi hermosa gotita rosa.</h2>
+
+            <p class="message">
+                Ojalá pudiera estar todas las noches
+                a tu ladito, arroparte,
+                darte un besito en la frente
+                y abrazarte hasta quedarnos dormidos.
+            </p>
+
+            <p class="message">
+                Me encanta cuando estamos acostaditos
+                juntos y siento que el tiempo
+                pasa demasiado rápido.
+            </p>
+
+            <p class="message">
+                Si pudiera, haría que esos ratitos
+                duraran un poquito más.
+            </p>
+
+            <p class="message">
+                Y mira, mi princesa...
+                Hasta Simba, Nala, Kiara, Kopa y Kion
+                ya están dormiditos con nosotros.
+            </p>
+
+            <p class="message">
+                Nuestro pequeño reino
+                también necesita descansar.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <p class="message">
+                Descansa, mi niña preciosa.
+                Espero que tengas sueños
+                tan bonitos como tú.
+            </p>
+
+            <p class="message">
+                Y si alguna noche no puedo
+                estar abrazándote en persona,
+                puedes regresar a este regalito.
+            </p>
+
+            <h2>
+                Buenas noches, mi princesa.
+                <br>
+                Te amo.
+                <br>
+                Nos vemos mañana.
+            </h2>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ☾ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 4 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Otro besito de buenas noches ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 20, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const title = document.getElementById("title");
+const instruction = document.getElementById("instruction");
+const lamp = document.getElementById("lamp");
+const final = document.getElementById("final");
+
+let started = false;
+let sleeping = false;
+let revealed = false;
+let timers = [];
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+            startScene();
+
+        }
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* ESTRELLAS DE LA VENTANA */
+
+let stars = "";
+
+for (let i = 0; i < 45; i++) {
+
+    stars += `
+        <circle class="star"
+                cx="${random(30, 152)}"
+                cy="${random(27, 135)}"
+                r="${random(.5, 1.5)}"
+                fill="#e4e1ff"
+                style="animation-delay:${random(-3, 0)}s"/>
+    `;
+
+}
+
+document.getElementById("windowStars")
+    .innerHTML = stars;
+
+/* CORAZONCITOS DE LA COBIJA */
+
+let hearts = "";
+
+for (let row = 0; row < 2; row++) {
+
+    for (let i = 0; i < 5; i++) {
+
+        hearts += `
+            <g transform="translate(
+                ${58 + i * 44}
+                ${252 + row * 30}
+            )">
+
+                <path d="
+                    M0 8
+                    C-16 -2 -8 -13 0 -6
+                    C8 -13 16 -2 0 8Z
+                "
+                fill="#f9cbe7"
+                opacity=".6"/>
+
+            </g>
+        `;
+
+    }
+
+}
+
+document.getElementById("blanketHearts")
+    .innerHTML = hearts;
+
+/* NUESTROS GATITOS DORMIDOS */
+
+function cat(x, y, scale, color, stripe, type, delay) {
+
+    let markings = "";
+
+    if (type === "tabby") {
+
+        markings = `
+            <path d="
+                M-13 -19 L-10 -10
+                M0 -22 V-11
+                M13 -19 L10 -10
+                M-24 -4 L-16 -1
+                M24 -4 L16 -1
+                M-19 20 L-10 24
+                M-2 17 L3 25
+                M15 19 L20 26
+            "
+            fill="none"
+            stroke="${stripe}"
+            stroke-width="4"
+            stroke-linecap="round"/>
+        `;
+
+    }
+
+    if (type === "calico") {
+
+        markings = `
+            <path d="
+                M-23 -17
+                Q-5 -28 -5 -8
+                Q-9 4 -25 -1Z
+            "
+            fill="#96939e"/>
+
+            <path d="
+                M8 -21
+                Q28 -16 24 4
+                Q10 5 8 -21Z
+            "
+            fill="#e9a04c"/>
+
+            <ellipse cx="-10" cy="23"
+                     rx="12" ry="9"
+                     fill="#e9a04c"/>
+
+            <ellipse cx="17" cy="25"
+                     rx="10" ry="9"
+                     fill="#96939e"/>
+        `;
+
+    }
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+
+            <g class="cat"
+               style="animation-delay:${delay}s">
+
+                <ellipse cx="0" cy="25"
+                         rx="34" ry="18"
+                         fill="${color}"/>
+
+                <path class="cat-tail"
+                      d="M20 30 Q49 32 37 10"
+                      stroke="${color}"
+                      stroke-width="10"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <path d="
+                    M-23 -7 L-23 -33 L-4 -18
+                    M23 -7 L23 -33 L4 -18
+                "
+                fill="${color}"
+                stroke="${color}"
+                stroke-width="3"
+                stroke-linejoin="round"/>
+
+                <path d="
+                    M-19 -25 L-19 -10 L-9 -18
+                    M19 -25 L19 -10 L9 -18
+                "
+                fill="#eab0b7"/>
+
+                <ellipse rx="26" ry="23"
+                         fill="${color}"/>
+
+                ${markings}
+
+                <path d="
+                    M-17 1 Q-11 7 -5 1
+                    M5 1 Q11 7 17 1
+                "
+                fill="none"
+                stroke="#302631"
+                stroke-width="2.5"
+                stroke-linecap="round"/>
+
+                <path d="M-3 9 Q0 6 3 9 L0 12Z"
+                      fill="#e58d9e"/>
+
+                <ellipse cx="-14" cy="35"
+                         rx="13" ry="6"
+                         fill="${color}"/>
+
+                <ellipse cx="14" cy="35"
+                         rx="13" ry="6"
+                         fill="${color}"/>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+/* COLORES DE LA FAMILIA DEL REY LEÓN */
+
+document.getElementById("cats").innerHTML =
+
+    // Simba: naranja
+
+    cat(
+        145, 292, .57,
+        "#e9a04c",
+        "#ba702e",
+        "tabby",
+        0
+    )
+
+    // Nala: blanca, gris y naranja
+
+    + cat(
+        240, 216, .45,
+        "#fff3e7",
+        "#96939e",
+        "calico",
+        -.5
+    )
+
+    // Kiara: atigrada gris
+
+    + cat(
+        75, 253, .48,
+        "#99959e",
+        "#53515c",
+        "tabby",
+        -1
+    )
+
+    // Kopa: gemelito de Kiara
+
+    + cat(
+        130, 253, .48,
+        "#99959e",
+        "#53515c",
+        "tabby",
+        -1.5
+    )
+
+    // Kion: gris más clarito
+
+    + cat(
+        205, 270, .48,
+        "#c7c4c9",
+        "#b8b4bd",
+        "plain",
+        -2
+    );
+
+/* ANIMACIÓN AUTOMÁTICA */
+
+function startScene() {
+
+    instruction.textContent =
+        "Ven, mi princesa... Ya es hora de descansar.";
+
+    later(() => {
+
+        scene.classList.add("tucked");
+
+        instruction.textContent =
+            "Deja que te arrope para que no tengas frío.";
+
+    }, 2500);
+
+    later(() => {
+
+        scene.classList.add("kissing");
+
+        instruction.textContent =
+            "Y no puede faltar tu besito de buenas noches.";
+
+    }, 6000);
+
+    later(() => {
+
+        scene.classList.add("together");
+
+        instruction.textContent =
+            "Ahora sí, ven a mis bracitos.";
+
+    }, 10000);
+
+    later(() => {
+
+        lamp.disabled = false;
+
+        lamp.classList.add("ready");
+
+        instruction.textContent =
+            "Presiona la lamparita para dormir, mi princesa. ♡";
+
+    }, 13500);
+
+}
+
+/* APAGAR Y ENCENDER LA LAMPARITA */
+
+lamp.addEventListener("click", () => {
+
+    if (Date.now() < unlockDate) return;
+
+    sleeping = !sleeping;
+
+    scene.classList.toggle("dark", sleeping);
+
+    document.body.classList.toggle("night", sleeping);
+
+    lamp.setAttribute(
+        "aria-label",
+        sleeping
+        ? "Encender la lámpara"
+        : "Apagar la lámpara"
+    );
+
+    if (sleeping) {
+
+        title.textContent =
+            "Buenas noches, mi princesa";
+
+        instruction.textContent =
+            "Shhh... Nuestra pequeña familia ya está dormidita.";
+
+        if (!revealed) {
+
+            revealed = true;
+
+            later(() => {
+
+                final.hidden = false;
+
+                for (let i = 0; i < 40; i++) {
+
+                    later(createHeart, i * 120);
+
+                }
+
+            }, 2500);
+
+        }
+
+    } else {
+
+        title.textContent =
+            "Aquí sigo contigo, mi princesa";
+
+        instruction.textContent =
+            "Puedes apagar la lamparita cuando quieras descansar.";
+
+    }
+
+});
+
+/* CORAZONES SUAVES */
+
+function createHeart() {
+
+    const heart = document.createElement("span");
+
+    heart.className = "floating-heart";
+
+    heart.textContent =
+        Math.random() > .5 ? "♥" : "♡";
+
+    heart.style.left =
+        random(0, 100) + "vw";
+
+    heart.style.fontSize =
+        random(10, 23) + "px";
+
+    heart.style.color =
+        Math.random() > .5
+        ? "#ffc1e3"
+        : "#9ccaff";
+
+    heart.style.setProperty(
+        "--drift",
+        random(-40, 40) + "px"
+    );
+
+    const duration = random(6, 10);
+
+    heart.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+
+        heart.remove();
+
+    }, duration * 1000);
+
+}
+
+/* REPETIR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        sleeping = false;
+        revealed = false;
+
+        scene.className = "scene";
+
+        document.body.classList.remove("night");
+
+        lamp.disabled = true;
+
+        lamp.classList.remove("ready");
+
+        lamp.setAttribute(
+            "aria-label",
+            "Apagar la lámpara"
+        );
+
+        final.hidden = true;
+
+        title.textContent =
+            "Ya es hora de dormir, mi princesa";
+
+        document.querySelectorAll(".floating-heart")
+            .forEach(heart => heart.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        later(startScene, 1500);
+
+    });
+
+/* ESTRELLITAS DE FONDO */
+
+for (let i = 0; i < 35; i++) {
+
+    const sparkle = document.createElement("span");
+
+    sparkle.className = "sparkle";
+
+    sparkle.textContent =
+        i % 4 === 0 ? "✧" : "·";
+
+    sparkle.style.left =
+        random(0, 100) + "vw";
+
+    sparkle.style.top =
+        random(0, 100) + "vh";
+
+    sparkle.style.fontSize =
+        random(6, 13) + "px";
+
+    sparkle.style.animationDelay =
+        random(-3, 0) + "s";
+
+    document.body.appendChild(sparkle);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

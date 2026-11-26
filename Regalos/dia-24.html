@@ -1,0 +1,2597 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 24 | Feliz Navidad, mi princesa</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #30213d,
+        #050509 85%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+body.ending {
+    background: #000;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 550px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #e5c58c;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 30px;
+    line-height: 1.5;
+    text-shadow: 0 0 25px #ff79bd60;
+}
+
+h2 {
+    color: #ffc1e3;
+    line-height: 1.6;
+}
+
+.message {
+    color: #eddaef;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 26px;
+    margin: 30px auto;
+    line-height: 1.9;
+}
+
+button,
+.back {
+    display: inline-block;
+    margin: 18px auto;
+    padding: 15px 24px;
+    border: 1px solid #cba6db;
+    border-radius: 30px;
+    background: #ffffff09;
+    color: #f7d9ef;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.chapter {
+    animation: chapterIn 1.6s ease both;
+}
+
+.chapter.leaving {
+    animation: chapterOut .8s ease both;
+}
+
+.chapter-label {
+    color: #c5a6dd;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-top: 20px;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff25;
+    transition: all .5s;
+}
+
+.indicator.active {
+    background: #ff9bd5;
+    box-shadow: 0 0 12px #ff79bd;
+    transform: scale(1.3);
+}
+
+.divider {
+    color: #e5c58c;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+/* HABITACIÓN NAVIDEÑA */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    margin: 20px auto;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid #d6b87950;
+    box-shadow: 0 0 30px #ff9bd520;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.tree-light {
+    animation: twinkle 2s infinite alternate;
+    animation-delay: var(--delay);
+}
+
+.cat-tail {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: tail 1.5s infinite alternate;
+}
+
+.cat-motion {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: catBounce 2.5s infinite ease-in-out;
+    animation-delay: var(--delay);
+}
+
+.gift-button {
+    position: absolute;
+    left: 40%;
+    top: 61%;
+    width: 20%;
+    height: 17%;
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.gift-lid {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 1.8s ease, opacity 1.8s;
+}
+
+.gift-glow {
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+.scene.opened .gift-lid {
+    transform: translateY(-75px) rotate(-20deg);
+    opacity: 0;
+}
+
+.scene.opened .gift-glow {
+    opacity: 1;
+}
+
+.gift-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 2s infinite;
+}
+
+/* RECUERDOS DEL CALENDARIO */
+
+.memories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+    margin: 25px auto;
+}
+
+.memory {
+    aspect-ratio: 1;
+    border: 1px solid #ff9bd530;
+    border-radius: 12px;
+    background: #ffffff06;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    opacity: 0;
+    transform: scale(.5);
+}
+
+.memory.visible {
+    animation: memoryIn .8s ease both;
+}
+
+.memory-icon {
+    font-size: clamp(23px, 7vw, 35px);
+}
+
+.memory-day {
+    color: #d6b6ff;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.memory-name {
+    font-size: 10px;
+    color: #f2dce9;
+    padding: 0 3px;
+}
+
+.big-number {
+    font-size: 90px;
+    color: #ffc1e3;
+    text-shadow:
+        -10px 0 30px #48baff,
+        10px 0 30px #ff79bd;
+    margin: 20px auto;
+}
+
+#memoryEnding {
+    animation: chapterIn 1.5s ease both;
+}
+
+/* NAVIDAD BAJO LA NIEVE */
+
+.winter-scene {
+    width: 100%;
+    max-width: 460px;
+    margin: auto;
+}
+
+.winter-scene svg {
+    display: block;
+    width: 100%;
+}
+
+.beating {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 2s infinite;
+}
+
+/* FOTOGRAFÍA EN CORAZÓN */
+
+.photo-section {
+    animation: chapterIn 2s ease both;
+}
+
+.heart-photo {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 25px auto;
+    filter: drop-shadow(0 0 15px #ff79bd80);
+}
+
+.heart-photo svg {
+    width: 100%;
+    display: block;
+}
+
+#photoError {
+    color: #ffc1e3;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.photo-full {
+    display: block;
+    width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    margin: 20px auto;
+    border: 2px solid #ff9bd5;
+    border-radius: 15px;
+}
+
+/* ÚLTIMA CARTITA */
+
+.envelope {
+    position: relative;
+    width: 260px;
+    height: 170px;
+    max-width: 85%;
+    margin: 45px auto;
+    border-radius: 8px;
+    background: linear-gradient(
+        135deg,
+        #ffb6dc,
+        #ad508d
+    );
+    box-shadow: 0 0 35px #ff79bd40;
+    perspective: 600px;
+}
+
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        #f9b3d9,
+        #d77daf
+    );
+    clip-path: polygon(
+        0 0,
+        50% 55%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+    border-radius: 8px;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(
+        #ffe0ef,
+        #ed9bc8
+    );
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 1.2s;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.seal {
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #a52e71;
+    font-size: 43px;
+    text-shadow: 0 0 10px #fff5;
+    transition: opacity .5s;
+}
+
+.envelope.open .seal {
+    opacity: 0;
+}
+
+.envelope-button {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.letter {
+    position: relative;
+    margin: 25px auto;
+    padding: 35px 23px;
+    border: 1px solid #d8b98b;
+    border-radius: 5px;
+    background: linear-gradient(
+        135deg,
+        #fff1e8,
+        #f6dce9
+    );
+    color: #694052;
+    box-shadow: 0 0 35px #ff9bd530;
+    text-align: left;
+    animation: chapterIn 1.8s ease both;
+}
+
+.letter h2 {
+    color: #9c4277;
+    text-align: center;
+    font-size: 25px;
+}
+
+.letter p {
+    font-size: 17px;
+    line-height: 1.95;
+}
+
+.letter .signature {
+    color: #8e4776;
+    font-style: italic;
+    text-align: right;
+}
+
+.letter .special {
+    padding: 15px 0;
+    border-top: 1px solid #b98b9c60;
+    border-bottom: 1px solid #b98b9c60;
+    color: #9c4277;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* GRAN FINAL */
+
+.ending-content {
+    padding: 30px 0;
+}
+
+.ending-line {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 2s, transform 2s;
+}
+
+.ending-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.infinity {
+    width: 100%;
+    max-width: 360px;
+    margin: 35px auto;
+}
+
+.infinity svg {
+    width: 100%;
+    overflow: visible;
+}
+
+.infinity-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+
+.infinity.visible .infinity-path {
+    animation: drawInfinity 4s ease forwards;
+}
+
+.final-name {
+    color: #ffc1e3;
+    font-size: 38px;
+    text-shadow: 0 0 30px #ff79bd;
+}
+
+.final-date {
+    color: #c9b6df;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.credits {
+    color: #d6b6ff;
+    font-size: 14px;
+    line-height: 2.2;
+    margin: 30px auto;
+}
+
+.credits strong {
+    color: #ffc1e3;
+}
+
+/* NIEVE Y PARTÍCULAS */
+
+.snowflake {
+    position: fixed;
+    top: -30px;
+    pointer-events: none;
+    z-index: 3;
+    animation: snowfall linear forwards;
+    text-shadow: 0 0 8px currentColor;
+}
+
+.particle {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    z-index: 4;
+    animation: rise linear forwards;
+    text-shadow: 0 0 12px currentColor;
+}
+
+/* ANIMACIONES */
+
+@keyframes chapterIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes chapterOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes memoryIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: .3;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes tail {
+    from {
+        transform: rotate(-7deg);
+    }
+
+    to {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes catBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes drawInfinity {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes snowfall {
+    to {
+        transform: translate(var(--drift), 110vh)
+                   rotate(180deg);
+        opacity: .15;
+    }
+}
+
+@keyframes rise {
+    to {
+        transform: translate(var(--drift), -110vh);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .beating,
+    .gift-pulse,
+    .cat-motion,
+    .cat-tail,
+    .tree-light {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date" id="mainDate">
+        24 DE DICIEMBRE · 2026
+    </p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Tu último regalito 🔒</h1>
+
+        <p class="message">
+            Hemos llegado muy lejos,
+            mi hermosa princesa.
+        </p>
+
+        <p class="message">
+            Solamente falta un poquito
+            para nuestro gran final.
+        </p>
+
+        <div id="countdown"></div>
+
+        <div style="font-size:70px">🎁</div>
+
+    </section>
+
+    <section id="unlocked" hidden>
+
+        <div class="indicators" id="indicators">
+
+            <span class="indicator active"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+
+        </div>
+
+        <!-- CAPÍTULO 1 -->
+
+        <section class="chapter" id="chapter1">
+
+            <p class="chapter-label">
+                CAPÍTULO I
+            </p>
+
+            <h1>
+                Llegó el gran día,
+                mi princesa.
+            </h1>
+
+            <p class="message">
+                ¿Recuerdas el regalito
+                que dejamos debajo de nuestro árbol?
+            </p>
+
+            <div class="scene" id="christmasScene">
+
+                <svg viewBox="0 0 360 420"
+                     id="christmasRoom">
+                </svg>
+
+                <button class="gift-button"
+                        id="openGift"
+                        aria-label="Abrir último regalo">
+                </button>
+
+            </div>
+
+            <p class="message" id="giftInstruction">
+                Ahora sí puedes abrirlo,
+                mi hermosa gotita rosa. ♡
+            </p>
+
+            <button id="openGiftText">
+                Abrir mi último regalito 🎁
+            </button>
+
+        </section>
+
+        <!-- CAPÍTULO 2 -->
+
+        <section class="chapter"
+                 id="chapter2"
+                 hidden>
+
+            <p class="chapter-label">
+                CAPÍTULO II
+            </p>
+
+            <h1>
+                Nuestros 24 días
+            </h1>
+
+            <p class="message">
+                Antes de terminar,
+                quiero que recordemos
+                todo nuestro pequeño viaje.
+            </p>
+
+            <div class="memories"
+                 id="memories">
+            </div>
+
+            <div id="memoryEnding" hidden>
+
+                <div class="big-number">24</div>
+
+                <h2>24 días pensando en ti.</h2>
+
+                <p class="message">
+                    24 días en los que,
+                    detrás de cada regalito,
+                    solamente había alguien
+                    pensando en ti.
+                </p>
+
+                <p class="message">
+                    Imaginando tus sonrisitas,
+                    tus reacciones
+                    y lo bonito que sería
+                    sorprenderte cada mañana.
+                </p>
+
+                <button class="next"
+                        data-next="3">
+                    Continuar nuestra historia ♡
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- CAPÍTULO 3 -->
+
+        <section class="chapter"
+                 id="chapter3"
+                 hidden>
+
+            <p class="chapter-label">
+                CAPÍTULO III
+            </p>
+
+            <h1>Mi Navidad favorita</h1>
+
+            <p class="message">
+                No necesito una Navidad perfecta.
+                Me encanta imaginar una Navidad contigo.
+            </p>
+
+            <div class="winter-scene">
+
+                <svg viewBox="0 0 360 380"
+                     id="winterScene">
+                </svg>
+
+            </div>
+
+            <button id="revealPhoto">
+                Guardemos otro recuerdo ♡
+            </button>
+
+            <div class="photo-section"
+                 id="photoSection"
+                 hidden>
+
+                <div class="heart-photo">
+
+                    <svg viewBox="0 0 360 330">
+
+                        <defs>
+
+                            <clipPath id="heartClip">
+
+                                <path d="
+                                    M180 308
+                                    C125 265 15 190 15 99
+                                    C15 15 119 -5 180 65
+                                    C241 -5 345 15 345 99
+                                    C345 190 235 265 180 308Z
+                                "/>
+
+                            </clipPath>
+
+                            <linearGradient id="photoBorder">
+
+                                <stop stop-color="#69ceff"/>
+
+                                <stop offset=".5"
+                                      stop-color="#d9b6ff"/>
+
+                                <stop offset="1"
+                                      stop-color="#ff79bd"/>
+
+                            </linearGradient>
+
+                        </defs>
+
+                        <path d="
+                            M180 308
+                            C125 265 15 190 15 99
+                            C15 15 119 -5 180 65
+                            C241 -5 345 15 345 99
+                            C345 190 235 265 180 308Z
+                        "
+                        fill="#24162f"/>
+
+                        <image id="christmasPhoto"
+                               x="15" y="5"
+                               width="330" height="303"
+                               preserveAspectRatio="xMidYMid slice"
+                               clip-path="url(#heartClip)"/>
+
+                        <path d="
+                            M180 308
+                            C125 265 15 190 15 99
+                            C15 15 119 -5 180 65
+                            C241 -5 345 15 345 99
+                            C345 190 235 265 180 308Z
+                        "
+                        fill="none"
+                        stroke="url(#photoBorder)"
+                        stroke-width="5"/>
+
+                    </svg>
+
+                </div>
+
+                <p id="photoError" hidden>
+                    Nuestro recuerdo navideño. ♡
+                    <br>
+                    No se pudo cargar la fotografía.
+                </p>
+
+                <button id="fullPhotoButton">
+                    Ver nuestra fotografía completa
+                </button>
+
+                <img class="photo-full"
+                     id="fullPhoto"
+                     alt="Nuestro recuerdo de Navidad"
+                     hidden>
+
+                <h2>
+                    Qué bonito compartir
+                    estas fechas contigo.
+                </h2>
+
+                <p class="message">
+                    Tú, yo, nuestras gotitas
+                    y nuestra pequeña familia
+                    del Rey León.
+                </p>
+
+                <p class="message">
+                    Simba, Nala, Kiara, Kopa y Kion.
+                </p>
+
+                <p class="message">
+                    Espero que todavía nos queden
+                    muchísimas Navidades
+                    y recuerdos por compartir.
+                </p>
+
+                <button class="next"
+                        data-next="4">
+                    Tengo algo más que decirte ♡
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- CAPÍTULO 4 -->
+
+        <section class="chapter"
+                 id="chapter4"
+                 hidden>
+
+            <p class="chapter-label">
+                CAPÍTULO IV
+            </p>
+
+            <h1>Mi última cartita</h1>
+
+            <p class="message">
+                No podía terminar nuestro calendario
+                sin escribirte una última cartita,
+                mi niña preciosa.
+            </p>
+
+            <div class="envelope"
+                 id="envelope">
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="seal">♥</div>
+
+                <button class="envelope-button"
+                        id="openLetter"
+                        aria-label="Abrir carta">
+                </button>
+
+            </div>
+
+            <p id="letterInstruction"
+               class="message">
+                Presiona el sobre, mi princesa.
+            </p>
+
+            <article class="letter"
+                     id="letter"
+                     hidden>
+
+                <div style="
+                    text-align:center;
+                    color:#b96a98;
+                    font-size:13px;
+                    letter-spacing:2px;
+                ">
+                    24 · 12 · 2026
+                </div>
+
+                <h2>Mi hermosa Karina:</h2>
+
+                <p>
+                    Llegamos al último día
+                    de nuestro calendario.
+                </p>
+
+                <p>
+                    No sabes cuánto disfruté
+                    preparar cada uno de estos regalitos,
+                    imaginando tu carita al descubrirlos.
+                </p>
+
+                <p>
+                    Quería hacerte algo diferente,
+                    algo que tuviera un pedacito
+                    de nosotros y que pudieras guardar
+                    durante mucho tiempo.
+                </p>
+
+                <p>
+                    Sé que tengo muchos defectos
+                    y que todavía tengo muchísimo
+                    que aprender.
+                </p>
+
+                <p>
+                    Pero quiero seguir esforzándome
+                    por cuidar nuestro amor
+                    y compartir momentos bonitos contigo.
+                </p>
+
+                <p>
+                    Gracias por permitirme
+                    ser tu gotita azul.
+                </p>
+
+                <p>
+                    Espero que esta sea una
+                    de muchísimas Navidades juntos.
+                </p>
+
+                <p class="special">
+                    Tal vez no pude comprarte
+                    un calendario de Adviento,
+                    mi princesa,
+                    pero espero haber podido regalarte
+                    24 motivos para sonreír.
+                </p>
+
+                <p>
+                    Feliz Navidad, mi niña preciosa.
+                </p>
+
+                <p>
+                    Te amo muchísimo.
+                </p>
+
+                <p class="signature">
+                    Con todo mi amor,
+                    <br>
+                    Tu gotita azul. 💙
+                </p>
+
+                <div style="
+                    text-align:center;
+                    color:#b96a98;
+                    font-size:30px;
+                ">
+                    ♡
+                </div>
+
+            </article>
+
+            <button class="next"
+                    id="lastButton"
+                    data-next="5"
+                    hidden>
+                Una última cosita...
+            </button>
+
+        </section>
+
+        <!-- CAPÍTULO 5 -->
+
+        <section class="chapter"
+                 id="chapter5"
+                 hidden>
+
+            <div class="ending-content">
+
+                <p class="date ending-line"
+                   id="endingDate">
+                    24 · 12 · 2026
+                </p>
+
+                <h2 class="ending-line"
+                    id="endingOne"
+                    style="color:white">
+                    Fin de nuestro calendario...
+                </h2>
+
+                <p class="message ending-line"
+                   id="endingTwo">
+                    Pero no de nuestra historia.
+                </p>
+
+                <div class="infinity ending-line"
+                     id="infinity">
+
+                    <svg viewBox="0 0 300 160">
+
+                        <defs>
+
+                            <linearGradient id="infinityLove">
+
+                                <stop stop-color="#48baff"/>
+
+                                <stop offset=".5"
+                                      stop-color="#b98aff"/>
+
+                                <stop offset="1"
+                                      stop-color="#ff79bd"/>
+
+                            </linearGradient>
+
+                        </defs>
+
+                        <path class="infinity-path"
+                              d="
+                                  M150 80
+                                  C110 10 35 15 35 80
+                                  C35 145 110 150 150 80
+                                  C190 10 265 15 265 80
+                                  C265 145 190 150 150 80
+                              "
+                              fill="none"
+                              stroke="url(#infinityLove)"
+                              stroke-width="7"
+                              stroke-linecap="round"
+                              style="
+                                  filter:drop-shadow(
+                                      0 0 12px #c18aff
+                                  );
+                              "/>
+
+                    </svg>
+
+                </div>
+
+                <h1 class="final-name ending-line"
+                    id="endingName">
+                    Te amo, Karina.
+                </h1>
+
+                <p class="final-date ending-line"
+                   id="endingAnniversary">
+                    09 · 12 · 2025 — ∞
+                </p>
+
+                <div class="credits ending-line"
+                     id="credits">
+
+                    <div class="divider">✧ ♡ ✧</div>
+
+                    <strong>
+                        24 de 24 regalitos.
+                    </strong>
+
+                    <br>
+
+                    Hechos con amor,
+                    solamente para ti.
+
+                    <br><br>
+
+                    Protagonistas:
+
+                    <br>
+
+                    Nuestra gotita azul
+                    y nuestra gotita rosa.
+
+                    <br><br>
+
+                    Invitados especiales:
+
+                    <br>
+
+                    Simba, Nala, Kiara, Kopa y Kion.
+
+                    <br><br>
+
+                    <strong>
+                        Nuestra historia continuará...
+                    </strong>
+
+                </div>
+
+                <div id="endingButtons"
+                     class="ending-line"
+                     hidden>
+
+                    <a class="back"
+                       href="../index.html">
+                        Volver a nuestros 24 regalitos ♡
+                    </a>
+
+                    <button id="replay">
+                        Volver a vivir este momento
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+    <a class="back"
+       id="mainBack"
+       href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 24, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const christmasScene =
+    document.getElementById("christmasScene");
+
+const openGift =
+    document.getElementById("openGift");
+
+const openGiftText =
+    document.getElementById("openGiftText");
+
+const indicators =
+    document.getElementById("indicators");
+
+const photoSection =
+    document.getElementById("photoSection");
+
+const envelope =
+    document.getElementById("envelope");
+
+const letter =
+    document.getElementById("letter");
+
+let currentChapter = 1;
+let transitioning = false;
+let started = false;
+let giftOpened = false;
+let letterOpened = false;
+let timers = [];
+let snowInterval = null;
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            buildChristmasRoom();
+            buildWinterScene();
+            startSnow();
+
+        }
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* COLORES DE NUESTRAS GOTITAS */
+
+function definitions(prefix) {
+
+    return `
+        <defs>
+
+            <radialGradient id="${prefix}blue"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#d2f8ff"/>
+
+                <stop offset=".4"
+                      stop-color="#55caff"/>
+
+                <stop offset="1"
+                      stop-color="#1754bc"/>
+
+            </radialGradient>
+
+            <radialGradient id="${prefix}pink"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#ffe5f4"/>
+
+                <stop offset=".4"
+                      stop-color="#ff9cd5"/>
+
+                <stop offset="1"
+                      stop-color="#b52c85"/>
+
+            </radialGradient>
+
+            <linearGradient id="${prefix}love">
+
+                <stop stop-color="#69ceff"/>
+
+                <stop offset="1"
+                      stop-color="#ff79bd"/>
+
+            </linearGradient>
+
+            <radialGradient id="${prefix}room">
+
+                <stop stop-color="#59443e"/>
+
+                <stop offset="1"
+                      stop-color="#151425"/>
+
+            </radialGradient>
+
+            <linearGradient id="${prefix}tree"
+                            x2="100%" y2="100%">
+
+                <stop stop-color="#438a70"/>
+
+                <stop offset="1"
+                      stop-color="#123b36"/>
+
+            </linearGradient>
+
+            <radialGradient id="${prefix}glow">
+
+                <stop stop-color="#fff4c9"/>
+
+                <stop offset=".3"
+                      stop-color="#ffb9df"
+                      stop-opacity=".8"/>
+
+                <stop offset="1"
+                      stop-color="#ffb9df"
+                      stop-opacity="0"/>
+
+            </radialGradient>
+
+        </defs>
+    `;
+
+}
+
+/* DIBUJAR GOTITAS */
+
+function drop(prefix, color, x, y, scale, hat = true) {
+
+    const gradient = `url(#${prefix}${color})`;
+
+    const glow =
+        color === "blue"
+        ? "#48baff"
+        : "#ff79bd";
+
+    const hatColor =
+        color === "blue"
+        ? "#438dcc"
+        : "#e67bb1";
+
+    return `
+        <g transform="
+            translate(${x} ${y})
+            scale(${scale})
+        ">
+
+            <g class="breathe"
+               style="filter:drop-shadow(0 0 8px ${glow})">
+
+                <g fill="${gradient}">
+
+                    <ellipse cy="15"
+                             rx="26" ry="31"/>
+
+                    <ellipse cx="-14" cy="40"
+                             rx="13" ry="10"/>
+
+                    <ellipse cx="14" cy="40"
+                             rx="13" ry="10"/>
+
+                    <ellipse cx="-27" cy="14"
+                             rx="9" ry="16"/>
+
+                    <ellipse cx="27" cy="14"
+                             rx="9" ry="16"/>
+
+                    <ellipse cy="-27"
+                             rx="39" ry="39"/>
+
+                </g>
+
+                <ellipse cx="-15" cy="-44"
+                         rx="13" ry="7"
+                         fill="white"
+                         opacity=".55"/>
+
+                <g fill="#10101e">
+
+                    <ellipse cx="-12" cy="-24"
+                             rx="4.5" ry="9"/>
+
+                    <ellipse cx="12" cy="-24"
+                             rx="4.5" ry="9"/>
+
+                </g>
+
+                ${hat ? `
+                    <path d="
+                        M-35 -48
+                        Q-22 -104 23 -83
+                        L37 -54Z
+                    "
+                    fill="${hatColor}"/>
+
+                    <rect x="-39" y="-57"
+                          width="78" height="13"
+                          rx="6"
+                          fill="#fff2f5"/>
+
+                    <circle cx="24" cy="-83"
+                            r="10"
+                            fill="#fff2f5"/>
+                ` : ""}
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+/* NUESTROS CINCO GATITOS */
+
+function cat(x, y, scale, color, stripe, type, delay) {
+
+    let markings = "";
+
+    if (type === "tabby") {
+
+        markings = `
+            <path d="
+                M-13 -19 L-10 -10
+                M0 -22 V-11
+                M13 -19 L10 -10
+                M-24 -4 L-16 -1
+                M24 -4 L16 -1
+                M-14 20 L-10 29
+                M5 20 L10 29
+            "
+            fill="none"
+            stroke="${stripe}"
+            stroke-width="4"
+            stroke-linecap="round"/>
+        `;
+
+    }
+
+    if (type === "calico") {
+
+        markings = `
+            <path d="
+                M-23 -17
+                Q-5 -28 -5 -8
+                Q-9 4 -25 -1Z
+            "
+            fill="#96939e"/>
+
+            <path d="
+                M8 -21
+                Q28 -16 24 4
+                Q10 5 8 -21Z
+            "
+            fill="#e9a04c"/>
+
+            <ellipse cx="-10" cy="23"
+                     rx="12" ry="9"
+                     fill="#e9a04c"/>
+        `;
+
+    }
+
+    return `
+        <g transform="
+            translate(${x} ${y})
+            scale(${scale})
+        ">
+
+            <g class="cat-motion"
+               style="--delay:${delay}s">
+
+                <path class="cat-tail"
+                      d="M18 30 Q46 31 36 8"
+                      stroke="${color}"
+                      stroke-width="10"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <ellipse cy="25"
+                         rx="27" ry="23"
+                         fill="${color}"/>
+
+                <path d="
+                    M-23 -7 L-23 -33 L-4 -18
+                    M23 -7 L23 -33 L4 -18
+                "
+                fill="${color}"
+                stroke="${color}"
+                stroke-width="3"
+                stroke-linejoin="round"/>
+
+                <path d="
+                    M-19 -25 L-19 -10 L-9 -18
+                    M19 -25 L19 -10 L9 -18
+                "
+                fill="#eab0b7"/>
+
+                <ellipse rx="26" ry="23"
+                         fill="${color}"/>
+
+                ${markings}
+
+                <ellipse cx="-10" cy="-2"
+                         rx="3.5" ry="5"
+                         fill="#302631"/>
+
+                <ellipse cx="10" cy="-2"
+                         rx="3.5" ry="5"
+                         fill="#302631"/>
+
+                <path d="M-3 8 Q0 5 3 8 L0 11Z"
+                      fill="#e58d9e"/>
+
+                <path d="
+                    M0 11 Q-4 16 -8 12
+                    M0 11 Q4 16 8 12
+                "
+                stroke="#302631"
+                stroke-width="1.5"
+                fill="none"/>
+
+                <ellipse cx="-13" cy="43"
+                         rx="11" ry="6"
+                         fill="${color}"/>
+
+                <ellipse cx="13" cy="43"
+                         rx="11" ry="6"
+                         fill="${color}"/>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+function familyCats(y) {
+
+    return (
+
+        // Simba
+
+        cat(
+            40, y - 13, .57,
+            "#e9a04c", "#ba702e",
+            "tabby", 0
+        )
+
+        // Nala
+
+        + cat(
+            107, y, .52,
+            "#fff3e7", "#96939e",
+            "calico", -.5
+        )
+
+        // Kiara
+
+        + cat(
+            180, y + 1, .49,
+            "#99959e", "#53515c",
+            "tabby", -1
+        )
+
+        // Kopa
+
+        + cat(
+            253, y, .52,
+            "#99959e", "#53515c",
+            "tabby", -1.5
+        )
+
+        // Kion
+
+        + cat(
+            320, y - 13, .57,
+            "#c7c4c9", "#b8b4bd",
+            "plain", -2
+        )
+
+    );
+
+}
+
+/* REGALITOS */
+
+function present(x, y, w, h, color) {
+
+    return `
+        <g transform="translate(${x} ${y})">
+
+            <rect width="${w}"
+                  height="${h}"
+                  rx="3"
+                  fill="${color}"/>
+
+            <rect x="-3" y="-3"
+                  width="${w + 6}"
+                  height="9"
+                  rx="3"
+                  fill="${color}"
+                  stroke="#ffffff40"/>
+
+            <path d="
+                M${w / 2} 0 V${h}
+                M0 12 H${w}
+            "
+            stroke="#f8d69b"
+            stroke-width="5"/>
+
+        </g>
+    `;
+
+}
+
+/* HABITACIÓN DEL DÍA 23 */
+
+function buildChristmasRoom() {
+
+    const colors = [
+        "#ff9bd5",
+        "#69ceff",
+        "#d9b6ff",
+        "#ffe4a0"
+    ];
+
+    let lights = "";
+
+    for (let i = 0; i < 36; i++) {
+
+        const y = random(90, 260);
+        const width = (y - 44) * .35;
+        const x = 180 + random(-width, width);
+        const color = colors[i % 4];
+
+        lights += `
+            <circle class="tree-light"
+                    cx="${x}" cy="${y}"
+                    r="3.2"
+                    fill="${color}"
+                    style="
+                        --delay:${random(-2, 0)}s;
+                        filter:drop-shadow(0 0 5px ${color});
+                    "/>
+        `;
+
+    }
+
+    const positions = [
+        [180,95],
+        [153,142],
+        [207,151],
+        [133,194],
+        [225,205],
+        [112,248],
+        [192,249]
+    ];
+
+    let ornaments = "";
+
+    positions.forEach((position, index) => {
+
+        ornaments += `
+            <g transform="
+                translate(${position[0]} ${position[1]})
+            ">
+
+                <circle r="10"
+                        fill="${colors[index % 4]}"/>
+
+                <rect x="-3" y="-13"
+                      width="6" height="5"
+                      rx="1"
+                      fill="#f8d9a0"/>
+
+                <ellipse cx="-3" cy="-4"
+                         rx="3" ry="2"
+                         fill="white"
+                         opacity=".6"/>
+
+                <text y="4"
+                      text-anchor="middle"
+                      font-size="12"
+                      fill="white">♡</text>
+
+            </g>
+        `;
+
+    });
+
+    let stars = "";
+
+    for (let i = 0; i < 40; i++) {
+
+        stars += `
+            <circle cx="${random(25, 118)}"
+                    cy="${random(35, 150)}"
+                    r="${random(.6, 1.8)}"
+                    fill="white"
+                    opacity=".7"/>
+        `;
+
+    }
+
+    document.getElementById("christmasRoom").innerHTML =
+
+        definitions("room")
+
+        + `
+            <rect width="360" height="420"
+                  fill="url(#roomroom)"/>
+
+            <rect y="320"
+                  width="360" height="100"
+                  fill="#211b2e"/>
+
+            <ellipse cx="180" cy="363"
+                     rx="165" ry="37"
+                     fill="#715073"
+                     opacity=".4"/>
+
+            <rect x="20" y="30"
+                  width="103" height="125"
+                  rx="5"
+                  fill="#101d38"
+                  stroke="#82718c"
+                  stroke-width="5"/>
+
+            <circle cx="91" cy="57"
+                    r="16"
+                    fill="#fff0cb"/>
+
+            ${stars}
+
+            <path d="M71 30 V155 M20 93 H123"
+                  stroke="#82718c"
+                  stroke-width="4"/>
+
+            <rect x="271" y="36"
+                  width="68" height="74"
+                  rx="4"
+                  fill="#634759"
+                  stroke="#d6b879"
+                  stroke-width="3"/>
+
+            <text x="305" y="60"
+                  text-anchor="middle"
+                  font-size="11"
+                  fill="#f8d9a0">
+                FELIZ
+            </text>
+
+            <text x="305" y="78"
+                  text-anchor="middle"
+                  font-size="12"
+                  fill="#f8d9a0">
+                NAVIDAD
+            </text>
+
+            <text x="305" y="98"
+                  text-anchor="middle"
+                  font-size="18"
+                  fill="#ffc1e3">♡</text>
+
+            <rect x="166" y="246"
+                  width="28" height="55"
+                  rx="5"
+                  fill="#85593e"/>
+
+            <path d="
+                M180 44
+                L123 134 H146
+                L99 200 H128
+                L77 269 H283
+                L232 200 H261
+                L214 134 H237Z
+            "
+            fill="url(#roomtree)"/>
+
+            <path d="
+                M135 126 Q184 158 225 139
+                M115 194 Q181 227 246 197
+                M96 252 Q180 281 265 248
+            "
+            stroke="#dfbd7a"
+            stroke-width="3"
+            fill="none"/>
+
+            ${lights}
+
+            ${ornaments}
+
+            <path d="
+                M180 17
+                L187 34 L206 35
+                L191 47 L196 65
+                L180 54 L164 65
+                L169 47 L154 35
+                L173 34Z
+            "
+            fill="#ffe4a0"
+            stroke="#fff3cb"
+            stroke-width="2"
+            style="filter:drop-shadow(0 0 12px #ffe4a0)"/>
+
+        `
+
+        + present(91, 282, 42, 34, "#bc73ac")
+
+        + present(220, 280, 43, 36, "#6a9ed0")
+
+        + present(265, 294, 30, 26, "#a38bdb")
+
+        + drop("room", "blue", 65, 317, .83)
+
+        + drop("room", "pink", 295, 317, .83)
+
+        + familyCats(376)
+
+        + `
+            <circle class="gift-glow"
+                    cx="180" cy="280"
+                    r="140"
+                    fill="url(#roomglow)"/>
+
+            <g>
+
+                <rect x="151" y="267"
+                      width="58" height="52"
+                      rx="5"
+                      fill="#e47eb5"
+                      stroke="#ffd2e9"
+                      stroke-width="2"/>
+
+                <path d="M180 267 V319"
+                      stroke="#f8d9a0"
+                      stroke-width="7"/>
+
+                <rect x="162" y="280"
+                      width="36" height="30"
+                      rx="5"
+                      fill="#51263e"/>
+
+                <text x="180" y="301"
+                      text-anchor="middle"
+                      font-size="20"
+                      fill="#ffe4a0">
+                    24
+                </text>
+
+                <g class="gift-lid">
+
+                    <rect x="147" y="263"
+                          width="66" height="13"
+                          rx="4"
+                          fill="#ffb3da"/>
+
+                    <path d="
+                        M180 263
+                        Q147 234 155 254
+                        Q161 266 180 263
+                        Q213 234 205 254
+                        Q199 266 180 263
+                    "
+                    fill="none"
+                    stroke="#f8d9a0"
+                    stroke-width="5"/>
+
+                </g>
+
+            </g>
+
+            <text class="gift-pulse"
+                  x="180" y="238"
+                  text-anchor="middle"
+                  font-size="24"
+                  fill="#ffe4a0">
+                ♡
+            </text>
+
+            <text x="180" y="409"
+                  text-anchor="middle"
+                  font-size="11"
+                  letter-spacing="2"
+                  fill="#f4d7e8">
+                NUESTRO ÚLTIMO REGALITO
+            </text>
+        `;
+
+}
+
+/* ABRIR EL ÚLTIMO REGALO */
+
+function revealGift() {
+
+    if (
+        giftOpened ||
+        transitioning ||
+        Date.now() < unlockDate
+    ) return;
+
+    giftOpened = true;
+
+    openGift.disabled = true;
+    openGiftText.disabled = true;
+
+    christmasScene.classList.add("opened");
+
+    document.getElementById("giftInstruction")
+        .textContent =
+            "Llegamos al final de nuestro pequeño viaje...";
+
+    openGiftText.textContent =
+        "Preparando tu sorpresa...";
+
+    burst(60);
+
+    later(() => {
+
+        goToChapter(2);
+
+    }, 3500);
+
+}
+
+openGift.addEventListener("click", revealGift);
+
+openGiftText.addEventListener("click", revealGift);
+
+/* NUESTROS 24 REGALITOS */
+
+const memories = [
+
+    ["📸", "Nuestra primera foto"],
+    ["💌", "Una cartita"],
+    ["💗", "Cinco cositas"],
+    ["🎵", "Como Tú Ninguna"],
+    ["💧", "Nuestras gotitas"],
+    ["🎮", "El laberinto"],
+    ["🐱", "Nuestro recuerdo con Nala"],
+    ["⭐", "Gracias por tanto"],
+    ["💞", "Nuestro primer año"],
+    ["🌹", "Diez razones"],
+    ["👑", "Mi princesa"],
+    ["🌠", "Un deseo"],
+    ["🌧️", "Te extraño"],
+    ["🕹️", "Atrapa mi amor"],
+    ["🫂", "Un abracito"],
+    ["🎶", "Pensándote"],
+    ["🏡", "Nuestro futuro"],
+    ["💙", "Nuestra historia"],
+    ["💋", "19 besitos"],
+    ["🌙", "Dulces sueños"],
+    ["🖼️", "Nuestro museo"],
+    ["🪐", "Nuestro universo"],
+    ["🎄", "Nuestro arbolito"],
+    ["🎁", "Feliz Navidad"]
+
+];
+
+function showMemories() {
+
+    const container =
+        document.getElementById("memories");
+
+    container.innerHTML = "";
+
+    document.getElementById("memoryEnding")
+        .hidden = true;
+
+    memories.forEach((memory, index) => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "memory";
+
+        item.innerHTML = `
+            <span class="memory-icon">
+                ${memory[0]}
+            </span>
+
+            <span class="memory-day">
+                DÍA ${String(index + 1).padStart(2, "0")}
+            </span>
+
+            <span class="memory-name">
+                ${memory[1]}
+            </span>
+        `;
+
+        container.appendChild(item);
+
+        later(() => {
+
+            item.classList.add("visible");
+
+        }, 300 + index * 300);
+
+    });
+
+    later(() => {
+
+        document.getElementById("memoryEnding")
+            .hidden = false;
+
+    }, 8500);
+
+}
+
+/* NAVIDAD BAJO LA NIEVE */
+
+function buildWinterScene() {
+
+    let stars = "";
+
+    for (let i = 0; i < 95; i++) {
+
+        stars += `
+            <circle cx="${random(0, 360)}"
+                    cy="${random(0, 240)}"
+                    r="${random(.5, 1.8)}"
+                    fill="white"
+                    opacity="${random(.2, .9)}"/>
+        `;
+
+    }
+
+    document.getElementById("winterScene").innerHTML =
+
+        definitions("winter")
+
+        + `
+            <rect width="360" height="380"
+                  rx="20"
+                  fill="#101328"/>
+
+            ${stars}
+
+            <circle cx="270" cy="65"
+                    r="35"
+                    fill="#fff0cb"
+                    style="filter:drop-shadow(0 0 20px #fff0cb70)"/>
+
+            <circle cx="258" cy="55"
+                    r="6"
+                    fill="#dfcfb0"
+                    opacity=".4"/>
+
+            <path d="
+                M0 220 L70 135
+                L135 220 L215 120
+                L360 235 V380 H0Z
+            "
+            fill="#252e4b"/>
+
+            <path d="
+                M0 250 Q90 210 180 245
+                T360 235 V380 H0Z
+            "
+            fill="#a4b6d1"/>
+
+            <path d="
+                M0 280 Q90 240 180 280
+                T360 265 V380 H0Z
+            "
+            fill="#d5d8ed"/>
+
+            <ellipse cx="180" cy="306"
+                     rx="125" ry="25"
+                     fill="#a19fbc"
+                     opacity=".5"/>
+
+        `
+
+        + drop("winter", "blue", 140, 265, 1)
+
+        + drop("winter", "pink", 220, 265, 1)
+
+        + `
+            <path d="M151 277 Q180 307 220 277"
+                  stroke="url(#winterblue)"
+                  stroke-width="14"
+                  stroke-linecap="round"
+                  fill="none"/>
+
+            <path d="M209 289 Q180 315 140 289"
+                  stroke="url(#winterpink)"
+                  stroke-width="14"
+                  stroke-linecap="round"
+                  fill="none"/>
+
+            <g transform="translate(180 110)">
+
+                <path class="beating"
+                      d="
+                          M0 42
+                          C-85 -10 -45 -65 0 -30
+                          C45 -65 85 -10 0 42Z
+                      "
+                      fill="url(#winterlove)"
+                      style="
+                          filter:drop-shadow(
+                              0 0 15px #ff79bd
+                          );
+                      "/>
+
+            </g>
+        `
+
+        + familyCats(340);
+
+}
+
+/* REVELAR FOTOGRAFÍA */
+
+document.getElementById("revealPhoto")
+    .addEventListener("click", () => {
+
+        if (
+            currentChapter !== 3 ||
+            transitioning
+        ) return;
+
+        const photoPath =
+            "../imagenes/navidad.jpg";
+
+        const loader = new Image();
+
+        const revealButton =
+            document.getElementById("revealPhoto");
+
+        revealButton.disabled = true;
+
+        revealButton.textContent =
+            "Preparando nuestro recuerdo...";
+
+        loader.onload = () => {
+
+            if (currentChapter !== 3) return;
+
+            const photo =
+                document.getElementById("christmasPhoto");
+
+            photo.setAttribute("href", photoPath);
+
+            photo.setAttributeNS(
+                "http://www.w3.org/1999/xlink",
+                "xlink:href",
+                photoPath
+            );
+
+            document.getElementById("fullPhoto")
+                .src = photoPath;
+
+            document.getElementById("photoError")
+                .hidden = true;
+
+            document.getElementById("fullPhotoButton")
+                .hidden = false;
+
+            finishPhotoReveal();
+
+        };
+
+        loader.onerror = () => {
+
+            if (currentChapter !== 3) return;
+
+            document.getElementById("photoError")
+                .hidden = false;
+
+            document.getElementById("fullPhotoButton")
+                .hidden = true;
+
+            finishPhotoReveal();
+
+        };
+
+        loader.src = photoPath;
+
+    });
+
+function finishPhotoReveal() {
+
+    document.getElementById("revealPhoto")
+        .hidden = true;
+
+    photoSection.hidden = false;
+
+    burst(45);
+
+    photoSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+document.getElementById("fullPhotoButton")
+    .addEventListener("click", () => {
+
+        const photo =
+            document.getElementById("fullPhoto");
+
+        photo.hidden = !photo.hidden;
+
+        document.getElementById("fullPhotoButton")
+            .textContent = photo.hidden
+                ? "Ver nuestra fotografía completa"
+                : "Ocultar fotografía completa";
+
+    });
+
+/* ABRIR NUESTRA ÚLTIMA CARTITA */
+
+document.getElementById("openLetter")
+    .addEventListener("click", () => {
+
+        if (
+            letterOpened ||
+            currentChapter !== 4 ||
+            transitioning
+        ) return;
+
+        letterOpened = true;
+
+        envelope.classList.add("open");
+
+        document.getElementById("openLetter")
+            .disabled = true;
+
+        document.getElementById("letterInstruction")
+            .textContent =
+                "Con todo mi amor, para ti...";
+
+        later(() => {
+
+            envelope.hidden = true;
+
+            document.getElementById("letterInstruction")
+                .hidden = true;
+
+            letter.hidden = false;
+
+            document.getElementById("lastButton")
+                .hidden = false;
+
+            letter.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 1600);
+
+    });
+
+/* CAMBIAR DE CAPÍTULO */
+
+function goToChapter(number) {
+
+    if (
+        transitioning ||
+        number < 1 ||
+        number > 5 ||
+        Date.now() < unlockDate
+    ) return;
+
+    transitioning = true;
+
+    const previous =
+        document.getElementById(
+            `chapter${currentChapter}`
+        );
+
+    previous.classList.add("leaving");
+
+    later(() => {
+
+        previous.hidden = true;
+
+        previous.classList.remove("leaving");
+
+        currentChapter = number;
+
+        const next =
+            document.getElementById(
+                `chapter${number}`
+            );
+
+        next.hidden = false;
+
+        document.querySelectorAll(".indicator")
+            .forEach((indicator, index) => {
+
+                indicator.classList.toggle(
+                    "active",
+                    index === number - 1
+                );
+
+            });
+
+        window.scrollTo({
+            top: 0,
+            behavior: "instant"
+        });
+
+        transitioning = false;
+
+        if (number === 2) {
+
+            showMemories();
+
+        }
+
+        if (number === 5) {
+
+            startEnding();
+
+        }
+
+    }, 800);
+
+}
+
+document.querySelectorAll(".next")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            goToChapter(
+                Number(button.dataset.next)
+            );
+
+        });
+
+    });
+
+/* GRAN FINAL */
+
+function startEnding() {
+
+    document.body.classList.add("ending");
+
+    indicators.hidden = true;
+
+    document.getElementById("mainDate")
+        .hidden = true;
+
+    document.getElementById("mainBack")
+        .hidden = true;
+
+    clearInterval(snowInterval);
+
+    snowInterval = null;
+
+    document.querySelectorAll(".snowflake, .particle")
+        .forEach(element => element.remove());
+
+    const sequence = [
+
+        ["endingDate", 1000],
+
+        ["endingOne", 3000],
+
+        ["endingTwo", 6500],
+
+        ["infinity", 9500],
+
+        ["endingName", 14000],
+
+        ["endingAnniversary", 17000],
+
+        ["credits", 20500]
+
+    ];
+
+    sequence.forEach(([id, delay]) => {
+
+        later(() => {
+
+            document.getElementById(id)
+                .classList.add("visible");
+
+        }, delay);
+
+    });
+
+    later(() => {
+
+        burst(100);
+
+    }, 14000);
+
+    later(() => {
+
+        const buttons =
+            document.getElementById("endingButtons");
+
+        buttons.hidden = false;
+
+        requestAnimationFrame(() => {
+
+            buttons.classList.add("visible");
+
+        });
+
+    }, 25000);
+
+}
+
+/* NIEVE NAVIDEÑA */
+
+function createSnowflake() {
+
+    const flake =
+        document.createElement("span");
+
+    flake.className = "snowflake";
+
+    flake.textContent =
+        Math.random() > .7 ? "❄" : "·";
+
+    flake.style.left =
+        random(0, 100) + "vw";
+
+    flake.style.fontSize =
+        random(8, 20) + "px";
+
+    flake.style.color =
+        Math.random() > .5
+        ? "#ffc1e3"
+        : "#c9dcff";
+
+    flake.style.setProperty(
+        "--drift",
+        random(-60, 60) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    flake.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(flake);
+
+    setTimeout(() => {
+
+        flake.remove();
+
+    }, duration * 1000);
+
+}
+
+function startSnow() {
+
+    clearInterval(snowInterval);
+
+    snowInterval =
+        setInterval(createSnowflake, 230);
+
+}
+
+/* CORAZONES Y ESTRELLAS */
+
+function createParticle() {
+
+    const particle =
+        document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.textContent =
+        Math.random() > .5 ? "♥" : "✧";
+
+    const colors = [
+        "#ff9bd5",
+        "#69ceff",
+        "#d9b6ff",
+        "#ffe4a0"
+    ];
+
+    particle.style.color =
+        colors[Math.floor(Math.random() * 4)];
+
+    particle.style.left =
+        random(0, 100) + "vw";
+
+    particle.style.fontSize =
+        random(10, 26) + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        random(-70, 70) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    particle.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, duration * 1000);
+
+}
+
+function burst(amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        later(createParticle, i * 65);
+
+    }
+
+}
+
+/* VOLVER A VIVIR NUESTRO ÚLTIMO REGALO */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        window.location.reload();
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2100 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 17 | Nuestro futuro</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #291631,
+        #050308 85%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 520px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd70;
+}
+
+h2 {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.5;
+}
+
+.message {
+    color: #f1d9ee;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    margin: 30px auto;
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+}
+
+button,
+.back {
+    display: inline-block;
+    padding: 13px 25px;
+    margin: 15px auto;
+    border: 1px solid #d29de8;
+    border-radius: 30px;
+    background: #ffffff0b;
+    color: #f6d8ff;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+    opacity: .5;
+}
+
+.start-button {
+    background: linear-gradient(
+        135deg,
+        #513388,
+        #a63c83
+    );
+    box-shadow: 0 0 25px #ff79bd40;
+}
+
+/* INTRODUCCIÓN */
+
+.intro-heart {
+    font-size: 95px;
+    margin: 20px auto;
+    color: #ffc1e3;
+    text-shadow:
+        -12px 0 30px #48baff,
+        12px 0 30px #ff49ac;
+    animation: heartbeat 2s infinite;
+}
+
+/* ESCENARIOS */
+
+.scene {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 25px;
+    border: 1px solid #e2b2ff60;
+    box-shadow: 0 0 35px #a46ad340;
+    margin: 20px auto;
+    background: #100c20;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+.chapter {
+    animation: appear 1.2s ease both;
+}
+
+.chapter.leaving {
+    animation: disappear .5s ease both;
+}
+
+.chapter-number {
+    color: #d9b6ff;
+    letter-spacing: 3px;
+    font-size: 12px;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px auto;
+}
+
+.dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ffffff18;
+    border: 1px solid #b78bd4;
+    transition: all .5s;
+}
+
+.dot.active {
+    background: #ff9bd5;
+    box-shadow: 0 0 12px #ff79bd;
+    transform: scale(1.2);
+}
+
+.dot.visited {
+    background: #9c7bd6;
+}
+
+#chapterText {
+    min-height: 100px;
+}
+
+/* GOTITAS */
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+.little-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.8s infinite;
+}
+
+/* PLAYA */
+
+.wave {
+    animation: wave 4s ease-in-out infinite alternate;
+}
+
+.sun {
+    animation: sunset 14s ease-in-out infinite alternate;
+}
+
+/* CAMPAMENTO */
+
+.fire {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: fire .45s ease-in-out infinite alternate;
+}
+
+.ember {
+    animation: ember 3s linear infinite;
+}
+
+/* LLUVIA */
+
+.rain-line {
+    animation: rain .9s linear infinite;
+}
+
+.rain-dance {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: dance 3s ease-in-out infinite;
+}
+
+/* VIAJE */
+
+.cloud {
+    animation: cloud 14s linear infinite;
+}
+
+.plane {
+    animation: plane 4s ease-in-out infinite;
+}
+
+/* NAVIDAD */
+
+.snowflake {
+    animation: snow 5s linear infinite;
+}
+
+.tree-light {
+    animation: twinkle 1.3s infinite alternate;
+}
+
+/* GATITOS */
+
+.tail {
+    transform-box: fill-box;
+    transform-origin: left bottom;
+    animation: tail 1.8s ease-in-out infinite alternate;
+}
+
+.cat-bounce {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: catBounce 2.8s ease-in-out infinite;
+}
+
+.cat-walk {
+    animation: catWalk 5s ease-in-out infinite alternate;
+}
+
+.cat-sleep {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 2.5s infinite;
+}
+
+.sleep-letter {
+    animation: sleep 3s infinite;
+}
+
+.butterfly {
+    animation: butterfly 4s ease-in-out infinite;
+}
+
+.star {
+    animation: twinkle 2s infinite alternate;
+}
+
+.background-star {
+    position: fixed;
+    pointer-events: none;
+    color: #e5c9ff;
+    animation: twinkle 3s infinite alternate;
+}
+
+/* FINAL */
+
+#final {
+    animation: appear 2s ease;
+}
+
+.final-heart {
+    color: #ffc1e3;
+    font-size: 85px;
+    text-shadow:
+        -10px 0 25px #48baff,
+        10px 0 25px #ff49ac;
+    animation: heartbeat 1.8s infinite;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 26px;
+    line-height: 1.6;
+    text-shadow: 0 0 18px #ff79bd80;
+}
+
+.divider {
+    color: #ffd8a2;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+.particle {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    z-index: 5;
+    animation: rise linear forwards;
+    text-shadow: 0 0 12px currentColor;
+}
+
+/* ANIMACIONES */
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.025, .98); }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes disappear {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes wave {
+    from { transform: translateX(-15px); }
+    to { transform: translateX(15px); }
+}
+
+@keyframes sunset {
+    from { transform: translateY(0); }
+    to { transform: translateY(14px); }
+}
+
+@keyframes fire {
+    from { transform: scale(.9, .85); }
+    to { transform: scale(1.08, 1.12); }
+}
+
+@keyframes ember {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(15px, -80px);
+        opacity: 0;
+    }
+}
+
+@keyframes rain {
+    from { transform: translate(30px, -100px); }
+    to { transform: translate(-30px, 100px); }
+}
+
+@keyframes dance {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes cloud {
+    from { transform: translateX(-160px); }
+    to { transform: translateX(420px); }
+}
+
+@keyframes plane {
+    0%, 100% { transform: translateY(-5px); }
+    50% { transform: translateY(8px); }
+}
+
+@keyframes snow {
+    from { transform: translateY(-80px); }
+    to { transform: translateY(100px); }
+}
+
+@keyframes twinkle {
+    from { opacity: .2; }
+    to { opacity: 1; }
+}
+
+@keyframes tail {
+    from { transform: rotate(-12deg); }
+    to { transform: rotate(15deg); }
+}
+
+@keyframes catBounce {
+    0%, 70%, 100% { transform: translateY(0); }
+    85% { transform: translateY(-7px); }
+}
+
+@keyframes catWalk {
+    from { transform: translateX(-12px); }
+    to { transform: translateX(12px); }
+}
+
+@keyframes sleep {
+    from {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    30% { opacity: 1; }
+
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@keyframes butterfly {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -20px); }
+}
+
+@keyframes rise {
+    to {
+        transform: translate(var(--drift), -115vh);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .star,
+    .background-star,
+    .little-heart,
+    .tail,
+    .cat-bounce,
+    .cat-walk,
+    .cat-sleep {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">17 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Todo lo que nos falta vivir 🔒</h1>
+
+        <p class="message">
+            Una pequeña mirada hacia nuestro futuro,
+            mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <!-- INTRODUCCIÓN -->
+
+        <section id="introduction">
+
+            <h1>
+                Todo lo que nos falta vivir
+            </h1>
+
+            <div class="intro-heart">♥</div>
+
+            <p class="message">
+                Me encanta todo lo que hemos vivido,
+                pero también me emociona todo lo
+                que nos falta vivir juntos.
+            </p>
+
+            <p class="message">
+                Hoy quiero mostrarte algunos
+                de los recuerdos que me encantaría
+                crear contigo.
+            </p>
+
+            <button class="start-button" id="start">
+                Ven conmigo, mi princesa ♡
+            </button>
+
+        </section>
+
+        <!-- CAPÍTULOS -->
+
+        <section id="chapters" hidden>
+
+            <div class="chapter" id="chapter">
+
+                <p class="chapter-number"
+                   id="chapterNumber"></p>
+
+                <h2 id="chapterTitle"></h2>
+
+                <div class="scene" id="scene"></div>
+
+                <p class="message"
+                   id="chapterText"></p>
+
+            </div>
+
+            <div class="indicators" id="indicators"></div>
+
+            <button id="next">
+                Siguiente recuerdo ♡
+            </button>
+
+        </section>
+
+        <!-- FINAL -->
+
+        <section id="final" hidden>
+
+            <h1>Todo un futuro contigo</h1>
+
+            <div class="scene" id="finalScene"></div>
+
+            <p class="message">
+                No sé exactamente qué nos depara
+                el futuro, pero me encantaría
+                descubrirlo contigo.
+            </p>
+
+            <p class="message">
+                No quiero que estos momentos se queden
+                solamente en una página que hice para ti.
+            </p>
+
+            <p class="message">
+                Me encantaría que algún día
+                se conviertan en fotografías
+                y recuerdos que podamos guardar.
+            </p>
+
+            <p class="message">
+                Que nuestras gotitas solamente
+                sean un adelanto de todo
+                lo que nos falta vivir.
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <h2 class="highlight">
+                Todavía nos quedan muchísimos
+                recuerdos por crear, mi princesa.
+            </h2>
+
+            <div class="final-heart">♥</div>
+
+            <p class="message">
+                Te amo, Karina.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 7 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Volver a soñar contigo ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 17, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const introduction = document.getElementById("introduction");
+const chapters = document.getElementById("chapters");
+const chapter = document.getElementById("chapter");
+
+const chapterNumber = document.getElementById("chapterNumber");
+const chapterTitle = document.getElementById("chapterTitle");
+const chapterText = document.getElementById("chapterText");
+
+const scene = document.getElementById("scene");
+const indicators = document.getElementById("indicators");
+const next = document.getElementById("next");
+
+const final = document.getElementById("final");
+const finalScene = document.getElementById("finalScene");
+
+let current = 0;
+let transitioning = false;
+let timers = [];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor(remaining / 3600000) % 24;
+    const minutes = Math.floor(remaining / 60000) % 60;
+    const seconds = Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* FUNCIONES DE DIBUJO */
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function heart(x, y, size = 1) {
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${size})">
+            <g class="little-heart">
+                <path d="
+                    M0 16
+                    C-35 -5 -24 -27 -10 -21
+                    Q-3 -20 0 -12
+                    Q3 -20 10 -21
+                    C24 -27 35 -5 0 16Z
+                "
+                fill="url(#love)"
+                filter="url(#softGlow)"/>
+            </g>
+        </g>
+    `;
+
+}
+
+/* DEFINICIONES SVG */
+
+function svg(content, top, bottom) {
+
+    return `
+    <svg viewBox="0 0 360 350"
+         xmlns="http://www.w3.org/2000/svg">
+
+        <defs>
+
+            <linearGradient id="sky"
+                            x1="0" y1="0"
+                            x2="0" y2="1">
+
+                <stop stop-color="${top}"/>
+                <stop offset="1" stop-color="${bottom}"/>
+
+            </linearGradient>
+
+            <radialGradient id="blue"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#d2f8ff"/>
+                <stop offset=".4" stop-color="#55caff"/>
+                <stop offset="1" stop-color="#1754bc"/>
+
+            </radialGradient>
+
+            <radialGradient id="pink"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#ffe5f4"/>
+                <stop offset=".4" stop-color="#ff9cd5"/>
+                <stop offset="1" stop-color="#b52c85"/>
+
+            </radialGradient>
+
+            <linearGradient id="love">
+
+                <stop stop-color="#69ceff"/>
+                <stop offset=".5" stop-color="#c18aff"/>
+                <stop offset="1" stop-color="#ff79bd"/>
+
+            </linearGradient>
+
+            <linearGradient id="ocean"
+                            x1="0" y1="0"
+                            x2="0" y2="1">
+
+                <stop stop-color="#71629c"/>
+                <stop offset="1" stop-color="#223858"/>
+
+            </linearGradient>
+
+            <radialGradient id="fireGlow">
+
+                <stop stop-color="#ffb44c" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#ff9d39" stop-opacity="0"/>
+
+            </radialGradient>
+
+            <filter id="softGlow"
+                    x="-100%" y="-100%"
+                    width="300%" height="300%">
+
+                <feGaussianBlur in="SourceAlpha"
+                                stdDeviation="3"
+                                result="blur"/>
+
+                <feFlood flood-color="#ffb7e5"
+                         flood-opacity=".6"/>
+
+                <feComposite in2="blur"
+                             operator="in"/>
+
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+
+            </filter>
+
+        </defs>
+
+        <rect width="360" height="350"
+              fill="url(#sky)"/>
+
+        ${content}
+
+    </svg>
+    `;
+
+}
+
+/* NUESTRAS GOTITAS */
+
+function drop(x, y, color, scale = 1, back = false) {
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+
+            <g class="breathe">
+
+                <ellipse cy="43"
+                         rx="37" ry="8"
+                         fill="${color === "blue" ? "#48baff" : "#ff79bd"}"
+                         opacity=".22"/>
+
+                <g fill="url(#${color})"
+                   filter="url(#softGlow)">
+
+                    <ellipse cy="13"
+                             rx="24" ry="29"/>
+
+                    <ellipse cx="-13" cy="37"
+                             rx="12" ry="9"/>
+
+                    <ellipse cx="13" cy="37"
+                             rx="12" ry="9"/>
+
+                    <ellipse cx="-24" cy="13"
+                             rx="9" ry="15"/>
+
+                    <ellipse cx="24" cy="13"
+                             rx="9" ry="15"/>
+
+                    <ellipse cy="-25"
+                             rx="35" ry="35"/>
+
+                </g>
+
+                <ellipse cx="-13" cy="-42"
+                         rx="12" ry="6"
+                         fill="white"
+                         opacity=".5"/>
+
+                ${back ? "" : `
+                    <ellipse cx="-11" cy="-22"
+                             rx="4" ry="8"
+                             fill="#10101e"/>
+
+                    <ellipse cx="11" cy="-22"
+                             rx="4" ry="8"
+                             fill="#10101e"/>
+                `}
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+function couple(x, y, scale = 1, back = false) {
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+
+            ${drop(-35, 0, "blue", 1, back)}
+            ${drop(35, 0, "pink", 1, back)}
+
+            <path d="M-15 9 Q0 30 20 9"
+                  stroke="url(#blue)"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  fill="none"/>
+
+            <path d="M20 20 Q0 35 -15 20"
+                  stroke="url(#pink)"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  fill="none"/>
+
+            ${heart(0, -80, .6)}
+
+        </g>
+    `;
+
+}
+
+/* ESTRELLAS */
+
+function stars(amount = 65) {
+
+    let result = "";
+
+    for (let i = 0; i < amount; i++) {
+
+        result += `
+            <circle class="star"
+                    cx="${random(0, 360)}"
+                    cy="${random(0, 230)}"
+                    r="${random(.5, 1.8)}"
+                    fill="#fff1dc"
+                    style="animation-delay:${random(-3, 0)}s"/>
+        `;
+
+    }
+
+    return result;
+
+}
+
+/* ESCENA 1: PLAYA */
+
+function beachScene() {
+
+    return svg(`
+
+        <circle class="sun"
+                cx="180" cy="145"
+                r="51"
+                fill="#ffca83"
+                filter="url(#softGlow)"/>
+
+        <path d="M0 185 H360 V290 H0Z"
+              fill="url(#ocean)"/>
+
+        <path d="M145 190 H215 L270 280 H90Z"
+              fill="#ffb78c"
+              opacity=".22"/>
+
+        <g class="wave"
+           fill="none"
+           stroke="#f4c9de"
+           stroke-width="2"
+           opacity=".55">
+
+            <path d="M-30 202 Q30 195 90 202 T210 202 T330 202 T450 202"/>
+
+            <path d="M-30 225 Q30 218 90 225 T210 225 T330 225 T450 225"/>
+
+            <path d="M-30 249 Q30 242 90 249 T210 249 T330 249 T450 249"/>
+
+        </g>
+
+        <path d="M0 270 Q90 245 180 270 T360 270 V350 H0Z"
+              fill="#c68f89"/>
+
+        <path d="M0 284 Q90 260 180 284 T360 284"
+              stroke="#f7d7c0"
+              stroke-width="5"
+              fill="none"
+              opacity=".65"/>
+
+        <path d="M22 295 Q40 190 24 110"
+              stroke="#633e46"
+              stroke-width="13"
+              fill="none"/>
+
+        <g fill="#364c53">
+
+            <path d="M24 115 Q-20 45 80 77 Q48 82 24 115Z"/>
+
+            <path d="M24 115 Q90 52 110 115 Q65 96 24 115Z"/>
+
+            <path d="M24 115 Q90 90 90 165 Q60 126 24 115Z"/>
+
+            <path d="M24 115 Q-20 80 -20 155 Q0 125 24 115Z"/>
+
+        </g>
+
+        ${couple(180, 280, .92, true)}
+
+    `, "#603b86", "#ffc18e");
+
+}
+
+/* ESCENA 2: CAMPAMENTO */
+
+function campingScene() {
+
+    let embers = "";
+
+    for (let i = 0; i < 15; i++) {
+
+        embers += `
+            <circle class="ember"
+                    cx="${random(164, 196)}"
+                    cy="${random(245, 270)}"
+                    r="${random(1, 2.5)}"
+                    fill="#ffd67c"
+                    style="animation-delay:${random(-3, 0)}s"/>
+        `;
+
+    }
+
+    return svg(`
+
+        ${stars(100)}
+
+        <circle cx="280" cy="65"
+                r="34"
+                fill="#fff0c7"
+                filter="url(#softGlow)"/>
+
+        <path d="M0 220 L70 100 L140 220
+                 L220 120 L360 220 V350 H0Z"
+              fill="#17263e"/>
+
+        <path d="M0 245 Q180 200 360 245 V350 H0Z"
+              fill="#19382f"/>
+
+        <path d="M15 275 L80 165 L145 275Z"
+              fill="#b26d91"
+              stroke="#e2a7ba"
+              stroke-width="2"/>
+
+        <path d="M80 165 L113 275 H47Z"
+              fill="#3e2948"/>
+
+        <path d="M80 165 L80 275"
+              stroke="#f2c1ce"
+              stroke-width="2"/>
+
+        <circle cx="180" cy="268"
+                r="100"
+                fill="url(#fireGlow)"/>
+
+        ${couple(265, 270, .7)}
+
+        <g stroke="#694232"
+           stroke-width="11"
+           stroke-linecap="round">
+
+            <path d="M153 290 L205 275"/>
+
+            <path d="M153 275 L205 290"/>
+
+        </g>
+
+        <g class="fire">
+
+            <path d="
+                M180 286
+                C140 270 168 242 165 218
+                Q190 233 183 249
+                Q205 235 199 220
+                C230 265 207 285 180 286Z
+            "
+            fill="#ff823f"/>
+
+            <path d="
+                M180 282
+                C161 268 181 254 180 240
+                C207 263 198 279 180 282Z
+            "
+            fill="#ffe092"/>
+
+        </g>
+
+        ${embers}
+
+    `, "#050a21", "#34305b");
+
+}
+
+/* ESCENA 3: LLUVIA */
+
+function rainyScene() {
+
+    let rain = "";
+
+    for (let i = 0; i < 90; i++) {
+
+        const x = random(0, 400);
+        const y = random(-100, 400);
+
+        rain += `
+            <line class="rain-line"
+                  x1="${x}"
+                  y1="${y}"
+                  x2="${x - 5}"
+                  y2="${y + 18}"
+                  stroke="#c6e8ff"
+                  stroke-width="1.4"
+                  opacity=".5"
+                  style="animation-delay:${random(-1, 0)}s"/>
+        `;
+
+    }
+
+    return svg(`
+
+        <g fill="#303b58">
+
+            <ellipse cx="65" cy="50" rx="90" ry="36"/>
+
+            <ellipse cx="200" cy="25" rx="110" ry="45"/>
+
+            <ellipse cx="320" cy="60" rx="85" ry="38"/>
+
+        </g>
+
+        <rect y="245" width="360" height="105"
+              fill="#26354d"/>
+
+        <ellipse cx="180" cy="305"
+                 rx="125" ry="22"
+                 fill="#7b9bc4"
+                 opacity=".3"/>
+
+        <ellipse cx="180" cy="305"
+                 rx="70" ry="12"
+                 stroke="#a2d7ff"
+                 fill="none"
+                 opacity=".5"/>
+
+        ${rain}
+
+        <g class="rain-dance">
+
+            ${couple(180, 250, 1.15)}
+
+        </g>
+
+        ${heart(90, 130, .35)}
+        ${heart(270, 150, .35)}
+
+    `, "#182237", "#6689b4");
+
+}
+
+/* ESCENA 4: VIAJE */
+
+function travelScene() {
+
+    let clouds = "";
+
+    for (let i = 0; i < 5; i++) {
+
+        clouds += `
+            <g class="cloud"
+               style="animation-delay:${-i * 3}s"
+               opacity=".7">
+
+                <g transform="translate(0 ${45 + i * 55})"
+                   fill="#f6eaff">
+
+                    <ellipse rx="45" ry="17"/>
+
+                    <ellipse cx="-15" cy="-12"
+                             rx="24" ry="22"/>
+
+                    <ellipse cx="18" cy="-10"
+                             rx="23" ry="20"/>
+
+                </g>
+
+            </g>
+        `;
+
+    }
+
+    return svg(`
+
+        ${clouds}
+
+        <g class="plane">
+
+            <path d="
+                M25 155
+                Q20 130 70 125
+                H282
+                Q325 125 337 153
+                Q345 175 310 183
+                H75
+                Q35 180 25 155Z
+            "
+            fill="#f9e9f5"
+            stroke="#dba9d6"
+            stroke-width="2"/>
+
+            <path d="M45 133 L22 80 L50 80 L100 130Z"
+                  fill="#c18add"/>
+
+            <path d="M145 176 L100 240 L150 240 L235 176Z"
+                  fill="#c18add"/>
+
+            <path d="M130 130 L100 92 L150 92 L220 130Z"
+                  fill="#d7b0ec"/>
+
+            <path d="M35 165 H325"
+                  stroke="#e889bc"
+                  stroke-width="5"/>
+
+            <rect x="111" y="133"
+                  width="60" height="42"
+                  rx="16"
+                  fill="#52688c"/>
+
+            <rect x="185" y="133"
+                  width="60" height="42"
+                  rx="16"
+                  fill="#52688c"/>
+
+            ${drop(141, 160, "blue", .36)}
+            ${drop(215, 160, "pink", .36)}
+
+            <path d="M285 133 Q315 133 325 150 H285Z"
+                  fill="#8aa2c9"/>
+
+            ${heart(180, 80, .6)}
+
+        </g>
+
+        <text x="180" y="300"
+              text-anchor="middle"
+              font-size="17"
+              fill="#ffffff">
+
+            Cualquier lugar, contigo ♡
+
+        </text>
+
+    `, "#587bb9", "#e6b9df");
+
+}
+
+/* ESCENA 5: NAVIDAD */
+
+function christmasScene() {
+
+    let lights = "";
+    let snow = "";
+
+    for (let i = 0; i < 28; i++) {
+
+        const y = random(75, 230);
+        const width = (y - 40) * .35;
+
+        lights += `
+            <circle class="tree-light"
+                    cx="${105 + random(-width, width)}"
+                    cy="${y}"
+                    r="3.5"
+                    fill="${["#ffd77a", "#ff91bd", "#85d8ff"][i % 3]}"
+                    style="animation-delay:${random(-2, 0)}s"/>
+        `;
+
+    }
+
+    for (let i = 0; i < 60; i++) {
+
+        snow += `
+            <circle class="snowflake"
+                    cx="${random(0, 360)}"
+                    cy="${random(-60, 350)}"
+                    r="${random(1, 3)}"
+                    fill="white"
+                    opacity=".7"
+                    style="animation-delay:${random(-5, 0)}s"/>
+        `;
+
+    }
+
+    return svg(`
+
+        ${stars(45)}
+
+        <path d="M0 260 Q180 235 360 260 V350 H0Z"
+              fill="#e5d8ed"/>
+
+        <rect x="93" y="215"
+              width="24" height="55"
+              rx="4"
+              fill="#795449"/>
+
+        <g fill="#24634d">
+
+            <path d="M105 40 L48 135 H162Z"/>
+
+            <path d="M105 85 L30 190 H180Z"/>
+
+            <path d="M105 130 L12 245 H198Z"/>
+
+        </g>
+
+        ${lights}
+
+        <path d="
+            M105 17 L111 32 L128 33
+            L115 44 L119 60 L105 51
+            L91 60 L95 44 L82 33
+            L99 32Z
+        "
+        fill="#ffdf89"
+        filter="url(#softGlow)"/>
+
+        <g>
+
+            <rect x="30" y="252"
+                  width="40" height="35"
+                  rx="4"
+                  fill="#b65b92"/>
+
+            <path d="M50 252 V287 M30 263 H70"
+                  stroke="#ffd88a"
+                  stroke-width="5"/>
+
+            <rect x="80" y="260"
+                  width="35" height="32"
+                  rx="4"
+                  fill="#7166b5"/>
+
+            <path d="M97 260 V292 M80 272 H115"
+                  stroke="#ffc1e3"
+                  stroke-width="5"/>
+
+        </g>
+
+        ${couple(260, 260, .85)}
+
+        ${snow}
+
+    `, "#10152e", "#625079");
+
+}
+
+/* DIBUJAR LOS GATITOS */
+
+function cat(x, y, scale, name, color, stripe, type, motion) {
+
+    let markings = "";
+
+    if (type === "tabby") {
+
+        markings = `
+            <path d="
+                M-10 -21 L-7 -10
+                M0 -24 L0 -12
+                M10 -21 L7 -10
+                M-24 -5 L-15 -2
+                M24 -5 L15 -2
+                M-24 6 L-17 8
+                M24 6 L17 8
+                M-18 25 L-10 28
+                M18 25 L10 28
+                M-18 37 L-10 40
+                M18 37 L10 40
+            "
+            stroke="${stripe}"
+            stroke-width="4"
+            stroke-linecap="round"/>
+        `;
+
+    }
+
+    if (type === "calico") {
+
+        markings = `
+            <path d="M-24 -18 Q-2 -29 -4 -8
+                     Q-10 7 -25 0Z"
+                  fill="#96939e"/>
+
+            <path d="M7 -22 Q30 -17 25 6
+                     Q12 7 7 -22Z"
+                  fill="#e9a04c"/>
+
+            <ellipse cx="-11" cy="31"
+                     rx="9" ry="15"
+                     fill="#e9a04c"/>
+
+            <ellipse cx="12" cy="38"
+                     rx="8" ry="12"
+                     fill="#96939e"/>
+        `;
+
+    }
+
+    return `
+        <g transform="translate(${x} ${y})">
+
+            <g class="${motion}">
+
+                <g transform="scale(${scale})">
+
+                    <ellipse cy="55"
+                             rx="29" ry="6"
+                             fill="#152e29"
+                             opacity=".25"/>
+
+                    <path class="tail"
+                          d="M13 40 Q40 42 24 18"
+                          fill="none"
+                          stroke="${color}"
+                          stroke-width="9"
+                          stroke-linecap="round"/>
+
+                    <ellipse cy="30"
+                             rx="20" ry="27"
+                             fill="${color}"/>
+
+                    <path d="
+                        M-23 -9 L-23 -36 L-4 -20
+                        M23 -9 L23 -36 L4 -20
+                    "
+                    fill="${color}"
+                    stroke="${color}"
+                    stroke-width="3"
+                    stroke-linejoin="round"/>
+
+                    <path d="
+                        M-19 -28 L-19 -13 L-9 -20
+                        M19 -28 L19 -13 L9 -20
+                    "
+                    fill="#eab0b7"/>
+
+                    <ellipse rx="26" ry="24"
+                             fill="${color}"/>
+
+                    ${markings}
+
+                    ${motion === "cat-sleep" ? `
+
+                        <path d="
+                            M-15 1 Q-10 6 -5 1
+                            M5 1 Q10 6 15 1
+                        "
+                        fill="none"
+                        stroke="#201923"
+                        stroke-width="2.5"
+                        stroke-linecap="round"/>
+
+                        <text class="sleep-letter"
+                              x="25" y="-20"
+                              font-size="18"
+                              fill="#fff1d8">Z</text>
+
+                    ` : `
+
+                        <ellipse cx="-10" cy="1"
+                                 rx="3.3" ry="5"
+                                 fill="#201923"/>
+
+                        <ellipse cx="10" cy="1"
+                                 rx="3.3" ry="5"
+                                 fill="#201923"/>
+
+                    `}
+
+                    <path d="M-3 9 Q0 6 3 9 L0 12Z"
+                          fill="#e58d9e"/>
+
+                    <path d="
+                        M-8 12 L-27 9
+                        M-8 15 L-27 17
+                        M8 12 L27 9
+                        M8 15 L27 17
+                    "
+                    stroke="#665963"
+                    stroke-width="1"
+                    opacity=".65"/>
+
+                    <ellipse cx="-10" cy="51"
+                             rx="10" ry="6"
+                             fill="${color}"/>
+
+                    <ellipse cx="10" cy="51"
+                             rx="10" ry="6"
+                             fill="${color}"/>
+
+                </g>
+
+            </g>
+
+            <text x="0"
+                  y="${scale * 57 + 13}"
+                  text-anchor="middle"
+                  font-size="11"
+                  fill="#fff3dd"
+                  stroke="#244139"
+                  stroke-width="2.5"
+                  paint-order="stroke">
+
+                ${name}
+
+            </text>
+
+        </g>
+    `;
+
+}
+
+/* ESCENA 6: NUESTRO PEQUEÑO REINO */
+
+function homeScene() {
+
+    let flowers = "";
+
+    for (let i = 0; i < 25; i++) {
+
+        const x = random(5, 355);
+        const y = random(225, 340);
+
+        flowers += `
+            <g transform="translate(${x} ${y})">
+
+                <path d="M0 0 V8"
+                      stroke="#487a4b"
+                      stroke-width="2"/>
+
+                <circle cx="-3" r="3"
+                        fill="#ff9fc6"/>
+
+                <circle cx="3" r="3"
+                        fill="#ff9fc6"/>
+
+                <circle cy="-3" r="3"
+                        fill="#ffb7da"/>
+
+                <circle r="2.3"
+                        fill="#ffe09a"/>
+
+            </g>
+        `;
+
+    }
+
+    return svg(`
+
+        <circle cx="290" cy="45"
+                r="29"
+                fill="#ffe0a2"
+                filter="url(#softGlow)"/>
+
+        <path d="M0 190 Q90 120 180 190
+                 Q270 125 360 190 V350 H0Z"
+              fill="#628d76"/>
+
+        <path d="M0 230 Q180 195 360 230 V350 H0Z"
+              fill="#416e52"/>
+
+        <!-- CASITA -->
+
+        <rect x="90" y="104"
+              width="180" height="126"
+              rx="5"
+              fill="#f3c7b5"/>
+
+        <rect x="230" y="55"
+              width="23" height="52"
+              rx="3"
+              fill="#98666e"/>
+
+        <path d="M72 113 L180 42 L288 113Z"
+              fill="#985a76"
+              stroke="#e6a4b7"
+              stroke-width="4"/>
+
+        <path d="M85 110 L180 49 L275 110"
+              stroke="#ffc1d0"
+              stroke-width="3"
+              fill="none"/>
+
+        <rect x="160" y="160"
+              width="40" height="70"
+              rx="18"
+              fill="#875b70"/>
+
+        <circle cx="190" cy="195"
+                r="3"
+                fill="#ffd98d"/>
+
+        <!-- VENTANITAS -->
+
+        <g fill="#ffe0a0"
+           stroke="#a46b83"
+           stroke-width="4">
+
+            <rect x="105" y="143"
+                  width="40" height="43"
+                  rx="6"/>
+
+            <rect x="215" y="143"
+                  width="40" height="43"
+                  rx="6"/>
+
+        </g>
+
+        <g stroke="#a46b83"
+           stroke-width="3">
+
+            <path d="M125 143 V186 M105 164 H145"/>
+
+            <path d="M235 143 V186 M215 164 H255"/>
+
+        </g>
+
+        <!-- LETRERO -->
+
+        <rect x="103" y="112"
+              width="154" height="24"
+              rx="7"
+              fill="#825b65"
+              stroke="#ffdb99"
+              stroke-width="2"/>
+
+        <text x="180" y="128"
+              text-anchor="middle"
+              font-size="11"
+              fill="#ffe5b2">
+
+            Nuestro pequeño reino ♡
+
+        </text>
+
+        <!-- CAMINITO -->
+
+        <path d="M163 230 H197
+                 L238 350 H122Z"
+              fill="#b9a58b"
+              opacity=".65"/>
+
+        <!-- JARDÍN -->
+
+        ${flowers}
+
+        <!-- MARIPOSA -->
+
+        <g class="butterfly">
+
+            <g transform="translate(40 175)">
+
+                <ellipse cx="-5" cy="-3"
+                         rx="7" ry="5"
+                         fill="#ff9bd5"
+                         transform="rotate(25)"/>
+
+                <ellipse cx="5" cy="-3"
+                         rx="7" ry="5"
+                         fill="#c7a4ff"
+                         transform="rotate(-25)"/>
+
+                <ellipse cy="1"
+                         rx="2" ry="6"
+                         fill="#5b4265"/>
+
+            </g>
+
+        </g>
+
+        <!-- NUESTRAS GOTITAS -->
+
+        ${couple(180, 226, .7)}
+
+        <!-- LOS CINCO GATITOS -->
+
+        ${cat(
+            40, 267, .64,
+            "Simba",
+            "#e9a04c",
+            "#ba702e",
+            "tabby",
+            "cat-walk"
+        )}
+
+        ${cat(
+            110, 290, .64,
+            "Nala",
+            "#fff3e7",
+            "#96939e",
+            "calico",
+            "cat-sleep"
+        )}
+
+        ${cat(
+            180, 290, .64,
+            "Kiara",
+            "#99959e",
+            "#53515c",
+            "tabby",
+            "cat-bounce"
+        )}
+
+        ${cat(
+            250, 290, .64,
+            "Kopa",
+            "#99959e",
+            "#53515c",
+            "tabby",
+            "cat-bounce"
+        )}
+
+        ${cat(
+            320, 267, .64,
+            "Kion",
+            "#c7c4c9",
+            "#b8b4bd",
+            "plain",
+            "cat-walk"
+        )}
+
+    `, "#a7a5d2", "#f4c7b4");
+
+}
+
+/* ESCENA FINAL */
+
+function endingScene() {
+
+    return svg(`
+
+        ${stars(120)}
+
+        <circle cx="180" cy="90"
+                r="43"
+                fill="#fff1d6"
+                filter="url(#softGlow)"/>
+
+        <path d="M0 220 L70 135 L140 220
+                 L230 125 L360 220 V350 H0Z"
+              fill="#222b49"/>
+
+        <path d="M0 260 Q180 180 360 260 V350 H0Z"
+              fill="#263b48"/>
+
+        <path d="
+            M135 350
+            Q230 280 175 220
+            Q140 175 180 145
+            Q160 185 190 220
+            Q255 280 235 350Z
+        "
+        fill="#c4a5da"
+        opacity=".6"/>
+
+        ${couple(180, 275, 1, true)}
+
+        ${heart(75, 125, .35)}
+        ${heart(285, 155, .4)}
+
+    `, "#060a21", "#453060");
+
+}
+
+/* CONTENIDO DE LOS CAPÍTULOS */
+
+const stories = [
+
+    {
+        title: "Un atardecer contigo",
+
+        text: `
+            Quiero sentarme contigo frente al mar,
+            abrazarte y ver cómo desaparece el sol.
+            Sin prisas, sin preocuparnos por nada.
+            Solamente tú y yo, mi princesa.
+        `,
+
+        draw: beachScene
+    },
+
+    {
+        title: "Una noche bajo las estrellas",
+
+        text: `
+            Quiero vivir nuevas aventuras contigo.
+            Acampar, encender una fogatita
+            y pasar la noche abrazaditos
+            mientras miramos las estrellas.
+        `,
+
+        draw: campingScene
+    },
+
+    {
+        title: "Bailando bajo la lluvia",
+
+        text: `
+            Qué bonito sería bailar bajo la lluvia
+            contigo, mi hermosa gotita rosa.
+            Reírnos, mojarnos y terminar
+            abrazándonos muy fuerte.
+        `,
+
+        draw: rainyScene
+    },
+
+    {
+        title: "Conociendo el mundo",
+
+        text: `
+            Quiero conocer nuevos lugares
+            de tu manita, tomar muchas fotografías
+            y descubrir rinconcitos del mundo
+            que se conviertan en nuestros recuerdos.
+        `,
+
+        draw: travelScene
+    },
+
+    {
+        title: "Muchas Navidades contigo",
+
+        text: `
+            Quiero compartir muchas Navidades
+            a tu lado. Decorar nuestro arbolito,
+            darte regalitos y seguir encontrando
+            maneras de sorprenderte cada diciembre.
+        `,
+
+        draw: christmasScene
+    },
+
+    {
+        title: "Nuestro pequeño reino",
+
+        text: `
+            Qué bonito sería algún día tener
+            nuestro propio hogar, despertar a tu lado
+            y estar acompañados de nuestra pequeña
+            familia del Rey León.
+
+            <br><br>
+
+            Tú, yo, Nala, Simba, Kiara, Kion y Kopa.
+
+            <br><br>
+
+            Tal vez no tengamos un reino como el
+            del Rey León, pero me encantaría
+            construir uno contigo.
+
+            <br><br>
+
+            Uno lleno de amor, abrazos
+            y cinco gatitos haciendo travesuras.
+
+            <br><br>
+
+            <strong style="color:#ffc1e3">
+                Mi lugar favorito no sería la casita,
+                sino estar contigo.
+            </strong>
+        `,
+
+        draw: homeScene
+    }
+
+];
+
+/* INDICADORES */
+
+stories.forEach(() => {
+
+    const dot = document.createElement("span");
+
+    dot.className = "dot";
+
+    indicators.appendChild(dot);
+
+});
+
+/* MOSTRAR CAPÍTULO */
+
+function renderChapter() {
+
+    const story = stories[current];
+
+    chapterNumber.textContent =
+        `RECUERDO ${current + 1} DE ${stories.length}`;
+
+    chapterTitle.textContent = story.title;
+
+    chapterText.innerHTML = story.text;
+
+    scene.innerHTML = story.draw();
+
+    document.querySelectorAll(".dot")
+        .forEach((dot, index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === current
+            );
+
+            dot.classList.toggle(
+                "visited",
+                index < current
+            );
+
+        });
+
+    next.textContent =
+        current === stories.length - 1
+        ? "Y todavía nos falta mucho más ♡"
+        : "Siguiente recuerdo ♡";
+
+    chapter.classList.remove("leaving");
+
+    chapter.style.animation = "none";
+
+    void chapter.offsetWidth;
+
+    chapter.style.animation = "";
+
+}
+
+/* COMENZAR */
+
+document.getElementById("start")
+    .addEventListener("click", () => {
+
+        if (Date.now() < unlockDate) return;
+
+        current = 0;
+
+        introduction.hidden = true;
+
+        chapters.hidden = false;
+
+        renderChapter();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* SIGUIENTE CAPÍTULO */
+
+next.addEventListener("click", () => {
+
+    if (transitioning) return;
+
+    transitioning = true;
+
+    next.disabled = true;
+
+    chapter.classList.add("leaving");
+
+    timers.push(setTimeout(() => {
+
+        if (current < stories.length - 1) {
+
+            current++;
+
+            renderChapter();
+
+        } else {
+
+            showFinal();
+
+        }
+
+        transitioning = false;
+
+        next.disabled = false;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }, 500));
+
+});
+
+/* FINAL */
+
+function showFinal() {
+
+    chapters.hidden = true;
+
+    scene.innerHTML = "";
+
+    final.hidden = false;
+
+    finalScene.innerHTML = endingScene();
+
+    for (let i = 0; i < 90; i++) {
+
+        timers.push(
+            setTimeout(createParticle, i * 65)
+        );
+
+    }
+
+}
+
+/* PARTÍCULAS */
+
+function createParticle() {
+
+    const particle = document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.textContent =
+        Math.random() > .5 ? "♥" : "✧";
+
+    particle.style.color =
+        Math.random() > .5
+        ? "#69ceff"
+        : "#ff9bd5";
+
+    particle.style.left =
+        random(0, 100) + "vw";
+
+    particle.style.fontSize =
+        random(12, 30) + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        random(-60, 60) + "px"
+    );
+
+    const duration = random(4, 7);
+
+    particle.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, duration * 1000);
+
+}
+
+/* REPETIR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        current = 0;
+
+        transitioning = false;
+
+        next.disabled = false;
+
+        final.hidden = true;
+
+        finalScene.innerHTML = "";
+
+        chapters.hidden = true;
+
+        scene.innerHTML = "";
+
+        introduction.hidden = false;
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* ESTRELLITAS DE FONDO */
+
+for (let i = 0; i < 45; i++) {
+
+    const star = document.createElement("span");
+
+    star.className = "background-star";
+
+    star.textContent =
+        i % 4 === 0 ? "✧" : "·";
+
+    star.style.left =
+        random(0, 100) + "vw";
+
+    star.style.top =
+        random(0, 100) + "vh";
+
+    star.style.fontSize =
+        random(6, 15) + "px";
+
+    star.style.animationDelay =
+        random(-3, 0) + "s";
+
+    document.body.appendChild(star);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

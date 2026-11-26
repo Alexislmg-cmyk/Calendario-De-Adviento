@@ -1,0 +1,899 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 5 | Nuestras gotitas 💙🩷</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(
+                ellipse at bottom,
+                #281039,
+                #05030b 80%
+            );
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 500px;
+            padding: 35px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            color: #ffc1e3;
+            font-size: 34px;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 25px;
+            background: radial-gradient(
+                ellipse at bottom,
+                #34204b80,
+                transparent 75%
+            );
+        }
+
+        .scene svg {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #bluePosition {
+            transform: translate(90px, 205px);
+        }
+
+        #pinkPosition {
+            transform: translate(480px, 205px);
+            opacity: 0;
+        }
+
+        .scene.started #pinkPosition {
+            animation: pinkArrival 3s ease-in-out 1s forwards;
+        }
+
+        .scene.started #bluePosition {
+            animation: blueApproach 2s ease-in-out 4s forwards;
+        }
+
+        .blue-body,
+        .pink-body {
+            transform-origin: 0px 75px;
+            animation: breathing 3s ease-in-out infinite;
+        }
+
+        .pink-body {
+            animation-delay: -.8s;
+        }
+
+        #littleGift {
+            opacity: 1;
+        }
+
+        .scene.started #littleGift {
+            animation: giveGift 1.5s ease-in-out 6s forwards;
+        }
+
+        #hugArms {
+            opacity: 0;
+        }
+
+        .scene.started #hugArms {
+            animation: show 1s ease 7.5s forwards;
+        }
+
+        #loveHeart {
+            opacity: 0;
+            transform-origin: 200px 85px;
+        }
+
+        .scene.started #loveHeart {
+            animation:
+                show 1s ease 8s forwards,
+                heartbeat 1.5s ease-in-out 9s infinite;
+        }
+
+        #dialogue {
+            min-height: 85px;
+            color: #ffd1ea;
+            font-size: 21px;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        #dialogue.animate {
+            animation: appear .8s ease;
+        }
+
+        #openGift {
+            border: none;
+            border-radius: 25px;
+            padding: 17px 25px;
+            background: linear-gradient(
+                135deg,
+                #ff70bc,
+                #a35de0
+            );
+            color: white;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            box-shadow: 0 0 25px #ff49ac80;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        #surprise {
+            animation: appear 1.5s ease;
+        }
+
+        .photo-frame {
+            padding: 7px;
+            border-radius: 25px;
+            background: linear-gradient(
+                135deg,
+                #5fcfff,
+                #be83ff,
+                #ff8cc8
+            );
+            box-shadow:
+                0 0 25px #b55dff70,
+                0 0 45px #ff49ac40;
+            margin: 30px auto;
+            max-width: 320px;
+        }
+
+        .photo-frame img {
+            display: block;
+            width: 100%;
+            max-height: 450px;
+            object-fit: contain;
+            border-radius: 19px;
+            background: #100719;
+        }
+
+        .highlight {
+            color: #ffc1e3;
+            font-size: 29px;
+            line-height: 1.5;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .particle {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            animation: rise 6s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes pinkArrival {
+            0% {
+                transform: translate(480px, 205px);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(285px, 205px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes blueApproach {
+            from {
+                transform: translate(90px, 205px);
+            }
+
+            to {
+                transform: translate(178px, 205px);
+            }
+        }
+
+        @keyframes giveGift {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+
+            65% {
+                opacity: 1;
+                transform: translate(40px, -8px);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(50px, -10px);
+            }
+        }
+
+        @keyframes breathing {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.025, .98);
+            }
+        }
+
+        @keyframes show {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                transform: translateY(-115vh) rotate(35deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">05 DE DICIEMBRE · 2026</p>
+
+        <section id="locked">
+
+            <h1>Dos gotitas te esperan 🔒</h1>
+
+            <p class="message">
+                Alguien tiene un pequeño regalo para ti,
+                pero todavía no es momento de entregártelo.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <section id="unlocked" hidden>
+
+            <h1>Nuestras gotitas</h1>
+
+            <div class="scene" id="scene">
+
+                <svg viewBox="0 0 400 330">
+
+                    <defs>
+
+                        <!-- Colores de la gotita azul -->
+
+                        <radialGradient id="blue" cx="32%" cy="22%" r="85%">
+                            <stop offset="0%" stop-color="#c1f5ff"/>
+                            <stop offset="35%" stop-color="#55caff"/>
+                            <stop offset="75%" stop-color="#1689ed"/>
+                            <stop offset="100%" stop-color="#1754bc"/>
+                        </radialGradient>
+
+                        <!-- Colores de la gotita rosa -->
+
+                        <radialGradient id="pink" cx="32%" cy="22%" r="85%">
+                            <stop offset="0%" stop-color="#ffe0f3"/>
+                            <stop offset="35%" stop-color="#ff9cd5"/>
+                            <stop offset="75%" stop-color="#ed55b3"/>
+                            <stop offset="100%" stop-color="#b52c85"/>
+                        </radialGradient>
+
+                        <linearGradient id="heartColor" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffbce6"/>
+                            <stop offset="100%" stop-color="#ed45ac"/>
+                        </linearGradient>
+
+                        <filter id="blueGlow" x="-60%" y="-60%" width="220%" height="220%">
+                            <feDropShadow dx="0" dy="0"
+                                          stdDeviation="7"
+                                          flood-color="#38baff"
+                                          flood-opacity=".85"/>
+                        </filter>
+
+                        <filter id="pinkGlow" x="-60%" y="-60%" width="220%" height="220%">
+                            <feDropShadow dx="0" dy="0"
+                                          stdDeviation="7"
+                                          flood-color="#ff62be"
+                                          flood-opacity=".85"/>
+                        </filter>
+
+                        <filter id="heartGlow" x="-60%" y="-60%" width="220%" height="220%">
+                            <feDropShadow dx="0" dy="0"
+                                          stdDeviation="8"
+                                          flood-color="#ff62be"/>
+                        </filter>
+
+                    </defs>
+
+                    <!-- Estrellitas del fondo -->
+
+                    <g fill="#ffffff" opacity=".6">
+                        <circle cx="35" cy="70" r="1.5"/>
+                        <circle cx="80" cy="35" r="2"/>
+                        <circle cx="150" cy="55" r="1"/>
+                        <circle cx="230" cy="30" r="1.5"/>
+                        <circle cx="320" cy="60" r="2"/>
+                        <circle cx="365" cy="110" r="1.5"/>
+                        <circle cx="45" cy="170" r="1"/>
+                        <circle cx="345" cy="190" r="1"/>
+                    </g>
+
+                    <!-- Suelo -->
+
+                    <ellipse cx="200" cy="294"
+                             rx="170" ry="16"
+                             fill="#a469ff"
+                             opacity=".12"/>
+
+                    <!-- GOTITA AZUL -->
+
+                    <g id="bluePosition">
+
+                        <ellipse cx="0" cy="81"
+                                 rx="46" ry="9"
+                                 fill="#48cfff"
+                                 opacity=".35"/>
+
+                        <g class="blue-body" filter="url(#blueGlow)">
+
+                            <!-- Piernitas -->
+
+                            <rect x="-23" y="42"
+                                  width="21" height="36"
+                                  rx="11" fill="url(#blue)"/>
+
+                            <rect x="2" y="42"
+                                  width="21" height="36"
+                                  rx="11" fill="url(#blue)"/>
+
+                            <!-- Brazos -->
+
+                            <ellipse cx="-35" cy="25"
+                                     rx="12" ry="24"
+                                     transform="rotate(25 -35 25)"
+                                     fill="url(#blue)"/>
+
+                            <ellipse cx="35" cy="25"
+                                     rx="12" ry="24"
+                                     transform="rotate(-30 35 25)"
+                                     fill="url(#blue)"/>
+
+                            <!-- Cuerpo -->
+
+                            <ellipse cx="0" cy="25"
+                                     rx="33" ry="38"
+                                     fill="url(#blue)"/>
+
+                            <!-- Cabeza -->
+
+                            <ellipse cx="0" cy="-30"
+                                     rx="48" ry="47"
+                                     fill="url(#blue)"/>
+
+                            <!-- Reflejos -->
+
+                            <ellipse cx="-22" cy="-53"
+                                     rx="15" ry="8"
+                                     transform="rotate(-30 -22 -53)"
+                                     fill="white"
+                                     opacity=".55"/>
+
+                            <ellipse cx="-13" cy="20"
+                                     rx="8" ry="15"
+                                     fill="white"
+                                     opacity=".13"/>
+
+                            <!-- Ojitos -->
+
+                            <ellipse cx="-14" cy="-25"
+                                     rx="5.5" ry="11"
+                                     fill="#08111f"/>
+
+                            <ellipse cx="14" cy="-25"
+                                     rx="5.5" ry="11"
+                                     fill="#08111f"/>
+
+                        </g>
+
+                        <!-- Regalito rosa -->
+
+                        <g id="littleGift">
+
+                            <rect x="25" y="12"
+                                  width="43" height="37"
+                                  rx="5" fill="#ed65b3"/>
+
+                            <rect x="22" y="8"
+                                  width="49" height="12"
+                                  rx="4" fill="#ffa6d9"/>
+
+                            <rect x="42" y="8"
+                                  width="9" height="41"
+                                  fill="#b16eea"/>
+
+                            <path d="M46 8
+                                     C20 0 29 -16 46 8
+                                     C63 -16 74 0 46 8"
+                                  fill="none"
+                                  stroke="#d6a1ff"
+                                  stroke-width="5"
+                                  stroke-linecap="round"/>
+
+                        </g>
+
+                    </g>
+
+                    <!-- GOTITA ROSA -->
+
+                    <g id="pinkPosition">
+
+                        <ellipse cx="0" cy="81"
+                                 rx="46" ry="9"
+                                 fill="#ff79cb"
+                                 opacity=".35"/>
+
+                        <g class="pink-body" filter="url(#pinkGlow)">
+
+                            <!-- Piernitas -->
+
+                            <rect x="-23" y="42"
+                                  width="21" height="36"
+                                  rx="11" fill="url(#pink)"/>
+
+                            <rect x="2" y="42"
+                                  width="21" height="36"
+                                  rx="11" fill="url(#pink)"/>
+
+                            <!-- Brazos -->
+
+                            <ellipse cx="-35" cy="25"
+                                     rx="12" ry="24"
+                                     transform="rotate(30 -35 25)"
+                                     fill="url(#pink)"/>
+
+                            <ellipse cx="35" cy="25"
+                                     rx="12" ry="24"
+                                     transform="rotate(-25 35 25)"
+                                     fill="url(#pink)"/>
+
+                            <!-- Cuerpo -->
+
+                            <ellipse cx="0" cy="25"
+                                     rx="33" ry="38"
+                                     fill="url(#pink)"/>
+
+                            <!-- Cabeza -->
+
+                            <ellipse cx="0" cy="-30"
+                                     rx="48" ry="47"
+                                     fill="url(#pink)"/>
+
+                            <!-- Reflejos -->
+
+                            <ellipse cx="-22" cy="-53"
+                                     rx="15" ry="8"
+                                     transform="rotate(-30 -22 -53)"
+                                     fill="white"
+                                     opacity=".55"/>
+
+                            <ellipse cx="-13" cy="20"
+                                     rx="8" ry="15"
+                                     fill="white"
+                                     opacity=".13"/>
+
+                            <!-- Ojitos -->
+
+                            <ellipse cx="-14" cy="-25"
+                                     rx="5.5" ry="11"
+                                     fill="#211020"/>
+
+                            <ellipse cx="14" cy="-25"
+                                     rx="5.5" ry="11"
+                                     fill="#211020"/>
+
+                        </g>
+
+                    </g>
+
+                    <!-- Bracitos del abrazo -->
+
+                    <g id="hugArms">
+
+                        <path d="M205 219 Q231 246 264 221"
+                              fill="none"
+                              stroke="url(#blue)"
+                              stroke-width="19"
+                              stroke-linecap="round"
+                              filter="url(#blueGlow)"/>
+
+                        <path d="M255 232 Q229 251 199 232"
+                              fill="none"
+                              stroke="url(#pink)"
+                              stroke-width="17"
+                              stroke-linecap="round"
+                              filter="url(#pinkGlow)"/>
+
+                    </g>
+
+                    <!-- Corazón final -->
+
+                    <g id="loveHeart" filter="url(#heartGlow)">
+
+                        <path d="M200 116
+                                 C188 105 165 91 165 72
+                                 C165 50 189 46 200 64
+                                 C211 46 235 50 235 72
+                                 C235 91 212 105 200 116Z"
+                              fill="url(#heartColor)"/>
+
+                    </g>
+
+                </svg>
+
+            </div>
+
+            <p id="dialogue"></p>
+
+            <button id="openGift" hidden>
+                Abre tu regalito, mi amor 🎁
+            </button>
+
+        </section>
+
+        <!-- SORPRESA FINAL -->
+
+        <section id="surprise" hidden>
+
+            <h1>Mi gotita rosa 🩷</h1>
+
+            <div class="photo-frame">
+
+                <img id="photo"
+                     alt="Mi hermosa gotita rosa">
+
+            </div>
+
+            <p class="message">
+                Entre todas las gotitas del mundo,
+                qué bonito fue coincidir contigo.
+            </p>
+
+            <h2 class="highlight">
+                Y si volviera a llover,
+                volvería a buscarte a ti.
+            </h2>
+
+            <p class="message">
+                No importa cuántas tormentas lleguen,
+                quiero seguir estando a tu lado.
+            </p>
+
+            <p class="message">
+                Te amo, mi gotita hermosa.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <p class="message">
+                Todavía te esperan 19 sorpresas más...
+            </p>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 5, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+
+        const scene = document.getElementById("scene");
+        const dialogue = document.getElementById("dialogue");
+        const openGift = document.getElementById("openGift");
+        const surprise = document.getElementById("surprise");
+        const photo = document.getElementById("photo");
+
+        let started = false;
+        let completed = false;
+
+        // Cuenta regresiva
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+
+                if (!completed) {
+                    unlocked.hidden = false;
+                }
+
+                if (!started) {
+
+                    started = true;
+                    startStory();
+
+                }
+
+                return;
+
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        // Cambiar los diálogos
+
+        function say(text) {
+
+            dialogue.classList.remove("animate");
+
+            void dialogue.offsetWidth;
+
+            dialogue.textContent = text;
+
+            dialogue.classList.add("animate");
+
+        }
+
+        // Historia de nuestras gotitas
+
+        function startStory() {
+
+            say("Ey... ¿Dónde estará mi gotita?");
+
+            requestAnimationFrame(() => {
+
+                scene.classList.add("started");
+
+            });
+
+            setTimeout(() => {
+
+                say("¡Ahí estás, mi princesa!");
+
+            }, 4000);
+
+            setTimeout(() => {
+
+                say("Tengo un regalito para ti...");
+
+            }, 6000);
+
+            setTimeout(() => {
+
+                say("Pero primero, un abracito.");
+
+            }, 7800);
+
+            setTimeout(() => {
+
+                createParticles(35);
+
+            }, 8500);
+
+            setTimeout(() => {
+
+                say("Ahora sí, mi gotita hermosa. 💙");
+
+                openGift.hidden = false;
+
+            }, 11000);
+
+        }
+
+        // Abrir el regalo
+
+        openGift.addEventListener("click", () => {
+
+            if (Date.now() < unlockDate) return;
+            if (completed) return;
+
+            completed = true;
+
+            photo.src = "../imagenes/gotita.jpg";
+
+            unlocked.hidden = true;
+
+            surprise.hidden = false;
+
+            createParticles(65);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        });
+
+        // Corazones y gotitas flotantes
+
+        function createParticles(amount) {
+
+            for (let i = 0; i < amount; i++) {
+
+                setTimeout(() => {
+
+                    const particle = document.createElement("span");
+
+                    particle.className = "particle";
+
+                    particle.textContent = [
+                        "💙", "🩷", "💗", "💧", "♡"
+                    ][Math.floor(Math.random() * 5)];
+
+                    particle.style.left =
+                        Math.random() * 100 + "vw";
+
+                    particle.style.fontSize =
+                        12 + Math.random() * 24 + "px";
+
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 6000);
+
+                }, i * 75);
+
+            }
+
+        }
+
+        // Nieve de fondo
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+
+            snow.textContent = "❄";
+
+            snow.style.left = Math.random() * 100 + "vw";
+
+            snow.style.fontSize =
+                5 + Math.random() * 12 + "px";
+
+            snow.style.opacity = Math.random() * .6;
+
+            snow.style.animationDuration =
+                5 + Math.random() * 10 + "s";
+
+            snow.style.animationDelay =
+                -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        updateCountdown();
+
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

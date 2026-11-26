@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 3 | Cinco cositas de ti 💗</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(ellipse at bottom, #310d40, #09050f 75%);
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 450px;
+            padding: 35px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            color: #ffc1e3;
+            font-size: 35px;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        .hearts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 22px;
+            margin: 40px 0;
+        }
+
+        .love-heart {
+            position: relative;
+            width: 100px;
+            height: 110px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            animation: floating 3s ease-in-out infinite;
+            transition: opacity .5s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .love-heart svg {
+            width: 100%;
+            overflow: visible;
+            filter: drop-shadow(0 0 13px var(--color));
+        }
+
+        .love-heart span {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+
+        .love-heart.discovered {
+            opacity: .45;
+            animation: none;
+        }
+
+        #reason {
+            min-height: 150px;
+            padding: 25px 20px;
+            border: 1px solid #ff9bd34d;
+            background: #ff9bd30a;
+            border-radius: 20px;
+            box-shadow: 0 0 25px #e85cbb20;
+            font-size: 21px;
+            line-height: 1.6;
+            color: #ffd1ea;
+        }
+
+        #reason.animate {
+            animation: appear .8s ease;
+        }
+
+        #progress {
+            color: #cfa2e8;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-top: 25px;
+        }
+
+        #finish {
+            background: linear-gradient(135deg, #df459c, #a363de);
+            color: white;
+            font-family: Georgia, serif;
+            font-size: 17px;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 25px #ff49ac60;
+            animation: appear 1s ease;
+        }
+
+        .big-heart {
+            width: 220px;
+            margin: 45px auto;
+            animation: heartbeat 1.3s infinite;
+            filter: drop-shadow(0 0 30px #ff49ac);
+        }
+
+        .final-title {
+            font-size: 43px;
+            color: #ffc1e3;
+            text-shadow: 0 0 25px #ff49ac;
+        }
+
+        #final {
+            animation: appear 1.5s ease;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .particle {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            z-index: 5;
+            animation: rise 5s ease-out forwards;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            20% {
+                transform: scale(1.12);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            60% {
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                opacity: 0;
+                transform: translateY(-110vh) rotate(35deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">03 DE DICIEMBRE · 2026</p>
+
+        <section id="locked">
+
+            <h1>Aún no, mi amor 🔒</h1>
+
+            <p class="message">
+                Hay cinco cositas que quiero decirte,
+                pero tendrás que esperar un poquito.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <section id="unlocked" hidden>
+
+            <h1>Cinco cositas que me encantan de ti</h1>
+
+            <p class="message">
+                Presiona cada corazón, mi princesa.
+                Todos guardan algo para ti.
+            </p>
+
+            <div class="hearts" id="hearts"></div>
+
+            <div id="reason">
+                Elige un corazoncito ♡
+            </div>
+
+            <p id="progress">
+                0 DE 5 CORAZONES
+            </p>
+
+            <button id="finish" hidden>
+                Una cosita más... ♡
+            </button>
+
+        </section>
+
+        <section id="final" hidden>
+
+            <div class="big-heart">
+
+                <svg viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="pink"
+                                        x1="0%" y1="0%"
+                                        x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffc1e3"/>
+                            <stop offset="50%" stop-color="#ff56ad"/>
+                            <stop offset="100%" stop-color="#a34de0"/>
+                        </linearGradient>
+                    </defs>
+
+                    <path
+                        d="M50 91 C40 80 5 57 5 30
+                           C5 5 35 0 50 23
+                           C65 0 95 5 95 30
+                           C95 57 60 80 50 91Z"
+                        fill="url(#pink)"
+                    />
+                </svg>
+
+            </div>
+
+            <h1 class="final-title">
+                Te amo, mi princesa.
+            </h1>
+
+            <p class="message">
+                Y aunque hoy solamente te dije cinco cosas,
+                podría pasarme toda la vida encontrando
+                nuevas razones para amarte.
+            </p>
+
+            <p class="message">
+                Me encantas completita, mi gotita. 💗
+            </p>
+
+            <p class="message">
+                Todavía te esperan 21 sorpresas más...
+            </p>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 3, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+        const hearts = document.getElementById("hearts");
+        const reason = document.getElementById("reason");
+        const progress = document.getElementById("progress");
+        const finish = document.getElementById("finish");
+        const final = document.getElementById("final");
+
+        let completed = false;
+
+        const discovered = new Set();
+
+        // Las cinco razones
+        const reasons = [
+
+            "Me encanta tu sonrisa. Verte feliz es una de las cosas más bonitas de mis días.",
+
+            "Me encantan tus abrazos. Si pudiera, me quedaría abrazándote durante horas.",
+
+            "Me encanta cuando estamos acostaditos juntos. Quisiera que esos momentos duraran un poquito más.",
+
+            "Me encanta poder consentirte, comprarte tus chocolatitos, tus Takis y esas donitas de maple que tanto te gustan.",
+
+            "Me encanta que seas tú. Con tus ocurrencias, tus gestos y todas esas pequeñas cositas que te hacen tan especial para mí."
+
+        ];
+
+        const colors = [
+            "#ff65ac",
+            "#c878ff",
+            "#ff9bce",
+            "#a777ff",
+            "#ed469a"
+        ];
+
+        reasons.forEach((text, index) => {
+
+            const heart = document.createElement("button");
+
+            heart.className = "love-heart";
+            heart.style.setProperty("--color", colors[index]);
+            heart.style.animationDelay = index * -.5 + "s";
+
+            heart.setAttribute(
+                "aria-label",
+                "Descubrir corazón " + (index + 1)
+            );
+
+            heart.innerHTML = `
+                <svg viewBox="0 0 100 100">
+                    <path
+                        d="M50 91 C40 80 5 57 5 30
+                           C5 5 35 0 50 23
+                           C65 0 95 5 95 30
+                           C95 57 60 80 50 91Z"
+                        fill="${colors[index]}"
+                    />
+                </svg>
+
+                <span>${index + 1}</span>
+            `;
+
+            heart.addEventListener("click", () => {
+
+                if (Date.now() < unlockDate) return;
+
+                discovered.add(index);
+
+                heart.classList.add("discovered");
+                heart.querySelector("span").textContent = "✓";
+
+                reason.classList.remove("animate");
+
+                void reason.offsetWidth;
+
+                reason.textContent = text;
+                reason.classList.add("animate");
+
+                progress.textContent =
+                    discovered.size + " DE 5 CORAZONES";
+
+                createParticles(8);
+
+                if (discovered.size === 5) {
+
+                    finish.hidden = false;
+
+                }
+
+            });
+
+            hearts.appendChild(heart);
+
+        });
+
+        finish.addEventListener("click", () => {
+
+            if (Date.now() < unlockDate) return;
+            if (discovered.size !== 5 || completed) return;
+
+            completed = true;
+
+            unlocked.hidden = true;
+            final.hidden = false;
+
+            createParticles(70);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        });
+
+        function createParticles(amount) {
+
+            for (let i = 0; i < amount; i++) {
+
+                setTimeout(() => {
+
+                    const particle = document.createElement("span");
+
+                    particle.className = "particle";
+
+                    particle.textContent = ["💗", "💕", "💜", "♡"][
+                        Math.floor(Math.random() * 4)
+                    ];
+
+                    particle.style.left = Math.random() * 100 + "vw";
+
+                    particle.style.fontSize =
+                        12 + Math.random() * 25 + "px";
+
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 5000);
+
+                }, i * 65);
+
+            }
+
+        }
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+
+                if (!completed) {
+                    unlocked.hidden = false;
+                }
+
+                return;
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.fontSize = 5 + Math.random() * 12 + "px";
+            snow.style.opacity = Math.random() * .6;
+            snow.style.animationDuration = 5 + Math.random() * 10 + "s";
+            snow.style.animationDelay = -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

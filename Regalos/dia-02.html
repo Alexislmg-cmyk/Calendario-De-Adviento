@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 2 | Una carta para ti 💌</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(ellipse at bottom, #310d40, #09050f 75%);
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            padding: 40px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            font-size: 35px;
+            color: #ffc1e3;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            font-size: 23px;
+            color: #ffc1e3;
+            line-height: 1.8;
+        }
+
+        .envelope {
+            position: relative;
+            width: 250px;
+            height: 165px;
+            margin: 65px auto;
+            background: #ffb5d8;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 45px #ff49ac70;
+            cursor: pointer;
+            perspective: 800px;
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        .envelope-front {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ffb6dc, #ed76b5);
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #ffd0e7;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 1s ease;
+            z-index: 3;
+        }
+
+        .seal {
+            position: absolute;
+            left: 50%;
+            top: 55%;
+            transform: translate(-50%, -50%);
+            background: #a35ce0;
+            color: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+            box-shadow: 0 0 15px #c77dff;
+            z-index: 4;
+            transition: opacity .5s;
+        }
+
+        .envelope.open {
+            animation: none;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope.open .seal {
+            opacity: 0;
+        }
+
+        .paper {
+            background: linear-gradient(145deg, #fff0f7, #eedbff);
+            color: #60294d;
+            padding: 30px 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 35px #e86bc650;
+            text-align: left;
+            animation: appear 1.5s ease;
+        }
+
+        .paper h2 {
+            color: #b44486;
+            text-align: center;
+            font-size: 27px;
+        }
+
+        #letter {
+            font-size: 18px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .signature {
+            text-align: right;
+            color: #b44486;
+            font-style: italic;
+            animation: appear 2s ease;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            z-index: 5;
+            animation: rise 4s ease-out forwards;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                opacity: 0;
+                transform: translateY(-110vh) rotate(30deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">02 DE DICIEMBRE · 2026</p>
+
+        <section id="locked">
+
+            <h1>Paciencia, princesa 🔒</h1>
+
+            <p class="message">
+                Tengo algo que decirte,
+                pero todavía no es el momento.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <section id="unlocked" hidden>
+
+            <h1>Tienes una cartita 💌</h1>
+
+            <button class="envelope" id="envelope"
+                    aria-label="Abrir carta">
+
+                <span class="envelope-front"></span>
+                <span class="flap"></span>
+                <span class="seal">♥</span>
+
+            </button>
+
+            <p class="message">
+                Es solamente para ti, mi princesa.
+                <br>
+                Presiona el corazón.
+            </p>
+
+        </section>
+
+        <section id="surprise" hidden>
+
+            <div class="paper">
+
+                <h2>Para mi gotita ♡</h2>
+
+                <div id="letter"></div>
+
+                <p class="signature" id="signature" hidden>
+                    Con todo mi amor,<br>
+                    Tu gotita azul. 💙
+                </p>
+
+            </div>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 2, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+        const envelope = document.getElementById("envelope");
+        const surprise = document.getElementById("surprise");
+
+        let opened = false;
+
+        const letterText = `Mi princesa:
+
+Hoy no quería regalarte una foto ni algo demasiado elaborado. Solamente quería recordarte lo mucho que te amo.
+
+Sé que tengo muchos defectos y que todavía tengo muchas cosas que aprender, pero quiero seguir creciendo y compartiendo mi vida contigo.
+
+Gracias por cada abrazo, cada beso, cada sonrisa y cada pequeño momento que compartimos.
+
+Me encanta poder hacer estas cositas para ti, imaginar tu carita cuando las abres y pensar que quizá logré sacarte una sonrisa.
+
+Espero que nunca olvides lo especial que eres para mí.
+
+Te amo muchísimo, mi gotita.
+
+Y todavía te esperan 22 sorpresas más...`;
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+
+                if (!opened) {
+                    unlocked.hidden = false;
+                }
+
+                return;
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+        }
+
+        function writeLetter() {
+
+            const letter = document.getElementById("letter");
+            const characters = Array.from(letterText);
+
+            let position = 0;
+
+            function write() {
+
+                if (position < characters.length) {
+
+                    letter.textContent += characters[position];
+
+                    position++;
+
+                    setTimeout(write, 35);
+
+                } else {
+
+                    document.getElementById("signature").hidden = false;
+
+                    createHearts();
+                }
+            }
+
+            write();
+        }
+
+        function createHearts() {
+
+            for (let i = 0; i < 35; i++) {
+
+                setTimeout(() => {
+
+                    const heart = document.createElement("span");
+
+                    heart.className = "heart";
+
+                    heart.textContent = ["💗", "💜", "♡", "💕"][
+                        Math.floor(Math.random() * 4)
+                    ];
+
+                    heart.style.left = Math.random() * 100 + "vw";
+                    heart.style.fontSize = 15 + Math.random() * 25 + "px";
+
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4000);
+
+                }, i * 70);
+            }
+        }
+
+        envelope.addEventListener("click", () => {
+
+            if (Date.now() < unlockDate || opened) return;
+
+            opened = true;
+
+            envelope.classList.add("open");
+
+            setTimeout(() => {
+
+                unlocked.hidden = true;
+                surprise.hidden = false;
+
+                createHearts();
+                writeLetter();
+
+            }, 1200);
+        });
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.fontSize = 5 + Math.random() * 12 + "px";
+            snow.style.opacity = Math.random() * .6;
+            snow.style.animationDuration = 5 + Math.random() * 10 + "s";
+            snow.style.animationDelay = -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

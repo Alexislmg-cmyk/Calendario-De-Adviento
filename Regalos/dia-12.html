@@ -1,0 +1,1270 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 12 | Un deseo para nosotros 🌙</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: linear-gradient(
+        #03040e,
+        #0d102c 50%,
+        #251333
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    max-width: 500px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 30px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #f1d5ff;
+    font-size: 30px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #bd83ef;
+}
+
+.message {
+    color: #ebd9f7;
+    font-size: 19px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* CIELO ESTRELLADO */
+
+#sky {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 7px currentColor;
+    animation: twinkle infinite alternate;
+}
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 15px auto;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+/* LUNA */
+
+.moon-glow {
+    animation: moonGlow 5s infinite alternate;
+}
+
+/* GOTITAS */
+
+.drop {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+.pink-drop {
+    animation-delay: .5s;
+}
+
+/* ESTRELLA FUGAZ */
+
+.shooting-star {
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    width: 75px;
+    height: 75px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.shooting-star.arriving {
+    animation: shooting 2s ease-out forwards;
+}
+
+.shooting-star.ready {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.shooting-star.ready svg {
+    animation: starPulse 1.5s infinite;
+}
+
+.shooting-star svg {
+    filter:
+        drop-shadow(0 0 10px #fff3ba)
+        drop-shadow(0 0 20px #ffc1e3);
+}
+
+.shooting-star.used {
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+}
+
+.trail {
+    position: absolute;
+    width: 140px;
+    height: 5px;
+    right: 55%;
+    top: 48%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #d9b6ff,
+        #fff5cf
+    );
+    transform: rotate(-25deg);
+    transform-origin: right center;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0;
+}
+
+.arriving .trail {
+    animation: trailFade 2s forwards;
+}
+
+/* CORAZÓN DE ESTRELLAS */
+
+#heartStars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.heart-point {
+    position: absolute;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    animation: formHeart 1s ease forwards;
+    text-shadow: 0 0 12px currentColor;
+}
+
+/* EXPLOSIÓN MÁGICA */
+
+.burst {
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 12px currentColor;
+    animation: burst 1.5s ease-out forwards;
+}
+
+/* MENSAJES */
+
+#instruction {
+    color: #ffe3ba;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 58px;
+    transition: opacity .5s;
+}
+
+#final {
+    margin-top: 25px;
+    animation: appear 2s ease;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 27px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ff49ac80,
+        0 0 30px #bd83ef;
+}
+
+.divider {
+    color: #d9b6ff;
+    font-size: 20px;
+    letter-spacing: 8px;
+    margin: 30px auto;
+}
+
+.final-heart {
+    font-size: 65px;
+    color: #ffc1e3;
+    text-shadow:
+        -8px 0 25px #48baff,
+        8px 0 25px #ff49ac;
+    animation: starPulse 2s infinite;
+}
+
+.back,
+.replay {
+    display: inline-block;
+    margin: 25px auto 0;
+    padding: 13px 25px;
+    border: 1px solid #ac80c7;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* ANIMACIONES */
+
+@keyframes twinkle {
+    from {
+        opacity: .15;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes moonGlow {
+    from {
+        opacity: .3;
+    }
+
+    to {
+        opacity: .7;
+    }
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes shooting {
+    0% {
+        transform: translate(-230%, -240%) scale(.3);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes trailFade {
+    0%, 35% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes starPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes burst {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform:
+            translate(var(--x), var(--y))
+            scale(.2);
+        opacity: 0;
+    }
+}
+
+@keyframes formHeart {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .star,
+    .drop,
+    .moon-glow,
+    .final-heart,
+    .shooting-star.ready svg {
+        animation: none;
+    }
+
+    .star {
+        opacity: .7;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<main class="container">
+
+    <p class="date">12 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Un deseo bajo las estrellas 🔒</h1>
+
+        <p class="message">
+            Hay una pequeña estrella esperando
+            iluminar nuestro cielo.
+        </p>
+
+        <p class="message">
+            Pronto podrás pedirle un deseo,
+            mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1>Un deseo para nosotros</h1>
+
+        <p class="message">
+            Ven, mi amor.<br>
+            Sentémonos un ratito a mirar las estrellas.
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 440">
+
+                <defs>
+
+                    <!-- LUNA -->
+
+                    <radialGradient id="moonColor"
+                                    cx="35%" cy="30%" r="80%">
+
+                        <stop offset="0%"
+                              stop-color="#fffdf0"/>
+
+                        <stop offset="60%"
+                              stop-color="#f3e5ff"/>
+
+                        <stop offset="100%"
+                              stop-color="#bba7e2"/>
+
+                    </radialGradient>
+
+                    <filter id="moonBlur"
+                            x="-100%" y="-100%"
+                            width="300%" height="300%">
+
+                        <feGaussianBlur stdDeviation="17"/>
+
+                    </filter>
+
+                    <!-- GOTITA AZUL -->
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop offset="0%"
+                              stop-color="#c1f5ff"/>
+
+                        <stop offset="40%"
+                              stop-color="#55caff"/>
+
+                        <stop offset="100%"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <!-- GOTITA ROSA -->
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop offset="0%"
+                              stop-color="#ffe0f3"/>
+
+                        <stop offset="40%"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="100%"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <filter id="blueGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="5"
+                            flood-color="#38baff"/>
+
+                    </filter>
+
+                    <filter id="pinkGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="5"
+                            flood-color="#ff62be"/>
+
+                    </filter>
+
+                    <!-- MONTAÑAS -->
+
+                    <linearGradient id="hillColor"
+                                    x1="0" y1="0"
+                                    x2="0" y2="1">
+
+                        <stop offset="0%"
+                              stop-color="#252040"/>
+
+                        <stop offset="100%"
+                              stop-color="#0b0816"/>
+
+                    </linearGradient>
+
+                </defs>
+
+                <!-- LUNA GRANDE -->
+
+                <circle class="moon-glow"
+                        cx="265" cy="76"
+                        r="65"
+                        fill="#d9b6ff"
+                        filter="url(#moonBlur)"/>
+
+                <circle cx="265" cy="76"
+                        r="53"
+                        fill="url(#moonColor)"/>
+
+                <!-- CRÁTERES -->
+
+                <g fill="#9f8fcb" opacity=".17">
+
+                    <circle cx="246" cy="53" r="12"/>
+
+                    <circle cx="287" cy="72" r="9"/>
+
+                    <circle cx="257" cy="99" r="15"/>
+
+                    <circle cx="281" cy="44" r="6"/>
+
+                    <circle cx="231" cy="79" r="5"/>
+
+                </g>
+
+                <!-- ESTRELLAS GRANDES -->
+
+                <g fill="#f3e2ff">
+
+                    <path d="M48 50 Q48 59 57 59
+                             Q48 59 48 68
+                             Q48 59 39 59
+                             Q48 59 48 50Z"/>
+
+                    <path d="M115 90 Q115 97 122 97
+                             Q115 97 115 104
+                             Q115 97 108 97
+                             Q115 97 115 90Z"/>
+
+                    <path d="M320 165 Q320 173 328 173
+                             Q320 173 320 181
+                             Q320 173 312 173
+                             Q320 173 320 165Z"/>
+
+                    <path d="M35 200 Q35 206 41 206
+                             Q35 206 35 212
+                             Q35 206 29 206
+                             Q35 206 35 200Z"/>
+
+                </g>
+
+                <!-- MONTAÑAS LEJANAS -->
+
+                <path d="
+                    M0 310
+                    L65 247
+                    L120 300
+                    L200 225
+                    L290 295
+                    L360 250
+                    L360 440
+                    L0 440Z
+                "
+                fill="#17152e"/>
+
+                <path d="
+                    M0 345
+                    Q70 290 140 325
+                    Q220 280 360 330
+                    L360 440
+                    L0 440Z
+                "
+                fill="#201932"/>
+
+                <!-- COLINA PRINCIPAL -->
+
+                <path d="
+                    M0 398
+                    Q180 305 360 398
+                    L360 440
+                    L0 440Z
+                "
+                fill="url(#hillColor)"/>
+
+                <!-- GOTITA AZUL -->
+
+                <g transform="translate(143 321)">
+
+                    <g class="drop">
+
+                        <ellipse cy="47"
+                                 rx="35" ry="6"
+                                 fill="#48cfff"
+                                 opacity=".25"/>
+
+                        <g fill="url(#blueDrop)"
+                           filter="url(#blueGlow)">
+
+                            <ellipse cy="18"
+                                     rx="24" ry="28"/>
+
+                            <ellipse cx="-15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="-25" cy="18"
+                                     rx="9" ry="17"/>
+
+                            <ellipse cy="-22"
+                                     rx="34" ry="34"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-38"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <!-- OJITOS MIRANDO ARRIBA -->
+
+                        <ellipse cx="-8" cy="-29"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="12" cy="-29"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g transform="translate(213 321)">
+
+                    <g class="drop pink-drop">
+
+                        <ellipse cy="47"
+                                 rx="35" ry="6"
+                                 fill="#ff79cb"
+                                 opacity=".25"/>
+
+                        <g fill="url(#pinkDrop)"
+                           filter="url(#pinkGlow)">
+
+                            <ellipse cy="18"
+                                     rx="24" ry="28"/>
+
+                            <ellipse cx="-15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="15" cy="39"
+                                     rx="13" ry="9"/>
+
+                            <ellipse cx="25" cy="18"
+                                     rx="9" ry="17"/>
+
+                            <ellipse cy="-22"
+                                     rx="34" ry="34"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-38"
+                                 rx="11" ry="6"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-12" cy="-29"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="8" cy="-29"
+                                 rx="4" ry="8"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITAS ABRAZADAS -->
+
+                <path d="M160 335 Q180 353 203 334"
+                      stroke="url(#blueDrop)"
+                      stroke-width="14"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <path d="M198 345 Q180 360 157 345"
+                      stroke="url(#pinkDrop)"
+                      stroke-width="13"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <!-- PASTITO -->
+
+                <g stroke="#655478"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   opacity=".5">
+
+                    <path d="M42 398 Q40 387 34 383"/>
+
+                    <path d="M42 398 Q46 387 51 385"/>
+
+                    <path d="M310 396 Q308 385 302 381"/>
+
+                    <path d="M310 396 Q315 385 320 384"/>
+
+                    <path d="M90 379 Q86 370 82 367"/>
+
+                    <path d="M270 378 Q275 368 279 367"/>
+
+                </g>
+
+            </svg>
+
+            <!-- ESTRELLA INTERACTIVA -->
+
+            <button class="shooting-star"
+                    id="shootingStar"
+                    aria-label="Pedir un deseo"
+                    disabled>
+
+                <span class="trail"></span>
+
+                <svg viewBox="0 0 100 100">
+
+                    <defs>
+
+                        <radialGradient id="wishStar">
+
+                            <stop offset="0%"
+                                  stop-color="#ffffff"/>
+
+                            <stop offset="60%"
+                                  stop-color="#fff2b6"/>
+
+                            <stop offset="100%"
+                                  stop-color="#ffc0df"/>
+
+                        </radialGradient>
+
+                    </defs>
+
+                    <path d="
+                        M50 4
+                        L64 34
+                        L97 39
+                        L73 62
+                        L79 95
+                        L50 79
+                        L21 95
+                        L27 62
+                        L3 39
+                        L36 34Z
+                    "
+                    fill="url(#wishStar)"
+                    stroke="#fff9e5"
+                    stroke-width="2"/>
+
+                </svg>
+
+            </button>
+
+            <div id="heartStars"></div>
+
+        </div>
+
+        <p id="instruction">
+            Mira el cielo, mi princesa...
+        </p>
+
+        <!-- DEDICATORIA FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ☾ ✧</div>
+
+            <h2 class="highlight">
+                ¿Ya pediste tu deseo?
+            </h2>
+
+            <p class="message">
+                No sé qué deseo hayas pedido,
+                mi princesa, pero quiero contarte el mío.
+            </p>
+
+            <p class="message">
+                Deseo que sigamos creciendo juntos,
+                que aprendamos a comprendernos
+                y que nunca nos falten los abrazos.
+            </p>
+
+            <p class="message">
+                Deseo que tengamos muchas noches
+                como esta, aunque no siempre
+                podamos estar juntitos.
+            </p>
+
+            <p class="message">
+                Que sigamos creando recuerdos,
+                descubriendo cosas nuevas
+                y disfrutando esos pequeños momentos
+                que tanto me encantan contigo.
+            </p>
+
+            <p class="message">
+                Y que algún día podamos mirar atrás
+                y recordar que todo comenzó
+                con dos personas que se enamoraron.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <h2 class="highlight">
+                Mi deseo es seguir construyendo
+                una historia bonita contigo.
+            </h2>
+
+            <p class="message">
+                Te amo, mi hermosa gotita rosa.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Ya estamos a la mitad
+                de tu calendario, mi princesa.
+            </p>
+
+            <p class="message">
+                Todavía te esperan
+                12 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Pedir otro deseo ✧
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 12, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const shootingStar = document.getElementById("shootingStar");
+const heartStars = document.getElementById("heartStars");
+const instruction = document.getElementById("instruction");
+const final = document.getElementById("final");
+
+let started = false;
+let wished = false;
+let timers = [];
+
+/* CONTROL DE TIEMPOS */
+
+function later(callback, delay) {
+
+    const timer = setTimeout(callback, delay);
+
+    timers.push(timer);
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            startScene();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* CREAR 200 ESTRELLITAS */
+
+function createSky() {
+
+    const sky = document.getElementById("sky");
+
+    const colors = [
+        "#ffffff",
+        "#d9b6ff",
+        "#ffc1e3",
+        "#a8dfff",
+        "#fff0ba"
+    ];
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < 200; i++) {
+
+        const star = document.createElement("span");
+
+        star.className = "star";
+
+        const size = .8 + Math.random() * 2.3;
+
+        const color =
+            colors[Math.floor(Math.random() * colors.length)];
+
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+
+        star.style.background = color;
+        star.style.color = color;
+
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * 100 + "%";
+
+        star.style.animationDuration =
+            2 + Math.random() * 5 + "s";
+
+        star.style.animationDelay =
+            -Math.random() * 6 + "s";
+
+        fragment.appendChild(star);
+
+    }
+
+    sky.appendChild(fragment);
+
+}
+
+/* COMENZAR LA ESCENA */
+
+function startScene() {
+
+    wished = false;
+
+    shootingStar.className = "shooting-star";
+
+    shootingStar.disabled = true;
+
+    heartStars.innerHTML = "";
+
+    final.hidden = true;
+
+    instruction.textContent =
+        "Mira el cielo, mi princesa...";
+
+    // Esperar tres segundos.
+
+    later(() => {
+
+        shootingStar.classList.add("arriving");
+
+        instruction.textContent =
+            "¡Mira, una estrella fugaz! ✧";
+
+        // Esperar a que termine de llegar.
+
+        later(() => {
+
+            shootingStar.classList.remove("arriving");
+
+            shootingStar.classList.add("ready");
+
+            shootingStar.disabled = false;
+
+            instruction.textContent =
+                "Presiona la estrella y pide un deseo, mi princesa.";
+
+        }, 2000);
+
+    }, 3000);
+
+}
+
+/* PEDIR EL DESEO */
+
+shootingStar.addEventListener("click", () => {
+
+    if (Date.now() < unlockDate) return;
+
+    if (wished) return;
+
+    wished = true;
+
+    shootingStar.disabled = true;
+
+    shootingStar.className = "shooting-star used";
+
+    instruction.textContent =
+        "Que tu deseo viaje hasta las estrellas...";
+
+    createExplosion();
+
+    later(() => {
+
+        createHeart();
+
+    }, 900);
+
+    later(() => {
+
+        instruction.textContent =
+            "Un pedacito de nuestro amor en el cielo. ♡";
+
+    }, 3500);
+
+    later(() => {
+
+        final.hidden = false;
+
+    }, 4500);
+
+});
+
+/* EXPLOSIÓN DE LA ESTRELLA */
+
+function createExplosion() {
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#bd83ef",
+        "#fff2b6",
+        "#ffffff"
+    ];
+
+    for (let i = 0; i < 65; i++) {
+
+        const particle = document.createElement("span");
+
+        particle.className = "burst";
+
+        const angle = Math.random() * Math.PI * 2;
+
+        const distance = 40 + Math.random() * 120;
+
+        const color =
+            colors[i % colors.length];
+
+        particle.style.color = color;
+        particle.style.background = color;
+
+        particle.style.setProperty(
+            "--x",
+            Math.cos(angle) * distance + "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            Math.sin(angle) * distance + "px"
+        );
+
+        const size = 3 + Math.random() * 5;
+
+        particle.style.width = size + "px";
+        particle.style.height = size + "px";
+
+        scene.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 1500);
+
+    }
+
+}
+
+/* FORMAR UN CORAZÓN EN EL CIELO */
+
+function createHeart() {
+
+    const amount = 85;
+
+    for (let i = 0; i < amount; i++) {
+
+        const t = i / amount * Math.PI * 2;
+
+        // Ecuación matemática de un corazón.
+
+        const x = 16 * Math.pow(Math.sin(t), 3);
+
+        const y =
+            13 * Math.cos(t)
+            - 5 * Math.cos(2 * t)
+            - 2 * Math.cos(3 * t)
+            - Math.cos(4 * t);
+
+        const point = document.createElement("span");
+
+        point.className = "heart-point";
+
+        point.textContent =
+            i % 5 === 0 ? "✦" : "·";
+
+        point.style.color =
+            x < 0 ? "#69ceff" : "#ff9bd5";
+
+        point.style.left =
+            50 + x * 1.55 + "%";
+
+        point.style.top =
+            35 - y * 1.2 + "%";
+
+        point.style.fontSize =
+            12 + Math.random() * 9 + "px";
+
+        point.style.animationDelay =
+            i * .025 + "s";
+
+        heartStars.appendChild(point);
+
+    }
+
+    // Pequeñas estrellas dentro del corazón.
+
+    for (let i = 0; i < 25; i++) {
+
+        const point = document.createElement("span");
+
+        point.className = "heart-point";
+
+        point.textContent = "✧";
+
+        const angle = Math.random() * Math.PI * 2;
+
+        const scale = .15 + Math.random() * .6;
+
+        const x =
+            16 * Math.pow(Math.sin(angle), 3) * scale;
+
+        const y = (
+            13 * Math.cos(angle)
+            - 5 * Math.cos(2 * angle)
+            - 2 * Math.cos(3 * angle)
+            - Math.cos(4 * angle)
+        ) * scale;
+
+        point.style.left =
+            50 + x * 1.55 + "%";
+
+        point.style.top =
+            35 - y * 1.2 + "%";
+
+        point.style.color =
+            i % 2 === 0 ? "#bdeaff" : "#ffd0e9";
+
+        point.style.fontSize =
+            5 + Math.random() * 7 + "px";
+
+        point.style.animationDelay =
+            1.5 + Math.random() + "s";
+
+        heartStars.appendChild(point);
+
+    }
+
+}
+
+/* PEDIR OTRO DESEO */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        document.querySelectorAll(".burst")
+            .forEach(particle => particle.remove());
+
+        startScene();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+createSky();
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

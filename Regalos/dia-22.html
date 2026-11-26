@@ -1,0 +1,1523 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 22 | Mi universo</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #211333,
+        #050510 75%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 520px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #c9afff;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 25px #ff79bd60;
+}
+
+h2 {
+    color: #ffc1e3;
+    line-height: 1.6;
+}
+
+.message {
+    color: #e9d8f5;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* UNIVERSO */
+
+.universe {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1.12;
+    margin: 10px auto;
+    overflow: hidden;
+    border-radius: 25px;
+    background: radial-gradient(
+        ellipse at center,
+        #45236b55,
+        transparent 75%
+    );
+}
+
+.universe > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.orbit {
+    fill: none;
+    stroke: #c5a2ff;
+    stroke-width: .7;
+    opacity: .23;
+    transition: opacity 2s;
+}
+
+.universe.finished .orbit {
+    opacity: 0;
+}
+
+.star {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 6px currentColor;
+    animation: twinkle 3s infinite alternate;
+}
+
+/* PLANETAS */
+
+.planet {
+    position: absolute;
+    width: 17%;
+    aspect-ratio: 1;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 4;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 1s;
+}
+
+.planet-ball {
+    position: absolute;
+    inset: 10%;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 25%,
+        #ffffff,
+        var(--color) 32%,
+        var(--dark) 85%
+    );
+    box-shadow:
+        0 0 18px var(--color),
+        inset -5px -7px 12px #0005;
+    animation: planetGlow 3s infinite alternate;
+}
+
+.planet-ring {
+    position: absolute;
+    left: -7%;
+    top: 37%;
+    width: 114%;
+    height: 27%;
+    border: 3px solid var(--color);
+    border-top-color: #ffffff55;
+    border-radius: 50%;
+    transform: rotate(-30deg);
+    box-shadow: 0 0 6px var(--color);
+}
+
+.planet-label {
+    position: absolute;
+    top: 104%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #f1ddff;
+    font-size: clamp(10px, 2.8vw, 13px);
+    white-space: nowrap;
+    text-shadow: 0 0 6px #000;
+}
+
+.planet.discovered .planet-ball {
+    box-shadow:
+        0 0 25px var(--color),
+        0 0 35px var(--color);
+}
+
+.planet.discovered .planet-label::after {
+    content: " ♡";
+    color: #ffc1e3;
+}
+
+.planet.vanish {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* GOTITAS */
+
+.blue-position {
+    transform: translate(180px, 205px);
+    transition: transform 3s ease-in-out;
+}
+
+.pink-position {
+    transform: translate(235px, 205px);
+    opacity: 0;
+    transition: opacity 2.5s;
+}
+
+.universe.meeting .blue-position {
+    transform: translate(145px, 205px);
+}
+
+.universe.meeting .pink-position {
+    opacity: 1;
+}
+
+.floating {
+    animation: floating 4s infinite ease-in-out;
+}
+
+.blue-glow {
+    filter: drop-shadow(0 0 12px #48baff);
+}
+
+.pink-glow {
+    filter: drop-shadow(0 0 12px #ff79bd);
+}
+
+.held-heart {
+    transition: opacity 1s;
+}
+
+.universe.meeting .held-heart {
+    opacity: 0;
+}
+
+.hug {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.universe.hugging .hug {
+    opacity: 1;
+}
+
+.beating {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 2s infinite;
+}
+
+/* ESTRELLAS QUE FORMAN LA GOTITA */
+
+.constellation-star {
+    opacity: 0;
+    animation: starAppear 1.2s ease forwards;
+}
+
+/* PROGRESO */
+
+.progress {
+    width: 85%;
+    height: 8px;
+    border-radius: 20px;
+    background: #ffffff15;
+    margin: 18px auto;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(
+        90deg,
+        #69ceff,
+        #bd8cff,
+        #ff79bd
+    );
+    border-radius: 20px;
+    transition: width .5s;
+}
+
+#counter {
+    color: #d6b6ff;
+    font-size: 15px;
+}
+
+/* DEDICATORIAS */
+
+#dedication {
+    min-height: 175px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #d9b6ff40;
+    border-radius: 20px;
+    background: #ffffff06;
+    box-shadow: 0 0 25px #a86cff15;
+}
+
+#planetTitle {
+    color: #ffc1e3;
+    font-size: 23px;
+    margin-top: 0;
+}
+
+#planetMessage {
+    color: #ead9f6;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.reveal {
+    animation: appear .6s ease both;
+}
+
+#final {
+    animation: appear 2s ease both;
+}
+
+.divider {
+    color: #d9b6ff;
+    letter-spacing: 8px;
+    margin: 30px auto;
+}
+
+.final-heart {
+    font-size: 90px;
+    color: #ffc1e3;
+    text-shadow:
+        -12px 0 25px #48baff,
+        12px 0 25px #ff79bd;
+    animation: heartbeat 2s infinite;
+}
+
+button:not(.planet),
+.back {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 14px 25px;
+    border: 1px solid #b88bdf;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f2d6ff;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.particle {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    z-index: 5;
+    text-shadow: 0 0 10px currentColor;
+    animation: rise linear forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes twinkle {
+    from {
+        opacity: .15;
+    }
+
+    to {
+        opacity: .9;
+    }
+}
+
+@keyframes planetGlow {
+    from {
+        filter: brightness(.9);
+    }
+
+    to {
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes floating {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes starAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: .95;
+    }
+}
+
+@keyframes rise {
+    to {
+        transform: translate(var(--drift), -110vh);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .star,
+    .planet-ball,
+    .floating,
+    .beating,
+    .final-heart {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">22 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Un pedacito de mi universo 🔒</h1>
+
+        <p class="message">
+            Hoy quiero enseñarte algo
+            que llevo dentro de mi corazoncito.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Bienvenida a mi universo, mi princesa
+        </h1>
+
+        <p class="message" id="intro">
+            Cada planeta guarda un pedacito
+            de lo que significas para mí.
+        </p>
+
+        <div class="universe" id="universe">
+
+            <svg viewBox="0 0 360 403"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+
+                    <radialGradient id="blue"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#d2f8ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pink"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe5f4"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="love">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset=".5"
+                              stop-color="#c18aff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                </defs>
+
+                <!-- ÓRBITAS -->
+
+                <g transform="rotate(-25 180 201)">
+
+                    <ellipse class="orbit"
+                             cx="180" cy="201"
+                             rx="70" ry="60"/>
+
+                    <ellipse class="orbit"
+                             cx="180" cy="201"
+                             rx="112" ry="96"/>
+
+                    <ellipse class="orbit"
+                             cx="180" cy="201"
+                             rx="151" ry="135"/>
+
+                </g>
+
+                <!-- CONSTELACIÓN -->
+
+                <g id="constellation"></g>
+
+                <!-- GOTITA AZUL -->
+
+                <g class="blue-position">
+
+                    <g class="floating blue-glow">
+
+                        <g fill="url(#blue)">
+
+                            <ellipse cy="15"
+                                     rx="26" ry="31"/>
+
+                            <ellipse cx="-14" cy="40"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="14" cy="40"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="-27" cy="14"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cx="27" cy="14"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cy="-27"
+                                     rx="39" ry="39"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-44"
+                                 rx="13" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <g fill="#10101e">
+
+                            <ellipse cx="-12" cy="-24"
+                                     rx="4.5" ry="9"/>
+
+                            <ellipse cx="12" cy="-24"
+                                     rx="4.5" ry="9"/>
+
+                        </g>
+
+                        <g class="held-heart">
+
+                            <path class="beating"
+                                  d="
+                                      M0 32
+                                      C-40 8 -20 -14 0 1
+                                      C20 -14 40 8 0 32Z
+                                  "
+                                  fill="#ff9bd5"/>
+
+                            <ellipse cx="-20" cy="16"
+                                     rx="8" ry="10"
+                                     fill="url(#blue)"/>
+
+                            <ellipse cx="20" cy="16"
+                                     rx="8" ry="10"
+                                     fill="url(#blue)"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g class="pink-position">
+
+                    <g class="floating pink-glow">
+
+                        <g fill="url(#pink)">
+
+                            <ellipse cy="15"
+                                     rx="26" ry="31"/>
+
+                            <ellipse cx="-14" cy="40"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="14" cy="40"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="-27" cy="14"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cx="27" cy="14"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cy="-27"
+                                     rx="39" ry="39"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-44"
+                                 rx="13" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <g fill="#10101e">
+
+                            <ellipse cx="-12" cy="-24"
+                                     rx="4.5" ry="9"/>
+
+                            <ellipse cx="12" cy="-24"
+                                     rx="4.5" ry="9"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- ABRAZO FINAL -->
+
+                <g class="hug">
+
+                    <path d="M155 217 Q190 244 235 217"
+                          stroke="url(#blue)"
+                          stroke-width="15"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M225 229 Q190 255 145 229"
+                          stroke="url(#pink)"
+                          stroke-width="15"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <g transform="translate(190 80)">
+
+                        <path class="beating"
+                              d="
+                                  M0 40
+                                  C-85 -10 -45 -65 0 -30
+                                  C45 -65 85 -10 0 40Z
+                              "
+                              fill="url(#love)"
+                              style="filter:drop-shadow(0 0 18px #ff79bd)"/>
+
+                    </g>
+
+                </g>
+
+            </svg>
+
+            <div id="planets"></div>
+
+        </div>
+
+        <!-- INTERACCIÓN -->
+
+        <section id="interaction">
+
+            <p id="counter">
+                0 de 6 planetas descubiertos
+            </p>
+
+            <div class="progress">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+            <div id="dedication">
+
+                <h2 id="planetTitle">
+                    Nuestro pequeño universo
+                </h2>
+
+                <p id="planetMessage">
+                    Presiona cualquiera de los planetas
+                    para descubrir lo que guarda
+                    para ti, mi princesa.
+                </p>
+
+            </div>
+
+            <button id="continueButton" hidden>
+                Descubrir mi universo completo ♡
+            </button>
+
+        </section>
+
+        <p class="message"
+           id="transitionMessage"
+           hidden>
+        </p>
+
+        <!-- DEDICATORIA FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <h2>
+                Qué bonito coincidir contigo.
+            </h2>
+
+            <p class="message">
+                Entre tantos planetas,
+                estrellas y galaxias,
+                qué bonito fue coincidir contigo
+                en este pequeño rincón del universo.
+            </p>
+
+            <p class="message">
+                Me encanta la felicidad
+                que compartimos,
+                la tranquilidad de nuestros abrazos
+                y todos esos pequeños momentos
+                que hacen especial nuestra historia.
+            </p>
+
+            <p class="message">
+                Me encanta tener la oportunidad
+                de conocerte un poquito más cada día,
+                consentirte y demostrarte
+                todo lo bonito que siento por ti.
+            </p>
+
+            <p class="message">
+                Quiero seguir creciendo,
+                aprendiendo y compartiendo
+                nuevos recuerdos contigo.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <h2>
+                Entre todas las historias
+                que pude vivir,
+                me encanta estar viviendo la nuestra.
+            </h2>
+
+            <p class="message">
+                Te amo en este pequeño universo,
+                mi hermosa Karina.
+            </p>
+
+            <p class="message">
+                Con todo mi amor,
+                <br>
+                tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 2 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Volver a explorar nuestro universo ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 22, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const universe = document.getElementById("universe");
+const planetsContainer = document.getElementById("planets");
+
+const constellation =
+    document.getElementById("constellation");
+
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const counter = document.getElementById("counter");
+const progressFill =
+    document.getElementById("progressFill");
+
+const dedication = document.getElementById("dedication");
+const planetTitle = document.getElementById("planetTitle");
+const planetMessage = document.getElementById("planetMessage");
+
+const continueButton =
+    document.getElementById("continueButton");
+
+const interaction = document.getElementById("interaction");
+
+const transitionMessage =
+    document.getElementById("transitionMessage");
+
+const final = document.getElementById("final");
+
+let discovered = new Set();
+let timers = [];
+let started = false;
+let finished = false;
+let orbitPaused = false;
+let orbitFrame = null;
+let orbitTime = 0;
+let previousTime = null;
+let planetButtons = [];
+
+const svgNS = "http://www.w3.org/2000/svg";
+
+/* LOS SEIS PLANETAS */
+
+const planets = [
+
+    {
+        name: "Mi felicidad",
+        color: "#ff9bcf",
+        dark: "#9b286e",
+        message:
+            "Me encanta verte sonreír, mi princesa. " +
+            "Hay algo muy bonito en poder compartir " +
+            "contigo nuestras risas y verte feliz."
+    },
+
+    {
+        name: "Mi tranquilidad",
+        color: "#b59aff",
+        dark: "#50318e",
+        message:
+            "Me encanta estar entre tus brazos. " +
+            "Esos ratitos en los que estamos acostaditos " +
+            "juntos y podemos olvidarnos un momento " +
+            "de todo lo demás."
+    },
+
+    {
+        name: "Mi compañía",
+        color: "#75c7ff",
+        dark: "#205aa5",
+        message:
+            "No importa si estamos haciendo algo " +
+            "especial o simplemente pasando el rato. " +
+            "Me encanta compartir esos pequeños " +
+            "momentos contigo."
+    },
+
+    {
+        name: "Mi inspiración",
+        color: "#f4cf8d",
+        dark: "#ad672d",
+        message:
+            "Estar contigo me ha hecho reflexionar " +
+            "sobre muchas cosas. Quiero seguir " +
+            "aprendiendo y esforzándome por ser " +
+            "una mejor versión de mí mismo."
+    },
+
+    {
+        name: "Mi ternura",
+        color: "#d9a1ff",
+        dark: "#773d9e",
+        message:
+            "Me encanta consentirte, llevarte tus " +
+            "chocolatitos, tus Takis, tus donitas de maple " +
+            "y llenarte esa carita preciosa de besitos."
+    },
+
+    {
+        name: "Mi amor",
+        color: "#ff85ac",
+        dark: "#a92b5e",
+        message:
+            "Me encanta que seas tú, mi hermosa " +
+            "gotita rosa. Y me hace muy feliz tener " +
+            "la oportunidad de compartir contigo " +
+            "esta historia tan bonita."
+    }
+
+];
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createPlanets();
+
+            startOrbit();
+
+        }
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* CIELO ESTRELLADO */
+
+for (let i = 0; i < 160; i++) {
+
+    const star = document.createElement("span");
+
+    star.className = "star";
+
+    const size = random(1, 3);
+
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+
+    star.style.left = random(0, 100) + "vw";
+    star.style.top = random(0, 100) + "vh";
+
+    star.style.color =
+        Math.random() > .5
+        ? "#d9b6ff"
+        : "#ffffff";
+
+    star.style.animationDuration =
+        random(2, 5) + "s";
+
+    star.style.animationDelay =
+        random(-5, 0) + "s";
+
+    document.body.appendChild(star);
+
+}
+
+/* CREAR PLANETAS */
+
+function createPlanets() {
+
+    planetsContainer.innerHTML = "";
+
+    planetButtons = [];
+
+    planets.forEach((planet, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "planet";
+
+        button.setAttribute(
+            "aria-label",
+            planet.name
+        );
+
+        button.setAttribute(
+            "aria-pressed",
+            "false"
+        );
+
+        button.style.setProperty(
+            "--color",
+            planet.color
+        );
+
+        button.style.setProperty(
+            "--dark",
+            planet.dark
+        );
+
+        button.innerHTML = `
+            <span class="planet-ball"></span>
+
+            <span class="planet-ring"></span>
+
+            <span class="planet-label">
+                ${planet.name}
+            </span>
+        `;
+
+        button.addEventListener("click", () => {
+
+            discoverPlanet(index);
+
+        });
+
+        planetsContainer.appendChild(button);
+
+        planetButtons.push(button);
+
+    });
+
+    positionPlanets();
+
+}
+
+/* MOVIMIENTO ORBITAL */
+
+function positionPlanets() {
+
+    planetButtons.forEach((button, index) => {
+
+        const angle =
+            index * Math.PI / 3
+            - Math.PI / 2
+            + orbitTime;
+
+        const x =
+            50 + Math.cos(angle) * 36;
+
+        const y =
+            49 + Math.sin(angle) * 36;
+
+        button.style.left = x + "%";
+        button.style.top = y + "%";
+
+    });
+
+}
+
+function orbitLoop(time) {
+
+    if (previousTime === null) {
+
+        previousTime = time;
+
+    }
+
+    const delta =
+        Math.min((time - previousTime) / 1000, .05);
+
+    previousTime = time;
+
+    if (!orbitPaused && !finished) {
+
+        orbitTime += delta * .065;
+
+        positionPlanets();
+
+    }
+
+    if (!finished) {
+
+        orbitFrame =
+            requestAnimationFrame(orbitLoop);
+
+    }
+
+}
+
+function startOrbit() {
+
+    cancelAnimationFrame(orbitFrame);
+
+    previousTime = null;
+
+    orbitFrame =
+        requestAnimationFrame(orbitLoop);
+
+}
+
+/* DESCUBRIR PLANETA */
+
+function discoverPlanet(index) {
+
+    if (finished || Date.now() < unlockDate) return;
+
+    const planet = planets[index];
+
+    discovered.add(index);
+
+    planetButtons[index]
+        .classList.add("discovered");
+
+    planetButtons[index]
+        .setAttribute("aria-pressed", "true");
+
+    planetTitle.textContent = planet.name;
+
+    planetTitle.style.color = planet.color;
+
+    planetMessage.textContent = planet.message;
+
+    dedication.style.borderColor =
+        planet.color + "70";
+
+    dedication.classList.remove("reveal");
+
+    void dedication.offsetWidth;
+
+    dedication.classList.add("reveal");
+
+    counter.textContent =
+        `${discovered.size} de 6 planetas descubiertos`;
+
+    progressFill.style.width =
+        `${discovered.size / 6 * 100}%`;
+
+    orbitPaused = true;
+
+    if (discovered.size === 6) {
+
+        continueButton.hidden = false;
+
+    }
+
+}
+
+/* FORMAR CONSTELACIÓN DE GOTITA ROSA */
+
+function createConstellation() {
+
+    constellation.innerHTML = "";
+
+    const shapes = [
+
+        // Cabeza
+
+        {x:235, y:178, rx:39, ry:39, count:100},
+
+        // Cuerpito
+
+        {x:235, y:220, rx:26, ry:31, count:75},
+
+        // Pie izquierdo
+
+        {x:221, y:245, rx:13, ry:10, count:30},
+
+        // Pie derecho
+
+        {x:249, y:245, rx:13, ry:10, count:30},
+
+        // Bracitos
+
+        {x:208, y:219, rx:9, ry:16, count:25},
+
+        {x:262, y:219, rx:9, ry:16, count:25}
+
+    ];
+
+    shapes.forEach(shape => {
+
+        for (let i = 0; i < shape.count; i++) {
+
+            const angle =
+                random(0, Math.PI * 2);
+
+            const radius =
+                Math.random() > .3
+                ? random(.88, 1)
+                : Math.sqrt(Math.random());
+
+            const x =
+                shape.x
+                + Math.cos(angle) * shape.rx * radius;
+
+            const y =
+                shape.y
+                + Math.sin(angle) * shape.ry * radius;
+
+            const star =
+                document.createElementNS(
+                    svgNS,
+                    "circle"
+                );
+
+            star.setAttribute("cx", x);
+            star.setAttribute("cy", y);
+
+            star.setAttribute(
+                "r",
+                random(.5, 1.8)
+            );
+
+            star.setAttribute(
+                "fill",
+                Math.random() > .4
+                ? "#ff9bd5"
+                : "#ffe5f4"
+            );
+
+            star.setAttribute(
+                "class",
+                "constellation-star"
+            );
+
+            star.style.animationDelay =
+                random(0, 2.5) + "s";
+
+            constellation.appendChild(star);
+
+        }
+
+    });
+
+}
+
+/* FINAL DEL UNIVERSO */
+
+continueButton.addEventListener("click", () => {
+
+    if (
+        finished ||
+        discovered.size !== 6 ||
+        Date.now() < unlockDate
+    ) return;
+
+    finished = true;
+
+    cancelAnimationFrame(orbitFrame);
+
+    interaction.hidden = true;
+
+    universe.classList.add("finished");
+
+    transitionMessage.hidden = false;
+
+    title.textContent =
+        "Ahora mira, mi princesa...";
+
+    intro.textContent =
+        "Hay algo todavía más bonito.";
+
+    transitionMessage.textContent =
+        "Todos estos pedacitos de mi universo " +
+        "me recuerdan a alguien muy especial.";
+
+    planetButtons.forEach((button, index) => {
+
+        later(() => {
+
+            button.classList.add("vanish");
+
+            button.disabled = true;
+
+        }, index * 180);
+
+    });
+
+    later(() => {
+
+        universe.classList.add("meeting");
+
+        createConstellation();
+
+        // Primero aparece la silueta de estrellas.
+
+        const pink =
+            universe.querySelector(".pink-position");
+
+        pink.style.opacity = "0";
+
+        transitionMessage.textContent =
+            "Una hermosa gotita rosa...";
+
+    }, 1600);
+
+    later(() => {
+
+        const pink =
+            universe.querySelector(".pink-position");
+
+        pink.style.opacity = "1";
+
+        constellation.style.transition =
+            "opacity 2s";
+
+        constellation.style.opacity = "0";
+
+    }, 5400);
+
+    later(() => {
+
+        universe.classList.add("hugging");
+
+        title.textContent =
+            "Mi rincón favorito del universo";
+
+        intro.textContent =
+            "Aquí, contigo. ♡";
+
+        transitionMessage.textContent =
+            "Qué bonito fue que nuestras gotitas " +
+            "coincidieran entre tantas estrellas.";
+
+        for (let i = 0; i < 90; i++) {
+
+            later(createParticle, i * 65);
+
+        }
+
+    }, 8000);
+
+    later(() => {
+
+        transitionMessage.hidden = true;
+
+        final.hidden = false;
+
+        final.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }, 11500);
+
+});
+
+/* CORAZONES Y ESTRELLAS FINALES */
+
+function createParticle() {
+
+    const particle =
+        document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.textContent =
+        Math.random() > .5 ? "♥" : "✧";
+
+    const colors = [
+        "#ff9bd5",
+        "#69ceff",
+        "#d9b6ff",
+        "#ffffff"
+    ];
+
+    particle.style.color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    particle.style.left =
+        random(0, 100) + "vw";
+
+    particle.style.fontSize =
+        random(10, 25) + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        random(-70, 70) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    particle.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, duration * 1000);
+
+}
+
+/* VOLVER A EXPLORAR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        cancelAnimationFrame(orbitFrame);
+
+        discovered.clear();
+
+        finished = false;
+        orbitPaused = false;
+        orbitTime = 0;
+
+        universe.className = "universe";
+
+        universe.querySelector(".pink-position")
+            .style.opacity = "";
+
+        constellation.innerHTML = "";
+
+        constellation.style.opacity = "1";
+
+        constellation.style.transition = "";
+
+        title.textContent =
+            "Bienvenida a mi universo, mi princesa";
+
+        intro.textContent =
+            "Cada planeta guarda un pedacito " +
+            "de lo que significas para mí.";
+
+        counter.textContent =
+            "0 de 6 planetas descubiertos";
+
+        progressFill.style.width = "0%";
+
+        planetTitle.textContent =
+            "Nuestro pequeño universo";
+
+        planetTitle.style.color = "";
+
+        planetMessage.textContent =
+            "Presiona cualquiera de los planetas " +
+            "para descubrir lo que guarda " +
+            "para ti, mi princesa.";
+
+        dedication.style.borderColor = "";
+
+        interaction.hidden = false;
+
+        continueButton.hidden = true;
+
+        transitionMessage.hidden = true;
+
+        final.hidden = true;
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        createPlanets();
+
+        startOrbit();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

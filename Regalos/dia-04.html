@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 4 | Como Tú Ninguna 💗</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(ellipse at bottom, #350b46, #050308 75%);
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 450px;
+            padding: 35px 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            font-size: 35px;
+            color: #ffc1e3;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        .vinyl-container {
+            position: relative;
+            margin: 45px auto;
+            width: min(250px, 75vw);
+            aspect-ratio: 1;
+        }
+
+        .glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #c13cff;
+            filter: blur(45px);
+            opacity: .4;
+        }
+
+        .vinyl {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background:
+                conic-gradient(
+                    transparent,
+                    #ffffff18,
+                    transparent 30%,
+                    transparent 50%,
+                    #ffffff18,
+                    transparent 80%
+                ),
+                repeating-radial-gradient(
+                    circle,
+                    #17101c 0px,
+                    #17101c 3px,
+                    #35233d 4px,
+                    #110c17 6px
+                );
+
+            border: 2px solid #a45ac3;
+
+            box-shadow:
+                0 0 30px #d34dff70,
+                inset 0 0 25px #000;
+
+            animation: spin 7s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .vinyl.playing {
+            animation-play-state: running;
+        }
+
+        .vinyl-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            border: 2px solid #ffc1e3;
+
+            background: linear-gradient(135deg, #ff9bce, #a34de0);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 25px #ff60c0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .vinyl-center:hover {
+            box-shadow: 0 0 40px #ff60c0;
+        }
+
+        .center-heart {
+            font-size: 36px;
+            line-height: 1;
+            text-shadow: 0 0 15px white;
+        }
+
+        #playIcon {
+            font-size: 21px;
+            margin-top: 5px;
+        }
+
+        .song {
+            font-size: 29px;
+            color: #ffc5e6;
+            margin-bottom: 8px;
+        }
+
+        .artist {
+            color: #c7a5de;
+            font-size: 17px;
+            letter-spacing: 3px;
+        }
+
+        .version {
+            color: #ae8ec1;
+            font-size: 13px;
+        }
+
+        .player {
+            border: 1px solid #ac68c45c;
+            background: #ffffff06;
+            padding: 22px;
+            border-radius: 25px;
+            box-shadow: 0 0 30px #a34de020;
+            backdrop-filter: blur(10px);
+        }
+
+        #progress {
+            width: 100%;
+            height: 5px;
+            accent-color: #ff79c5;
+            cursor: pointer;
+            margin: 25px 0 10px;
+        }
+
+        .times {
+            display: flex;
+            justify-content: space-between;
+            color: #dbb3e8;
+            font-size: 13px;
+        }
+
+        #status {
+            color: #dbb3e8;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 22px;
+        }
+
+        .dedication {
+            margin-top: 35px;
+            color: #f3c8ed;
+            font-size: 19px;
+            line-height: 1.8;
+            animation: appear 2s ease;
+        }
+
+        .highlight {
+            font-size: 32px;
+            color: #ffa9d9;
+            text-shadow: 0 0 20px #ff49ac;
+            margin: 25px 0;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .floating-heart {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            animation: rise 7s linear forwards;
+            color: #ff8ecc;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                transform: translateY(-115vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">04 DE DICIEMBRE · 2026</p>
+
+        <section id="locked">
+
+            <h1>Una canción te espera 🔒</h1>
+
+            <p class="message">
+                Hay una canción que me hace pensar en ti,
+                pero aún no puedo dedicártela.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <section id="unlocked" hidden>
+
+            <h1>Esta canción es para ti</h1>
+
+            <p class="message">
+                Porque hay canciones que tienen nombre y apellido...
+            </p>
+
+            <div class="vinyl-container">
+
+                <div class="glow"></div>
+
+                <div class="vinyl" id="vinyl"></div>
+
+                <button class="vinyl-center"
+                        id="playButton"
+                        aria-label="Reproducir canción">
+
+                    <span class="center-heart">♥</span>
+
+                    <span id="playIcon">▶</span>
+
+                </button>
+
+            </div>
+
+            <div class="player">
+
+                <h2 class="song">Como Tú Ninguna</h2>
+
+                <p class="artist">CRIS MJ</p>
+
+                <p class="version">Versión original</p>
+
+                <input type="range"
+                       id="progress"
+                       min="0"
+                       max="100"
+                       step="0.1"
+                       value="0"
+                       aria-label="Progreso de la canción"
+                       disabled>
+
+                <div class="times">
+
+                    <span id="currentTime">0:00</span>
+
+                    <span id="duration">0:00</span>
+
+                </div>
+
+                <p id="status">
+                    Presiona el corazón del disco, princesa ♡
+                </p>
+
+            </div>
+
+            <div class="dedication">
+
+                <p>
+                    Entre tantas personas, tantas miradas
+                    y tantas sonrisas, para mí siempre habrá
+                    algo que te haga diferente a todas las demás.
+                </p>
+
+                <p>
+                    Y cada vez que escucho esta canción,
+                    pienso en ti, mi amor.
+                </p>
+
+                <h2 class="highlight">
+                    Como tú, ninguna.
+                </h2>
+
+                <p>
+                    Te amo, mi gotita rosa. 💗
+                </p>
+
+                <p>
+                    Todavía te esperan 20 sorpresas más...
+                </p>
+
+            </div>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <audio id="audio" preload="none"></audio>
+
+    <script>
+
+        // Fecha de desbloqueo
+        const unlockDate = Date.UTC(2026, 11, 4, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+
+        const audio = document.getElementById("audio");
+        const vinyl = document.getElementById("vinyl");
+        const playButton = document.getElementById("playButton");
+        const playIcon = document.getElementById("playIcon");
+
+        const progress = document.getElementById("progress");
+        const currentTime = document.getElementById("currentTime");
+        const duration = document.getElementById("duration");
+        const status = document.getElementById("status");
+
+        let unlockedOnce = false;
+        let heartInterval = null;
+
+        // Cuenta regresiva
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+                unlocked.hidden = false;
+
+                if (!unlockedOnce) {
+
+                    unlockedOnce = true;
+
+                    audio.src = "../musica/como-tu-ninguna.mp3";
+                    audio.preload = "metadata";
+                    audio.load();
+
+                }
+
+                return;
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        // Reproducir y pausar
+
+        playButton.addEventListener("click", async () => {
+
+            if (Date.now() < unlockDate) return;
+
+            if (audio.paused) {
+
+                try {
+
+                    await audio.play();
+
+                } catch (error) {
+
+                    status.textContent =
+                        "No se pudo reproducir la canción. Intenta nuevamente.";
+
+                    console.error(error);
+
+                }
+
+            } else {
+
+                audio.pause();
+
+            }
+
+        });
+
+        // Cuando comienza la música
+
+        audio.addEventListener("playing", () => {
+
+            vinyl.classList.add("playing");
+
+            playIcon.textContent = "❚❚";
+
+            playButton.setAttribute(
+                "aria-label",
+                "Pausar canción"
+            );
+
+            status.textContent =
+                "Sonando especialmente para ti, mi amor ♡";
+
+            if (heartInterval === null) {
+
+                createHeart();
+
+                heartInterval = setInterval(createHeart, 450);
+
+            }
+
+        });
+
+        // Detener las animaciones
+
+        function stopAnimations() {
+
+            vinyl.classList.remove("playing");
+
+            clearInterval(heartInterval);
+
+            heartInterval = null;
+
+        }
+
+        // Cuando se pausa
+
+        audio.addEventListener("pause", () => {
+
+            stopAnimations();
+
+            playIcon.textContent = "▶";
+
+            playButton.setAttribute(
+                "aria-label",
+                "Reproducir canción"
+            );
+
+            status.textContent =
+                "Presiona el corazón para continuar ♡";
+
+        });
+
+        // Cuando termina la canción
+
+        audio.addEventListener("ended", () => {
+
+            stopAnimations();
+
+            playIcon.textContent = "▶";
+
+            playButton.setAttribute(
+                "aria-label",
+                "Reproducir nuevamente"
+            );
+
+            status.textContent =
+                "Como tú, ninguna. Te amo, princesa 💗";
+
+            audio.currentTime = 0;
+
+        });
+
+        // Si la canción está cargando
+
+        audio.addEventListener("waiting", () => {
+
+            stopAnimations();
+
+            status.textContent = "Cargando nuestra canción...";
+
+        });
+
+        // Si no encuentra el MP3
+
+        audio.addEventListener("error", () => {
+
+            stopAnimations();
+
+            playIcon.textContent = "▶";
+
+            progress.disabled = true;
+
+            status.textContent =
+                "No se encontró la canción. Revisa el archivo MP3.";
+
+        });
+
+        // Convertir segundos en minutos
+
+        function formatTime(seconds) {
+
+            if (!Number.isFinite(seconds)) return "0:00";
+
+            const minutes = Math.floor(seconds / 60);
+
+            const remaining = Math.floor(seconds % 60);
+
+            return minutes + ":" +
+                String(remaining).padStart(2, "0");
+
+        }
+
+        // Obtener duración real del MP3
+
+        function updateDuration() {
+
+            duration.textContent = formatTime(audio.duration);
+
+            progress.disabled =
+                !Number.isFinite(audio.duration) ||
+                audio.duration <= 0;
+
+        }
+
+        audio.addEventListener("loadedmetadata", updateDuration);
+
+        audio.addEventListener("durationchange", updateDuration);
+
+        // Actualizar barra de progreso
+
+        audio.addEventListener("timeupdate", () => {
+
+            currentTime.textContent =
+                formatTime(audio.currentTime);
+
+            if (Number.isFinite(audio.duration) &&
+                audio.duration > 0) {
+
+                progress.value =
+                    (audio.currentTime / audio.duration) * 100;
+
+            }
+
+        });
+
+        // Adelantar o retroceder la canción
+
+        progress.addEventListener("input", () => {
+
+            if (Number.isFinite(audio.duration) &&
+                audio.duration > 0) {
+
+                audio.currentTime =
+                    (progress.value / 100) * audio.duration;
+
+            }
+
+        });
+
+        // Corazones y notas musicales
+
+        function createHeart() {
+
+            const heart = document.createElement("span");
+
+            heart.className = "floating-heart";
+
+            heart.textContent = [
+                "♡", "💗", "💜", "♪", "♫", "💕"
+            ][Math.floor(Math.random() * 6)];
+
+            heart.style.left = Math.random() * 100 + "vw";
+
+            heart.style.fontSize =
+                12 + Math.random() * 22 + "px";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 7000);
+
+        }
+
+        // Nieve de fondo
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+
+            snow.style.left = Math.random() * 100 + "vw";
+
+            snow.style.fontSize =
+                5 + Math.random() * 12 + "px";
+
+            snow.style.opacity = Math.random() * .6;
+
+            snow.style.animationDuration =
+                5 + Math.random() * 10 + "s";
+
+            snow.style.animationDelay =
+                -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        // Pausar al abandonar la página
+
+        window.addEventListener("pagehide", () => {
+
+            audio.pause();
+
+        });
+
+        updateCountdown();
+
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

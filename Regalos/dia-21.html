@@ -1,0 +1,1471 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 21 | Nuestro museo del amor</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at top,
+        #302039,
+        #090609 85%
+    );
+    color: #fff4e5;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    width: 95%;
+    max-width: 650px;
+    margin: auto;
+    min-height: 100dvh;
+    padding: 30px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d6b879;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    font-size: 30px;
+    color: #f4d7a2;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #e7b85b40;
+}
+
+h2 {
+    color: #f4d7a2;
+    line-height: 1.6;
+}
+
+.message {
+    color: #e9d4e4;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    font-size: 25px;
+    line-height: 1.8;
+    color: #f4d7a2;
+    margin: 30px auto;
+}
+
+button,
+.back {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 14px 25px;
+    border: 1px solid #c9a464;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f4d7a2;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ENTRADA AL MUSEO */
+
+.entrance {
+    position: relative;
+    height: 390px;
+    overflow: hidden;
+    border: 3px solid #b68c49;
+    border-radius: 10px;
+    background: radial-gradient(
+        ellipse at center,
+        #56344d,
+        #160e1b
+    );
+    box-shadow: 0 0 30px #d6b87930;
+}
+
+.entrance svg {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.curtain {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 51%;
+    z-index: 3;
+    background: repeating-linear-gradient(
+        90deg,
+        #300611 0%,
+        #75142e 12%,
+        #a32c48 20%,
+        #480b20 32%
+    );
+    transition: transform 3s ease-in-out;
+    border-bottom: 6px solid #d8b675;
+    box-shadow: 0 0 25px #000;
+}
+
+.curtain.left {
+    left: 0;
+    border-right: 3px solid #c6a061;
+}
+
+.curtain.right {
+    right: 0;
+    border-left: 3px solid #c6a061;
+}
+
+.entrance.open .curtain.left {
+    transform: translateX(-101%);
+}
+
+.entrance.open .curtain.right {
+    transform: translateX(101%);
+}
+
+.valance {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    background: linear-gradient(
+        #8d2341,
+        #460b22
+    );
+    border-bottom: 4px solid #d6b879;
+    border-radius: 0 0 45% 45%;
+    z-index: 5;
+}
+
+.entrance-plaque {
+    position: absolute;
+    top: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    padding: 20px 10px;
+    border: 2px solid #d6b879;
+    background: #160e1be8;
+    color: #f4d7a2;
+    z-index: 4;
+    box-shadow: 0 0 20px #0008;
+    transition: opacity 1s;
+}
+
+.entrance.open .entrance-plaque {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.entrance-plaque small {
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.entrance-plaque h2 {
+    margin: 12px 0;
+    font-size: 25px;
+}
+
+.entrance-plaque p {
+    font-style: italic;
+    font-size: 15px;
+}
+
+.blue-pull {
+    transform: translate(145px, 235px);
+    transition: transform 3s ease-in-out;
+}
+
+.pink-pull {
+    transform: translate(215px, 235px);
+    transition: transform 3s ease-in-out;
+}
+
+.entrance.open .blue-pull {
+    transform: translate(65px, 235px);
+}
+
+.entrance.open .pink-pull {
+    transform: translate(295px, 235px);
+}
+
+.welcome {
+    position: absolute;
+    top: 65px;
+    width: 100%;
+    padding: 15px;
+    color: #f4d7a2;
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.entrance.open .welcome {
+    opacity: 1;
+}
+
+.welcome h2 {
+    font-size: 24px;
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+/* GALERÍA */
+
+#gallery {
+    animation: appear 2s ease both;
+}
+
+.museum-wall {
+    padding: 30px 18px;
+    border: 1px solid #a9875a50;
+    border-radius: 12px;
+    background: repeating-linear-gradient(
+        90deg,
+        #2c1b2d,
+        #2c1b2d 35px,
+        #302030 35px,
+        #302030 70px
+    );
+}
+
+.exhibit {
+    position: relative;
+    margin: 30px auto 45px;
+    max-width: 380px;
+}
+
+.spotlight {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45px;
+    height: 10px;
+    border-radius: 6px;
+    background: #d8b675;
+    box-shadow: 0 0 15px #ffe2a0;
+}
+
+.spotlight::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 280px;
+    height: 250px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+        #ffe0a028,
+        transparent
+    );
+    clip-path: polygon(
+        43% 0,
+        57% 0,
+        100% 100%,
+        0 100%
+    );
+    pointer-events: none;
+}
+
+.frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 13px;
+    border: 4px ridge #e4bd70;
+    border-radius: 3px;
+    background: linear-gradient(
+        135deg,
+        #f8d99b,
+        #92703c,
+        #e9c780,
+        #8e6734
+    );
+    box-shadow:
+        0 12px 20px #0007,
+        0 0 20px #e4bd7020;
+    transition: transform .3s;
+    cursor: pointer;
+}
+
+.frame:active {
+    transform: scale(.97);
+}
+
+.frame img {
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    background: #130d16;
+    border: 2px solid #65451f;
+}
+
+.plaque {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 20px;
+    border: 1px solid #d6b879;
+    background: linear-gradient(
+        #d7b97c,
+        #ad874e
+    );
+    color: #422a16;
+    font-size: 14px;
+    box-shadow: 0 3px 8px #0005;
+}
+
+.plaque small {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+}
+
+.visited .plaque {
+    background: linear-gradient(
+        #f5d6a2,
+        #c39c62
+    );
+}
+
+.photo-error {
+    padding: 60px 15px;
+    background: #160e1b;
+    color: #f4d7a2;
+}
+
+.progress {
+    width: 85%;
+    height: 7px;
+    margin: 20px auto;
+    background: #ffffff15;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+        90deg,
+        #d6b879,
+        #ffc1e3
+    );
+    transition: width .5s;
+}
+
+#counter {
+    color: #d6b879;
+    font-size: 14px;
+}
+
+/* FOTOGRAFÍA AMPLIADA */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: #08050bee;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow-y: auto;
+    padding: 30px 15px;
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    animation: appear .5s ease both;
+}
+
+.modal-photo {
+    padding: 9px;
+    border: 4px ridge #e4bd70;
+    background: #a17b42;
+    margin: 20px auto;
+}
+
+.modal-photo img {
+    display: block;
+    width: 100%;
+    max-height: 55vh;
+    object-fit: contain;
+    background: #130d16;
+}
+
+.close {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    font-size: 23px;
+}
+
+#photoTitle {
+    font-size: 25px;
+}
+
+#photoMessage {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #f2dce9;
+}
+
+/* CUARTO CUADRO */
+
+#future {
+    animation: appear 2s ease both;
+}
+
+.empty-frame {
+    position: relative;
+    margin: 35px auto;
+    max-width: 380px;
+    padding: 12px;
+    border: 5px ridge #e4bd70;
+    background: linear-gradient(
+        135deg,
+        #f8d99b,
+        #92703c,
+        #e9c780
+    );
+    box-shadow: 0 0 30px #e4bd7040;
+}
+
+.empty-canvas {
+    min-height: 270px;
+    padding: 35px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid #65451f;
+    background: radial-gradient(
+        ellipse at center,
+        #39263e,
+        #160e1b
+    );
+}
+
+.empty-canvas h2 {
+    font-size: 23px;
+}
+
+.empty-heart {
+    font-size: 65px;
+    color: #ffc1e3;
+    text-shadow: 0 0 25px #ff79bd;
+    animation: heartbeat 2s infinite;
+}
+
+.couple {
+    max-width: 340px;
+    margin: auto;
+}
+
+.couple svg {
+    width: 100%;
+}
+
+.divider {
+    color: #d6b879;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+.particle {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    z-index: 10;
+    animation: floatUp linear forwards;
+    text-shadow: 0 0 12px currentColor;
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatUp {
+    to {
+        transform: translate(var(--drift), -110vh);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .empty-heart {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">21 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Nuestro museo del amor 🔒</h1>
+
+        <p class="message">
+            Hay recuerdos que merecen
+            tener su propio museo.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">Una exposición muy especial</h1>
+
+        <!-- ENTRADA -->
+
+        <section id="entranceSection">
+
+            <div class="entrance" id="entrance">
+
+                <div class="welcome">
+
+                    <h2>Bienvenida, mi princesa</h2>
+
+                    <p>
+                        Todas las obras de arte
+                        tienen algo en común.
+                    </p>
+
+                    <p>Nosotros. ♡</p>
+
+                </div>
+
+                <svg viewBox="0 0 360 320"
+                     id="entranceDrops">
+                </svg>
+
+                <div class="curtain left"></div>
+
+                <div class="curtain right"></div>
+
+                <div class="valance"></div>
+
+                <div class="entrance-plaque">
+
+                    <small>EXPOSICIÓN PRIVADA</small>
+
+                    <h2>Nuestro museo del amor</h2>
+
+                    <p>Karina & su gotita azul</p>
+
+                    <small>DESDE EL 09 · 12 · 2025</small>
+
+                </div>
+
+            </div>
+
+            <p class="message">
+                Hoy tienes una invitación exclusiva,
+                mi princesa.
+            </p>
+
+            <button id="enterButton">
+                Entrar a nuestro museo ♡
+            </button>
+
+        </section>
+
+        <!-- GALERÍA DE FOTOS -->
+
+        <section id="gallery" hidden>
+
+            <p class="message">
+                Bienvenida a una pequeña colección
+                de nuestros recuerdos.
+            </p>
+
+            <p class="message">
+                Presiona cada cuadrito
+                para descubrir su historia.
+            </p>
+
+            <div class="progress">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+            <p id="counter">
+                0 de 3 recuerdos descubiertos
+            </p>
+
+            <div class="museum-wall" id="museumWall">
+            </div>
+
+        </section>
+
+        <!-- CUARTO MARCO -->
+
+        <section id="future" hidden>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <h2>Espera, mi princesa...</h2>
+
+            <p class="message">
+                Todavía nos queda una última obra
+                por descubrir.
+            </p>
+
+            <div class="empty-frame">
+
+                <div class="empty-canvas">
+
+                    <div class="empty-heart">♡</div>
+
+                    <h2>
+                        Reservado para todos
+                        los recuerdos que todavía
+                        nos faltan crear.
+                    </h2>
+
+                    <p>Próximamente...</p>
+
+                </div>
+
+            </div>
+
+            <div class="plaque">
+
+                Obra número 004
+
+                <small>
+                    Nuestra historia continúa.
+                </small>
+
+            </div>
+
+            <div class="couple">
+
+                <svg viewBox="0 0 360 260"
+                     id="finalDrops">
+                </svg>
+
+            </div>
+
+            <h2>
+                Mi colección favorita
+            </h2>
+
+            <p class="message">
+                Si pudiera construir un museo
+                con todos nuestros recuerdos,
+                necesitaría muchísimas habitaciones.
+            </p>
+
+            <p class="message">
+                Una para nuestros abrazos,
+                otra para nuestros besitos,
+                otra para nuestras risas
+                y otra para todos esos momentos
+                que quisiera volver a vivir contigo.
+            </p>
+
+            <p class="message">
+                Pero lo más bonito de nuestro museo
+                es que todavía no está terminado.
+            </p>
+
+            <p class="message">
+                Aún nos quedan fotografías por tomar,
+                lugares por conocer,
+                aventuras por vivir
+                y muchísimos recuerdos por crear.
+            </p>
+
+            <h2>
+                Mi obra de arte favorita
+                siempre serás tú.
+            </h2>
+
+            <p class="message">
+                Te amo, mi hermosa Karina.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 3 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Volver a recorrer nuestro museo ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<!-- VISOR DE FOTOGRAFÍAS -->
+
+<div class="modal"
+     id="modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="photoTitle"
+     hidden>
+
+    <div class="modal-content">
+
+        <button class="close"
+                id="closeModal"
+                aria-label="Cerrar fotografía">
+            ×
+        </button>
+
+        <p class="date" id="photoNumber"></p>
+
+        <div class="modal-photo">
+
+            <img id="largePhoto"
+                 alt="Uno de nuestros recuerdos">
+
+            <p id="modalError"
+               class="photo-error"
+               hidden>
+                No se pudo cargar la fotografía.
+            </p>
+
+        </div>
+
+        <h2 id="photoTitle"></h2>
+
+        <p id="photoMessage"></p>
+
+        <button id="continueButton">
+            Continuar recorrido ♡
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 21, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const entrance = document.getElementById("entrance");
+const entranceSection =
+    document.getElementById("entranceSection");
+
+const enterButton =
+    document.getElementById("enterButton");
+
+const gallery = document.getElementById("gallery");
+const museumWall = document.getElementById("museumWall");
+const future = document.getElementById("future");
+
+const modal = document.getElementById("modal");
+const largePhoto = document.getElementById("largePhoto");
+const modalError = document.getElementById("modalError");
+
+const title = document.getElementById("title");
+const counter = document.getElementById("counter");
+const progressFill =
+    document.getElementById("progressFill");
+
+let visited = new Set();
+let timers = [];
+let entered = false;
+let futureRevealed = false;
+let activeIndex = null;
+let previousFocus = null;
+
+/* NUESTRAS TRES FOTOGRAFÍAS */
+
+const memories = [
+
+    {
+        image: "../imagenes/collage-1.jpg",
+
+        title: "Un pedacito de nosotros",
+
+        message:
+            "Me encanta tener fotografías contigo. " +
+            "Porque cada una guarda un pedacito de " +
+            "nuestra historia y me permite recordar " +
+            "lo bonito que es compartir mi vida contigo."
+    },
+
+    {
+        image: "../imagenes/collage-2.jpg",
+
+        title: "Mi compañía favorita",
+
+        message:
+            "No necesito que todos nuestros días sean " +
+            "extraordinarios. Hasta los momentos más " +
+            "sencillos se vuelven especiales cuando " +
+            "tengo la oportunidad de compartirlos contigo."
+    },
+
+    {
+        image: "../imagenes/collage-3.jpg",
+
+        title: "Qué bonito coincidir contigo",
+
+        message:
+            "Me encanta mirar nuestras fotografías " +
+            "y pensar en todo lo que hemos vivido. " +
+            "Pero también me emociona imaginar todas " +
+            "las fotografías que todavía nos faltan tomar."
+    }
+
+];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+/* DIBUJAR NUESTRAS GOTITAS */
+
+function definitions(prefix) {
+
+    return `
+        <defs>
+
+            <radialGradient id="${prefix}blue"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#d2f8ff"/>
+
+                <stop offset=".4"
+                      stop-color="#55caff"/>
+
+                <stop offset="1"
+                      stop-color="#1754bc"/>
+
+            </radialGradient>
+
+            <radialGradient id="${prefix}pink"
+                            cx="30%" cy="20%" r="85%">
+
+                <stop stop-color="#ffe5f4"/>
+
+                <stop offset=".4"
+                      stop-color="#ff9cd5"/>
+
+                <stop offset="1"
+                      stop-color="#b52c85"/>
+
+            </radialGradient>
+
+            <linearGradient id="${prefix}love">
+
+                <stop stop-color="#69ceff"/>
+
+                <stop offset="1"
+                      stop-color="#ff79bd"/>
+
+            </linearGradient>
+
+        </defs>
+    `;
+
+}
+
+function drop(prefix, color, x, y, extraClass = "") {
+
+    const gradient = `url(#${prefix}${color})`;
+
+    const glow = color === "blue"
+        ? "#48baff"
+        : "#ff79bd";
+
+    return `
+        <g transform="translate(${x} ${y})"
+           class="${extraClass}">
+
+            <g class="breathe"
+               style="filter:drop-shadow(0 0 10px ${glow})">
+
+                <g fill="${gradient}">
+
+                    <ellipse cy="15"
+                             rx="26" ry="31"/>
+
+                    <ellipse cx="-14" cy="40"
+                             rx="13" ry="10"/>
+
+                    <ellipse cx="14" cy="40"
+                             rx="13" ry="10"/>
+
+                    <ellipse cx="-27" cy="14"
+                             rx="9" ry="16"/>
+
+                    <ellipse cx="27" cy="14"
+                             rx="9" ry="16"/>
+
+                    <ellipse cy="-27"
+                             rx="39" ry="39"/>
+
+                </g>
+
+                <ellipse cx="-15" cy="-44"
+                         rx="13" ry="7"
+                         fill="white"
+                         opacity=".55"/>
+
+                <g fill="#10101e">
+
+                    <ellipse cx="-12" cy="-24"
+                             rx="4.5" ry="9"/>
+
+                    <ellipse cx="12" cy="-24"
+                             rx="4.5" ry="9"/>
+
+                </g>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+/* GOTITAS DE LA ENTRADA */
+
+document.getElementById("entranceDrops").innerHTML =
+
+    definitions("entry")
+
+    + `
+        <ellipse cx="180" cy="291"
+                 rx="170" ry="16"
+                 fill="#d6b879"
+                 opacity=".15"/>
+    `
+
+    + drop("entry", "blue", 145, 235, "blue-pull")
+
+    + drop("entry", "pink", 215, 235, "pink-pull");
+
+/* GOTITAS DEL FINAL */
+
+document.getElementById("finalDrops").innerHTML =
+
+    definitions("end")
+
+    + `
+        <ellipse cx="180" cy="236"
+                 rx="120" ry="13"
+                 fill="url(#endlove)"
+                 opacity=".2"/>
+    `
+
+    + drop("end", "blue", 140, 180)
+
+    + drop("end", "pink", 220, 180)
+
+    + `
+        <path d="M151 192 Q180 222 220 192"
+              stroke="url(#endblue)"
+              stroke-width="14"
+              stroke-linecap="round"
+              fill="none"/>
+
+        <path d="M209 204 Q180 230 140 204"
+              stroke="url(#endpink)"
+              stroke-width="14"
+              stroke-linecap="round"
+              fill="none"/>
+
+        <path d="
+            M180 100
+            C85 45 125 -15 180 25
+            C235 -15 275 45 180 100Z
+        "
+        fill="url(#endlove)"
+        style="filter:drop-shadow(0 0 14px #ff79bd)"/>
+    `;
+
+/* ABRIR EL TELÓN */
+
+enterButton.addEventListener("click", () => {
+
+    if (entered || Date.now() < unlockDate) return;
+
+    entered = true;
+
+    enterButton.disabled = true;
+
+    enterButton.textContent =
+        "Preparando nuestra exposición...";
+
+    entrance.classList.add("open");
+
+    later(() => {
+
+        entranceSection.hidden = true;
+
+        gallery.hidden = false;
+
+        title.textContent =
+            "Nuestra galería de recuerdos";
+
+        createGallery();
+
+    }, 4800);
+
+});
+
+/* CREAR GALERÍA */
+
+function createGallery() {
+
+    museumWall.innerHTML = "";
+
+    memories.forEach((memory, index) => {
+
+        const exhibit =
+            document.createElement("article");
+
+        exhibit.className = "exhibit";
+
+        exhibit.innerHTML = `
+            <div class="spotlight"></div>
+
+            <button class="frame"
+                    aria-label="Descubrir recuerdo ${index + 1}">
+
+                <img alt="Recuerdo número ${index + 1}">
+
+                <div class="photo-error" hidden>
+                    Fotografía no disponible.
+                </div>
+
+            </button>
+
+            <div class="plaque">
+
+                Obra número 00${index + 1}
+
+                <small class="status">
+                    Presiona para descubrirla ♡
+                </small>
+
+            </div>
+        `;
+
+        const image = exhibit.querySelector("img");
+
+        const error =
+            exhibit.querySelector(".photo-error");
+
+        image.addEventListener("error", () => {
+
+            image.hidden = true;
+
+            error.hidden = false;
+
+        });
+
+        exhibit.querySelector(".frame")
+            .addEventListener("click", () => {
+
+                openPhoto(index);
+
+            });
+
+        museumWall.appendChild(exhibit);
+
+        image.src = memory.image;
+
+    });
+
+}
+
+/* AMPLIAR FOTOGRAFÍA */
+
+function openPhoto(index) {
+
+    if (Date.now() < unlockDate) return;
+
+    activeIndex = index;
+
+    previousFocus = document.activeElement;
+
+    const memory = memories[index];
+
+    document.getElementById("photoNumber")
+        .textContent = `OBRA NÚMERO 00${index + 1}`;
+
+    document.getElementById("photoTitle")
+        .textContent = memory.title;
+
+    document.getElementById("photoMessage")
+        .textContent = memory.message;
+
+    largePhoto.hidden = false;
+
+    modalError.hidden = true;
+
+    largePhoto.src = memory.image;
+
+    modal.hidden = false;
+
+    modal.scrollTop = 0;
+
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("closeModal").focus();
+
+}
+
+largePhoto.addEventListener("error", () => {
+
+    largePhoto.hidden = true;
+
+    modalError.hidden = false;
+
+});
+
+/* CERRAR FOTOGRAFÍA */
+
+function closePhoto() {
+
+    if (modal.hidden) return;
+
+    modal.hidden = true;
+
+    document.body.style.overflow = "";
+
+    if (activeIndex !== null) {
+
+        visited.add(activeIndex);
+
+        const exhibit =
+            museumWall.children[activeIndex];
+
+        exhibit.classList.add("visited");
+
+        exhibit.querySelector(".status")
+            .textContent = "Recuerdo descubierto ♡";
+
+    }
+
+    activeIndex = null;
+
+    if (previousFocus) {
+
+        previousFocus.focus({
+            preventScroll: true
+        });
+
+    }
+
+    updateProgress();
+
+}
+
+document.getElementById("closeModal")
+    .addEventListener("click", closePhoto);
+
+document.getElementById("continueButton")
+    .addEventListener("click", closePhoto);
+
+modal.addEventListener("click", event => {
+
+    if (event.target === modal) {
+
+        closePhoto();
+
+    }
+
+});
+
+document.addEventListener("keydown", event => {
+
+    if (event.key === "Escape") {
+
+        closePhoto();
+
+    }
+
+});
+
+/* PROGRESO */
+
+function updateProgress() {
+
+    counter.textContent =
+        `${visited.size} de 3 recuerdos descubiertos`;
+
+    progressFill.style.width =
+        `${visited.size / 3 * 100}%`;
+
+    if (visited.size === 3 && !futureRevealed) {
+
+        futureRevealed = true;
+
+        later(() => {
+
+            future.hidden = false;
+
+            for (let i = 0; i < 70; i++) {
+
+                later(createParticle, i * 90);
+
+            }
+
+            future.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 1200);
+
+    }
+
+}
+
+/* PARTÍCULAS DORADAS Y CORAZONES */
+
+function createParticle() {
+
+    const particle =
+        document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.textContent =
+        Math.random() > .5 ? "✧" : "♥";
+
+    const colors = [
+        "#f4d7a2",
+        "#ffc1e3",
+        "#69ceff",
+        "#d6b6ff"
+    ];
+
+    particle.style.color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    particle.style.left =
+        random(0, 100) + "vw";
+
+    particle.style.fontSize =
+        random(10, 25) + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        random(-60, 60) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    particle.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, duration * 1000);
+
+}
+
+/* REPETIR RECORRIDO */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        visited.clear();
+
+        entered = false;
+
+        futureRevealed = false;
+
+        activeIndex = null;
+
+        entrance.classList.remove("open");
+
+        enterButton.disabled = false;
+
+        enterButton.textContent =
+            "Entrar a nuestro museo ♡";
+
+        entranceSection.hidden = false;
+
+        gallery.hidden = true;
+
+        future.hidden = true;
+
+        modal.hidden = true;
+
+        document.body.style.overflow = "";
+
+        museumWall.innerHTML = "";
+
+        counter.textContent =
+            "0 de 3 recuerdos descubiertos";
+
+        progressFill.style.width = "0%";
+
+        title.textContent =
+            "Una exposición muy especial";
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

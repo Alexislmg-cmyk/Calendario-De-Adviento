@@ -1,0 +1,1308 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 15 | Un abrazo para ti</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #030205;
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* ILUMINACIÓN DEL FONDO */
+
+.ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse at 20% 50%,
+            #168dff55,
+            transparent 55%
+        ),
+        radial-gradient(
+            ellipse at 80% 50%,
+            #ff49ac55,
+            transparent 55%
+        );
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+body.complete .ambient {
+    opacity: 1;
+}
+
+.container {
+    position: relative;
+    width: 96%;
+    max-width: 480px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #f3d5ff;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #b87be8;
+}
+
+.message {
+    color: #f2dced;
+    font-size: 19px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ESCENARIO */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+.pink-breathe {
+    animation-delay: .5s;
+}
+
+#pinkCharacter {
+    opacity: 0;
+}
+
+.open-arms {
+    opacity: 1;
+    transition: opacity .5s;
+}
+
+.hug-arms {
+    opacity: 0;
+    transition: opacity .7s;
+}
+
+.scene.hugging .open-arms {
+    opacity: 0;
+}
+
+.scene.hugging .hug-arms {
+    opacity: 1;
+}
+
+#loveHeart {
+    opacity: 0;
+    transition: opacity 1s;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.scene.hugging #loveHeart {
+    opacity: 1;
+    animation: heartbeat 1.5s infinite;
+}
+
+/* BOTÓN DEL ABRAZO */
+
+.hug-button {
+    position: relative;
+    width: 85%;
+    max-width: 290px;
+    min-height: 70px;
+    padding: 18px;
+    border: 1px solid #ffb3df;
+    border-radius: 50px;
+    background: #241329;
+    color: #ffe1f3;
+    font-family: Georgia, serif;
+    font-size: 23px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 25px #ff79bd40;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hug-button.holding {
+    box-shadow:
+        0 0 25px #ff79bd,
+        0 0 45px #69ceff50;
+}
+
+.button-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    background: linear-gradient(
+        90deg,
+        #268bc9,
+        #a45bd3,
+        #e85da8
+    );
+    pointer-events: none;
+}
+
+.button-text {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#instruction {
+    color: #d9b6ff;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 50px;
+}
+
+#percentage {
+    color: #ffc1e3;
+    font-size: 18px;
+    margin: 15px auto;
+}
+
+/* FOTOGRAFÍA */
+
+.photo-section {
+    position: relative;
+    margin: 40px auto;
+    width: 90%;
+    max-width: 340px;
+}
+
+.photo-frame {
+    position: relative;
+    padding: 8px;
+    border: 1px solid #ffc1e3;
+    border-radius: 25px;
+    background: linear-gradient(
+        135deg,
+        #69ceff,
+        #b87be8,
+        #ff9bd5
+    );
+    box-shadow:
+        -10px 0 30px #48baff55,
+        10px 0 30px #ff49ac55;
+    animation: photoAppear 2s ease;
+}
+
+.photo-frame img {
+    display: block;
+    width: 100%;
+    max-height: 440px;
+    object-fit: contain;
+    border-radius: 18px;
+    background: #130c1e;
+}
+
+.photo-heart {
+    position: absolute;
+    color: #ffc1e3;
+    font-size: 27px;
+    text-shadow: 0 0 15px currentColor;
+    animation: floatHeart 3s infinite ease-in-out;
+    pointer-events: none;
+}
+
+.photo-heart:nth-of-type(1) {
+    top: -18px;
+    left: -15px;
+    color: #69ceff;
+}
+
+.photo-heart:nth-of-type(2) {
+    top: 15%;
+    right: -20px;
+    animation-delay: .5s;
+}
+
+.photo-heart:nth-of-type(3) {
+    top: 50%;
+    left: -22px;
+    color: #c18aff;
+    animation-delay: 1s;
+}
+
+.photo-heart:nth-of-type(4) {
+    bottom: -15px;
+    right: -12px;
+    animation-delay: 1.5s;
+}
+
+.photo-heart:nth-of-type(5) {
+    bottom: -20px;
+    left: 30%;
+    color: #69ceff;
+    animation-delay: 2s;
+}
+
+/* DEDICATORIA */
+
+#final {
+    animation: appear 2s ease;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 28px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ff49ac80,
+        0 0 30px #b87be8;
+}
+
+.final-heart {
+    font-size: 70px;
+    color: #ffc1e3;
+    text-shadow:
+        -8px 0 25px #48baff,
+        8px 0 25px #ff49ac;
+    animation: heartbeat 1.5s infinite;
+}
+
+.divider {
+    color: #d9b6ff;
+    letter-spacing: 8px;
+    margin: 30px auto;
+}
+
+.back,
+.replay {
+    display: inline-block;
+    margin: 25px auto 0;
+    padding: 13px 25px;
+    border: 1px solid #b68ad5;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* PARTÍCULAS */
+
+.particle {
+    position: fixed;
+    bottom: -40px;
+    z-index: 5;
+    pointer-events: none;
+    text-shadow: 0 0 12px currentColor;
+    animation: rise linear forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.13);
+    }
+}
+
+@keyframes floatHeart {
+    0%, 100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(8deg);
+    }
+}
+
+@keyframes photoAppear {
+    from {
+        opacity: 0;
+        transform: scale(.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rise {
+    to {
+        transform:
+            translate(var(--drift), -115vh)
+            rotate(40deg);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .final-heart,
+    .photo-heart,
+    .scene.hugging #loveHeart {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="ambient"></div>
+
+<main class="container">
+
+    <p class="date">15 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Un abracito para ti 🔒</h1>
+
+        <p class="message">
+            Tu gotita azul tiene los bracitos abiertos,
+            esperando a su princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Tengo algo para ti...
+        </h1>
+
+        <p class="message" id="intro">
+            Si pudiera salir de tu pantalla
+            en este momento,
+            ¿sabes qué sería lo primero que haría?
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 310">
+
+                <defs>
+
+                    <!-- COLORES DE LAS GOTITAS -->
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#c1f5ff"/>
+
+                        <stop offset="40%"
+                              stop-color="#55caff"/>
+
+                        <stop offset="100%"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe0f3"/>
+
+                        <stop offset="40%"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="100%"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="heartColor"
+                                    x1="0" y1="0"
+                                    x2="1" y2="1">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset=".5"
+                              stop-color="#c18aff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                    <filter id="blueGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="7"
+                            flood-color="#38baff"/>
+
+                    </filter>
+
+                    <filter id="pinkGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="7"
+                            flood-color="#ff62be"/>
+
+                    </filter>
+
+                </defs>
+
+                <!-- SOMBRITA -->
+
+                <ellipse cx="180" cy="270"
+                         rx="120" ry="12"
+                         fill="#b87be8"
+                         opacity=".12"/>
+
+                <!-- GOTITA AZUL -->
+
+                <g id="blueCharacter"
+                   transform="translate(180 195)">
+
+                    <g class="breathe">
+
+                        <g fill="url(#blueDrop)"
+                           filter="url(#blueGlow)">
+
+                            <!-- CUERPECITO -->
+
+                            <ellipse cy="24"
+                                     rx="31" ry="36"/>
+
+                            <!-- PIECITOS -->
+
+                            <rect x="-26" y="44"
+                                  width="25" height="28"
+                                  rx="12"/>
+
+                            <rect x="1" y="44"
+                                  width="25" height="28"
+                                  rx="12"/>
+
+                            <!-- BRACITOS ABIERTOS -->
+
+                            <g class="open-arms">
+
+                                <ellipse cx="-43" cy="12"
+                                         rx="12" ry="27"
+                                         transform="rotate(-60 -43 12)"/>
+
+                                <ellipse cx="43" cy="12"
+                                         rx="12" ry="27"
+                                         transform="rotate(60 43 12)"/>
+
+                            </g>
+
+                            <!-- CABECITA -->
+
+                            <ellipse cy="-28"
+                                     rx="44" ry="44"/>
+
+                        </g>
+
+                        <ellipse cx="-18" cy="-48"
+                                 rx="14" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <!-- OJITOS -->
+
+                        <ellipse cx="-14" cy="-25"
+                                 rx="5" ry="11"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="14" cy="-25"
+                                 rx="5" ry="11"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g id="pinkCharacter"
+                   transform="translate(305 195)">
+
+                    <g class="breathe pink-breathe">
+
+                        <g fill="url(#pinkDrop)"
+                           filter="url(#pinkGlow)">
+
+                            <ellipse cy="24"
+                                     rx="31" ry="36"/>
+
+                            <rect x="-26" y="44"
+                                  width="25" height="28"
+                                  rx="12"/>
+
+                            <rect x="1" y="44"
+                                  width="25" height="28"
+                                  rx="12"/>
+
+                            <g class="open-arms">
+
+                                <ellipse cx="-43" cy="12"
+                                         rx="12" ry="27"
+                                         transform="rotate(-60 -43 12)"/>
+
+                                <ellipse cx="43" cy="12"
+                                         rx="12" ry="27"
+                                         transform="rotate(60 43 12)"/>
+
+                            </g>
+
+                            <ellipse cy="-28"
+                                     rx="44" ry="44"/>
+
+                        </g>
+
+                        <ellipse cx="-18" cy="-48"
+                                 rx="14" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-14" cy="-25"
+                                 rx="5" ry="11"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="14" cy="-25"
+                                 rx="5" ry="11"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- ABRAZO FINAL -->
+
+                <g class="hug-arms">
+
+                    <path d="M119 205 Q105 234 133 239"
+                          stroke="url(#blueDrop)"
+                          stroke-width="19"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M241 205 Q255 234 227 239"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="19"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M150 207 Q185 247 220 207"
+                          stroke="url(#blueDrop)"
+                          stroke-width="19"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M210 225 Q175 256 140 225"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="18"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                </g>
+
+                <!-- CORAZÓN DEL ABRAZO -->
+
+                <g id="loveHeart"
+                   style="filter:drop-shadow(0 0 15px #ff79bd)">
+
+                    <path d="
+                        M180 105
+                        C145 82 125 65 125 43
+                        C125 10 165 5 180 32
+                        C195 5 235 10 235 43
+                        C235 65 215 82 180 105Z
+                    "
+                    fill="url(#heartColor)"/>
+
+                    <path d="M139 42 Q142 24 158 25"
+                          stroke="white"
+                          stroke-width="6"
+                          stroke-linecap="round"
+                          fill="none"
+                          opacity=".5"/>
+
+                </g>
+
+            </svg>
+
+        </div>
+
+        <!-- BOTÓN INTERACTIVO -->
+
+        <div id="interaction">
+
+            <button class="hug-button"
+                    id="hugButton">
+
+                <span class="button-fill"
+                      id="buttonFill"></span>
+
+                <span class="button-text">
+                    Abrázame ♡
+                </span>
+
+            </button>
+
+            <p id="percentage">0%</p>
+
+            <p id="instruction">
+                Mantén presionado el botón
+                durante cinco segundos, mi princesa.
+            </p>
+
+        </div>
+
+        <!-- MENSAJE DEL ABRAZO -->
+
+        <p class="message"
+           id="hugMessage" hidden>
+
+            Eso es exactamente lo que haría...
+            Abrazarte muy, muy fuerte. ♡
+
+        </p>
+
+        <!-- REGALO FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="photo-section">
+
+                <div class="photo-frame">
+
+                    <img id="hugPhoto"
+                         alt="Un recuerdo bonito de nosotros">
+
+                    <p id="photoError"
+                       class="message" hidden>
+
+                        Nuestro abracito ♡
+
+                    </p>
+
+                </div>
+
+                <span class="photo-heart">♥</span>
+                <span class="photo-heart">♡</span>
+                <span class="photo-heart">♥</span>
+                <span class="photo-heart">♥</span>
+                <span class="photo-heart">♡</span>
+
+            </div>
+
+            <h2 class="highlight">
+                Un abracito a la distancia
+            </h2>
+
+            <p class="message">
+                Te abrazaría muy fuerte,
+                te daría un besito en tu frente
+                y me quedaría así contigo un ratito.
+            </p>
+
+            <p class="message">
+                Porque hay veces en las que
+                no necesito decirte nada.
+            </p>
+
+            <p class="message">
+                Solamente quiero tenerte
+                entre mis bracitos.
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Me encanta cuando estamos acostaditos,
+                cuando te abrazo y cuando compartimos
+                esos pequeños momentos que quisiera
+                que duraran un poquito más.
+            </p>
+
+            <p class="message">
+                Y mientras no pueda darte
+                ese abrazo en persona,
+                te mando uno a través de tu pantallita.
+            </p>
+
+            <p class="message">
+                Para que puedas recibirlo
+                cada vez que quieras,
+                mi hermosa gotita rosa.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <h2 class="highlight">
+                Te amo, mi niña preciosa.
+            </h2>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 9 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Quiero otro abracito ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 15, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const blueCharacter = document.getElementById("blueCharacter");
+const pinkCharacter = document.getElementById("pinkCharacter");
+
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const hugButton = document.getElementById("hugButton");
+const buttonFill = document.getElementById("buttonFill");
+const percentage = document.getElementById("percentage");
+const instruction = document.getElementById("instruction");
+
+const interaction = document.getElementById("interaction");
+const hugMessage = document.getElementById("hugMessage");
+const final = document.getElementById("final");
+
+const hugPhoto = document.getElementById("hugPhoto");
+const photoError = document.getElementById("photoError");
+
+const requiredTime = 5000;
+
+let progress = 0;
+let holding = false;
+let completed = false;
+let started = false;
+
+let frameId = null;
+let lastTime = null;
+let activePointer = null;
+let timers = [];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            hugPhoto.src = "../imagenes/abrazo.jpg";
+
+            updateProgress();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* CARGAR FOTOGRAFÍA */
+
+hugPhoto.addEventListener("error", () => {
+
+    hugPhoto.hidden = true;
+
+    photoError.hidden = false;
+
+});
+
+hugPhoto.addEventListener("load", () => {
+
+    hugPhoto.hidden = false;
+
+    photoError.hidden = true;
+
+});
+
+/* CONTROL DE TIEMPOS */
+
+function later(callback, delay) {
+
+    const timer = setTimeout(callback, delay);
+
+    timers.push(timer);
+
+}
+
+/* MOVIMIENTO DE LAS GOTITAS */
+
+function updateProgress() {
+
+    const amount = Math.min(
+        progress / requiredTime,
+        1
+    );
+
+    const percent = Math.floor(amount * 100);
+
+    percentage.textContent = percent + "%";
+
+    buttonFill.style.width = percent + "%";
+
+    // La gotita azul se mueve hacia la izquierda.
+
+    const blueX = 180 - amount * 44;
+
+    // La gotita rosa se acerca desde la derecha.
+
+    const pinkX = 305 - amount * 81;
+
+    blueCharacter.setAttribute(
+        "transform",
+        `translate(${blueX} 195)`
+    );
+
+    pinkCharacter.setAttribute(
+        "transform",
+        `translate(${pinkX} 195)`
+    );
+
+    pinkCharacter.style.opacity =
+        Math.min(amount * 4, 1);
+
+    document.querySelector(".ambient")
+        .style.opacity = amount * .8;
+
+}
+
+/* COMENZAR A ABRAZAR */
+
+function startHolding() {
+
+    if (
+        completed ||
+        holding ||
+        Date.now() < unlockDate
+    ) return;
+
+    holding = true;
+
+    lastTime = null;
+
+    hugButton.classList.add("holding");
+
+    instruction.textContent =
+        "Un poquito más, mi princesa... ♡";
+
+    frameId = requestAnimationFrame(holdLoop);
+
+}
+
+/* PROGRESO DEL ABRAZO */
+
+function holdLoop(time) {
+
+    if (!holding || completed) return;
+
+    if (lastTime !== null) {
+
+        progress += Math.min(
+            time - lastTime,
+            100
+        );
+
+    }
+
+    lastTime = time;
+
+    progress = Math.min(
+        progress,
+        requiredTime
+    );
+
+    updateProgress();
+
+    if (progress >= requiredTime) {
+
+        finishHug();
+
+        return;
+
+    }
+
+    frameId = requestAnimationFrame(holdLoop);
+
+}
+
+/* PAUSAR EL ABRAZO */
+
+function stopHolding() {
+
+    holding = false;
+
+    activePointer = null;
+
+    lastTime = null;
+
+    cancelAnimationFrame(frameId);
+
+    hugButton.classList.remove("holding");
+
+    if (!completed && progress > 0) {
+
+        instruction.textContent =
+            "No te preocupes, mi amor. Sigue presionando para terminar nuestro abrazo.";
+
+    }
+
+}
+
+/* CONTROLES TÁCTILES Y RATÓN */
+
+hugButton.addEventListener("pointerdown", event => {
+
+    if (completed || holding) return;
+
+    event.preventDefault();
+
+    activePointer = event.pointerId;
+
+    hugButton.setPointerCapture(event.pointerId);
+
+    startHolding();
+
+});
+
+hugButton.addEventListener("pointerup", event => {
+
+    if (event.pointerId === activePointer) {
+
+        stopHolding();
+
+    }
+
+});
+
+hugButton.addEventListener("pointercancel", stopHolding);
+
+hugButton.addEventListener("lostpointercapture", stopHolding);
+
+hugButton.addEventListener("contextmenu", event => {
+
+    event.preventDefault();
+
+});
+
+/* TAMBIÉN FUNCIONA CON EL TECLADO */
+
+hugButton.addEventListener("keydown", event => {
+
+    if (event.key === " " || event.key === "Enter") {
+
+        event.preventDefault();
+
+        startHolding();
+
+    }
+
+});
+
+hugButton.addEventListener("keyup", event => {
+
+    if (event.key === " " || event.key === "Enter") {
+
+        event.preventDefault();
+
+        stopHolding();
+
+    }
+
+});
+
+window.addEventListener("blur", stopHolding);
+
+document.addEventListener("visibilitychange", () => {
+
+    if (document.hidden) {
+
+        stopHolding();
+
+    }
+
+});
+
+/* COMPLETAR EL ABRAZO */
+
+function finishHug() {
+
+    if (completed) return;
+
+    completed = true;
+
+    stopHolding();
+
+    progress = requiredTime;
+
+    updateProgress();
+
+    scene.classList.add("hugging");
+
+    document.body.classList.add("complete");
+
+    document.querySelector(".ambient")
+        .style.opacity = "1";
+
+    interaction.hidden = true;
+
+    hugButton.disabled = true;
+
+    title.textContent =
+        "Ven aquí, mi princesa";
+
+    intro.textContent =
+        "Qué bonito tenerte entre mis bracitos.";
+
+    hugMessage.hidden = false;
+
+    createParticles(100);
+
+    later(() => {
+
+        final.hidden = false;
+
+    }, 3000);
+
+}
+
+/* CORAZONES FLOTANTES */
+
+function createParticles(amount) {
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#c18aff",
+        "#ffc1e3"
+    ];
+
+    for (let i = 0; i < amount; i++) {
+
+        later(() => {
+
+            const particle = document.createElement("span");
+
+            particle.className = "particle";
+
+            particle.textContent =
+                i % 3 === 0 ? "♡" : "♥";
+
+            particle.style.color =
+                colors[i % colors.length];
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+            particle.style.fontSize =
+                12 + Math.random() * 25 + "px";
+
+            particle.style.setProperty(
+                "--drift",
+                -50 + Math.random() * 100 + "px"
+            );
+
+            const duration =
+                4 + Math.random() * 3;
+
+            particle.style.animationDuration =
+                duration + "s";
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+
+                particle.remove();
+
+            }, duration * 1000);
+
+        }, i * 75);
+
+    }
+
+}
+
+/* VOLVER A ABRAZARNOS */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        stopHolding();
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        progress = 0;
+
+        completed = false;
+
+        scene.classList.remove("hugging");
+
+        document.body.classList.remove("complete");
+
+        interaction.hidden = false;
+
+        hugButton.disabled = false;
+
+        hugMessage.hidden = true;
+
+        final.hidden = true;
+
+        title.textContent =
+            "Tengo algo para ti...";
+
+        intro.textContent =
+            "Si pudiera salir de tu pantalla en este momento, ¿sabes qué sería lo primero que haría?";
+
+        instruction.textContent =
+            "Mantén presionado el botón durante cinco segundos, mi princesa.";
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        updateProgress();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

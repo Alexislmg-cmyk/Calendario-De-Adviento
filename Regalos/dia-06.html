@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 6 | Encuentra a tu gotita 💙</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(
+                ellipse at bottom,
+                #310e42,
+                #07040c 80%
+            );
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 470px;
+            padding: 30px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            color: #ffc1e3;
+            font-size: 32px;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        .counter {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px 0 20px;
+            border: 1px solid #ad65c8;
+            border-radius: 30px;
+            background: #ffffff08;
+            color: #ffc1e3;
+            box-shadow: 0 0 20px #ba50ff30;
+            font-size: 18px;
+        }
+
+        #maze {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            width: 100%;
+            max-width: 390px;
+            aspect-ratio: 1;
+            margin: auto;
+            padding: 5px;
+            gap: 2px;
+            border: 1px solid #b56ae0;
+            border-radius: 15px;
+            background: #100719;
+            box-shadow: 0 0 30px #a34de050;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .cell {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-width: 0;
+            min-height: 0;
+            border-radius: 4px;
+        }
+
+        .wall {
+            background: linear-gradient(
+                135deg,
+                #48205d,
+                #25102f
+            );
+            box-shadow: inset 0 0 5px #b16eea40;
+        }
+
+        .path {
+            background: #ffffff04;
+        }
+
+        .collectible {
+            color: #ff80c6;
+            font-size: clamp(16px, 5vw, 25px);
+            text-shadow: 0 0 12px #ff49ac;
+            animation: heartbeat 1.4s infinite;
+        }
+
+        .character {
+            width: 90%;
+            height: 90%;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .pink-character {
+            filter: drop-shadow(0 0 5px #ff60bd);
+        }
+
+        .blue-character {
+            filter: drop-shadow(0 0 5px #39baff);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 58px);
+            grid-template-rows: repeat(2, 54px);
+            gap: 8px;
+            justify-content: center;
+            margin: 22px auto;
+        }
+
+        .control {
+            border: 1px solid #a760c9;
+            border-radius: 15px;
+            background: linear-gradient(
+                135deg,
+                #52246a,
+                #281337
+            );
+            color: #ffc1e3;
+            font-size: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 12px #a34de030;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .control:active {
+            transform: scale(.92);
+            background: #a34d9e;
+        }
+
+        .up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .down {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        #hint {
+            color: #d9b1e8;
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 48px;
+        }
+
+        #final {
+            animation: appear 1.5s ease;
+        }
+
+        .couple {
+            width: 100%;
+            max-width: 330px;
+            margin: 30px auto;
+        }
+
+        .couple svg {
+            width: 100%;
+            overflow: visible;
+        }
+
+        .big-heart {
+            transform-origin: 150px 40px;
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 10px #ff49ac);
+        }
+
+        .highlight {
+            color: #ffc1e3;
+            font-size: 28px;
+            line-height: 1.5;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .back,
+        #replay {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+            font-family: Georgia, serif;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .particle {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            animation: rise 6s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                transform: translateY(-115vh) rotate(35deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">06 DE DICIEMBRE · 2026</p>
+
+        <!-- REGALO BLOQUEADO -->
+
+        <section id="locked">
+
+            <h1>Alguien te espera 🔒</h1>
+
+            <p class="message">
+                Tu gotita azul está esperando encontrarte,
+                pero todavía falta un poquito.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <!-- MINIJUEGO -->
+
+        <section id="unlocked" hidden>
+
+            <h1>Encuentra a tu gotita azul</h1>
+
+            <p class="message">
+                Mi princesa, recoge los cinco corazones
+                y encuentra el camino hacia mí.
+            </p>
+
+            <div class="counter">
+                💗 <span id="score">0</span> / 5
+            </div>
+
+            <div id="maze" aria-label="Laberinto"></div>
+
+            <div class="controls">
+
+                <button class="control up"
+                        data-x="0" data-y="-1"
+                        aria-label="Arriba">↑</button>
+
+                <button class="control left"
+                        data-x="-1" data-y="0"
+                        aria-label="Izquierda">←</button>
+
+                <button class="control down"
+                        data-x="0" data-y="1"
+                        aria-label="Abajo">↓</button>
+
+                <button class="control right"
+                        data-x="1" data-y="0"
+                        aria-label="Derecha">→</button>
+
+            </div>
+
+            <p id="hint" aria-live="polite">
+                Usa las flechitas o desliza tu dedo
+                sobre el laberinto.
+            </p>
+
+        </section>
+
+        <!-- FINAL DEL JUEGO -->
+
+        <section id="final" hidden>
+
+            <h1>¡Me encontraste, mi amor!</h1>
+
+            <div class="couple" id="couple"></div>
+
+            <p class="message">
+                Sabía que encontrarías el camino
+                hacia tu gotita azul.
+            </p>
+
+            <h2 class="highlight">
+                No importa cuántos caminos tengamos
+                que recorrer, espero que siempre
+                terminemos encontrándonos.
+            </h2>
+
+            <p class="message">
+                Y si alguna vez te pierdes,
+                recuerda que también estaré
+                buscando el camino hacia ti.
+            </p>
+
+            <p class="message">
+                Te amo, mi gotita rosa. 🩷
+            </p>
+
+            <p class="message">
+                Todavía te esperan 18 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Volver a encontrarnos ♡
+            </button>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 6, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+        const maze = document.getElementById("maze");
+        const score = document.getElementById("score");
+        const hint = document.getElementById("hint");
+        const final = document.getElementById("final");
+        const couple = document.getElementById("couple");
+
+        // 1 = pared
+        // 0 = camino
+
+        const map = [
+            [1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,1,0,0,0,1],
+            [1,1,1,0,1,0,1,0,1],
+            [1,0,0,0,0,0,1,0,1],
+            [1,0,1,1,1,1,1,0,1],
+            [1,0,0,0,0,0,0,0,1],
+            [1,1,1,0,1,0,1,1,1],
+            [1,0,0,0,1,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1]
+        ];
+
+        const start = { x: 1, y: 1 };
+
+        const goal = { x: 7, y: 7 };
+
+        const originalHearts = [
+            { x: 3, y: 1 },
+            { x: 7, y: 1 },
+            { x: 1, y: 3 },
+            { x: 1, y: 7 },
+            { x: 7, y: 5 }
+        ];
+
+        let player = { ...start };
+
+        let hearts = originalHearts.map(
+            heart => ({ ...heart })
+        );
+
+        let collected = 0;
+        let completed = false;
+        let started = false;
+
+        // Dibujar nuestras gotitas
+
+        function characterBody(color, id) {
+
+            const pink = color === "pink";
+
+            const light = pink ? "#ffe0f3" : "#c1f5ff";
+            const middle = pink ? "#ff9cd5" : "#55caff";
+            const dark = pink ? "#b52c85" : "#1754bc";
+
+            return `
+                <defs>
+                    <radialGradient id="${id}"
+                                    cx="30%" cy="20%" r="85%">
+                        <stop offset="0%" stop-color="${light}"/>
+                        <stop offset="40%" stop-color="${middle}"/>
+                        <stop offset="100%" stop-color="${dark}"/>
+                    </radialGradient>
+                </defs>
+
+                <g fill="url(#${id})">
+
+                    <rect x="29" y="73"
+                          width="17" height="23" rx="9"/>
+
+                    <rect x="54" y="73"
+                          width="17" height="23" rx="9"/>
+
+                    <ellipse cx="24" cy="65"
+                             rx="10" ry="17"
+                             transform="rotate(25 24 65)"/>
+
+                    <ellipse cx="76" cy="65"
+                             rx="10" ry="17"
+                             transform="rotate(-25 76 65)"/>
+
+                    <ellipse cx="50" cy="65"
+                             rx="26" ry="29"/>
+
+                    <ellipse cx="50" cy="32"
+                             rx="34" ry="31"/>
+
+                </g>
+
+                <ellipse cx="35" cy="17"
+                         rx="12" ry="6"
+                         transform="rotate(-30 35 17)"
+                         fill="white" opacity=".55"/>
+
+                <ellipse cx="40" cy="35"
+                         rx="4" ry="8"
+                         fill="#10101e"/>
+
+                <ellipse cx="60" cy="35"
+                         rx="4" ry="8"
+                         fill="#10101e"/>
+            `;
+
+        }
+
+        function character(color) {
+
+            return `
+                <svg class="character ${color}-character"
+                     viewBox="0 0 100 100">
+
+                    ${characterBody(color, color + "-game")}
+
+                </svg>
+            `;
+
+        }
+
+        // Dibujar el laberinto
+
+        function renderMaze() {
+
+            maze.innerHTML = "";
+
+            map.forEach((row, y) => {
+
+                row.forEach((value, x) => {
+
+                    const cell = document.createElement("div");
+
+                    cell.className =
+                        "cell " + (value === 1 ? "wall" : "path");
+
+                    if (value === 0) {
+
+                        const isPlayer =
+                            player.x === x && player.y === y;
+
+                        const isGoal =
+                            goal.x === x && goal.y === y;
+
+                        const hasHeart = hearts.some(
+                            heart => heart.x === x &&
+                                     heart.y === y
+                        );
+
+                        if (isPlayer) {
+
+                            cell.innerHTML = character("pink");
+
+                        } else if (isGoal) {
+
+                            cell.innerHTML = character("blue");
+
+                        } else if (hasHeart) {
+
+                            cell.innerHTML =
+                                '<span class="collectible">♥</span>';
+
+                        }
+
+                    }
+
+                    maze.appendChild(cell);
+
+                });
+
+            });
+
+            score.textContent = collected;
+
+        }
+
+        // Mover a la gotita rosa
+
+        function move(dx, dy) {
+
+            if (Date.now() < unlockDate) return;
+            if (completed) return;
+
+            const nextX = player.x + dx;
+            const nextY = player.y + dy;
+
+            // Evitar atravesar paredes
+
+            if (
+                nextY < 0 ||
+                nextY >= map.length ||
+                nextX < 0 ||
+                nextX >= map[0].length ||
+                map[nextY][nextX] === 1
+            ) {
+                return;
+            }
+
+            // Pedir los cinco corazones antes de llegar
+
+            if (
+                nextX === goal.x &&
+                nextY === goal.y &&
+                collected < 5
+            ) {
+
+                hint.textContent =
+                    "Aquí estoy, mi amor. Te faltan " +
+                    (5 - collected) +
+                    " corazoncitos. 💙";
+
+                return;
+
+            }
+
+            player.x = nextX;
+            player.y = nextY;
+
+            const heartIndex = hearts.findIndex(
+                heart => heart.x === player.x &&
+                         heart.y === player.y
+            );
+
+            if (heartIndex !== -1) {
+
+                hearts.splice(heartIndex, 1);
+
+                collected++;
+
+                createParticles(5);
+
+                const messages = [
+                    "¡El primero, mi princesa! 💗",
+                    "Vas muy bien, mi amor.",
+                    "Cada vez estamos más cerquita.",
+                    "¡Solamente te falta uno!",
+                    "¡Ya tienes todos! Ven por tu abracito. 💙"
+                ];
+
+                hint.textContent = messages[collected - 1];
+
+            }
+
+            renderMaze();
+
+            if (
+                player.x === goal.x &&
+                player.y === goal.y &&
+                collected === 5
+            ) {
+
+                finishGame();
+
+            }
+
+        }
+
+        // Controles con botones
+
+        document.querySelectorAll(".control").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                move(
+                    Number(button.dataset.x),
+                    Number(button.dataset.y)
+                );
+
+            });
+
+        });
+
+        // Controles con teclado
+
+        document.addEventListener("keydown", event => {
+
+            if (!started || completed) return;
+
+            const directions = {
+                ArrowUp: [0, -1],
+                ArrowDown: [0, 1],
+                ArrowLeft: [-1, 0],
+                ArrowRight: [1, 0]
+            };
+
+            const direction = directions[event.key];
+
+            if (direction) {
+
+                event.preventDefault();
+
+                move(...direction);
+
+            }
+
+        });
+
+        // Controles deslizando el dedo
+
+        let touchX = 0;
+        let touchY = 0;
+        let touching = false;
+
+        maze.addEventListener("touchstart", event => {
+
+            if (event.touches.length !== 1) return;
+
+            touching = true;
+
+            touchX = event.touches[0].clientX;
+            touchY = event.touches[0].clientY;
+
+        }, { passive: true });
+
+        maze.addEventListener("touchmove", event => {
+
+            if (!touching || completed) return;
+
+            event.preventDefault();
+
+            const x = event.touches[0].clientX;
+            const y = event.touches[0].clientY;
+
+            const dx = x - touchX;
+            const dy = y - touchY;
+
+            const distance = Math.max(
+                18,
+                maze.clientWidth / 12
+            );
+
+            if (Math.abs(dx) < distance &&
+                Math.abs(dy) < distance) return;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+
+                move(dx > 0 ? 1 : -1, 0);
+
+            } else {
+
+                move(0, dy > 0 ? 1 : -1);
+
+            }
+
+            touchX = x;
+            touchY = y;
+
+        }, { passive: false });
+
+        maze.addEventListener("touchend", () => {
+
+            touching = false;
+
+        });
+
+        maze.addEventListener("touchcancel", () => {
+
+            touching = false;
+
+        });
+
+        // Encuentro de las gotitas
+
+        function finishGame() {
+
+            completed = true;
+
+            couple.innerHTML = `
+                <svg viewBox="0 0 300 220">
+
+                    <ellipse cx="150" cy="195"
+                             rx="105" ry="12"
+                             fill="#b16eea" opacity=".2"/>
+
+                    <g transform="translate(42 66) scale(1.25)"
+                       style="filter:drop-shadow(0 0 8px #39baff)">
+
+                        ${characterBody("blue", "blue-final")}
+
+                    </g>
+
+                    <g transform="translate(132 66) scale(1.25)"
+                       style="filter:drop-shadow(0 0 8px #ff60bd)">
+
+                        ${characterBody("pink", "pink-final")}
+
+                    </g>
+
+                    <path d="M128 149 Q150 170 179 145"
+                          stroke="#55caff"
+                          stroke-width="17"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M176 158 Q151 178 125 159"
+                          stroke="#ff9cd5"
+                          stroke-width="16"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <g class="big-heart">
+
+                        <path d="M150 65
+                                 C138 55 116 42 116 26
+                                 C116 7 138 3 150 19
+                                 C162 3 184 7 184 26
+                                 C184 42 162 55 150 65Z"
+                              fill="#ff85c8"/>
+
+                    </g>
+
+                </svg>
+            `;
+
+            unlocked.hidden = true;
+
+            final.hidden = false;
+
+            createParticles(75);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+        // Volver a jugar
+
+        document.getElementById("replay")
+            .addEventListener("click", () => {
+
+                if (Date.now() < unlockDate) return;
+
+                player = { ...start };
+
+                hearts = originalHearts.map(
+                    heart => ({ ...heart })
+                );
+
+                collected = 0;
+                completed = false;
+
+                final.hidden = true;
+                unlocked.hidden = false;
+
+                hint.textContent =
+                    "Vamos a encontrarnos otra vez, mi amor.";
+
+                renderMaze();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            });
+
+        // Cuenta regresiva
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+
+                if (!started) {
+
+                    started = true;
+                    unlocked.hidden = false;
+
+                    renderMaze();
+
+                }
+
+                return;
+
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        // Partículas de amor
+
+        function createParticles(amount) {
+
+            for (let i = 0; i < amount; i++) {
+
+                setTimeout(() => {
+
+                    const particle = document.createElement("span");
+
+                    particle.className = "particle";
+
+                    particle.textContent = [
+                        "💗", "💙", "🩷", "💜", "♡"
+                    ][Math.floor(Math.random() * 5)];
+
+                    particle.style.left =
+                        Math.random() * 100 + "vw";
+
+                    particle.style.fontSize =
+                        12 + Math.random() * 24 + "px";
+
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 6000);
+
+                }, i * 60);
+
+            }
+
+        }
+
+        // Nieve de fondo
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+
+            snow.style.left = Math.random() * 100 + "vw";
+
+            snow.style.fontSize =
+                5 + Math.random() * 12 + "px";
+
+            snow.style.opacity = Math.random() * .6;
+
+            snow.style.animationDuration =
+                5 + Math.random() * 10 + "s";
+
+            snow.style.animationDelay =
+                -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        updateCountdown();
+
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

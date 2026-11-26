@@ -1,0 +1,1710 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 16 | Bailando contigo</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #30152f,
+        #050307 80%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    max-width: 480px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 30px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 30px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd80;
+}
+
+.message {
+    color: #f5d8ed;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ILUMINACIÓN */
+
+.ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse at 20% 50%,
+            #269dff35,
+            transparent 55%
+        ),
+        radial-gradient(
+            ellipse at 80% 50%,
+            #ff49ac45,
+            transparent 55%
+        );
+    opacity: 0;
+    transition: opacity 3s;
+}
+
+body.opened .ambient {
+    opacity: 1;
+}
+
+/* CAJITA MUSICAL */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 15px auto;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.lid {
+    transform-box: view-box;
+    transform-origin: 180px 265px;
+    transition:
+        transform 2.3s ease-in-out,
+        opacity 1.5s;
+}
+
+.scene.opened .lid {
+    transform: scaleY(.08);
+    opacity: 0;
+}
+
+.open-lid {
+    opacity: 0;
+    transition: opacity 1.8s ease;
+}
+
+.scene.opened .open-lid {
+    opacity: 1;
+}
+
+.dancers {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.scene.opened .dancers {
+    opacity: 1;
+}
+
+.dancing-couple {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: dance 3s ease-in-out infinite;
+    animation-play-state: paused;
+}
+
+.scene.playing .dancing-couple {
+    animation-play-state: running;
+}
+
+.platform-ring {
+    stroke-dasharray: 8 6;
+    animation: rotatePlatform 2s linear infinite;
+    animation-play-state: paused;
+}
+
+.scene.playing .platform-ring {
+    animation-play-state: running;
+}
+
+.dance-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.5s infinite;
+    animation-play-state: paused;
+}
+
+.scene.playing .dance-heart {
+    animation-play-state: running;
+}
+
+/* LLAVECITA */
+
+.key-button {
+    position: absolute;
+    right: 0;
+    top: 68%;
+    width: 21%;
+    height: 19%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.key-button svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 7px #ffd37a);
+}
+
+.key-button.turning svg {
+    animation: turnKey .8s ease-in-out;
+}
+
+.key-button:disabled {
+    cursor: default;
+}
+
+.turns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+}
+
+.turn-dot {
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ffd37a;
+    border-radius: 50%;
+    background: #ffffff08;
+    transition: background .5s;
+}
+
+.turn-dot.active {
+    background: #ffd37a;
+    box-shadow: 0 0 15px #ffd37a;
+}
+
+#instruction {
+    color: #e8c7ff;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 45px;
+}
+
+/* REPRODUCTOR */
+
+.music-player {
+    width: 92%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #d9a5ec70;
+    border-radius: 25px;
+    background: #ffffff08;
+    box-shadow: 0 0 25px #ff79bd20;
+    animation: appear 1.5s ease;
+}
+
+.song-name {
+    color: #ffc1e3;
+    font-size: 23px;
+    margin: 5px;
+}
+
+.artist {
+    color: #d9b6ff;
+    font-size: 14px;
+}
+
+.progress {
+    width: 100%;
+    accent-color: #ff9bd5;
+    cursor: pointer;
+    margin: 15px auto 5px;
+}
+
+.times {
+    display: flex;
+    justify-content: space-between;
+    color: #d9b6ff;
+    font-size: 12px;
+}
+
+.play-button {
+    width: 65px;
+    height: 65px;
+    margin: 15px auto 0;
+    border: 1px solid #ffc1e3;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #a45bd3,
+        #e85da8
+    );
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ff79bd60;
+}
+
+#audioError {
+    color: #ffc1e3;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* DEDICATORIAS */
+
+.phrase {
+    min-height: 110px;
+    margin: 25px auto;
+    padding: 10px;
+    color: #f6d9f0;
+    font-size: 21px;
+    line-height: 1.7;
+    opacity: 1;
+    transition: opacity .6s;
+}
+
+.phrase.changing {
+    opacity: 0;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 28px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ff49ac80,
+        0 0 30px #b87be8;
+}
+
+#final {
+    animation: appear 2s ease;
+}
+
+.final-heart {
+    font-size: 75px;
+    color: #ffc1e3;
+    text-shadow:
+        -8px 0 25px #48baff,
+        8px 0 25px #ff49ac;
+    animation: heartbeat 1.5s infinite;
+}
+
+.back,
+.replay,
+.letter-button {
+    display: inline-block;
+    margin: 20px auto 0;
+    padding: 13px 25px;
+    border: 1px solid #b68ad5;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.divider {
+    color: #ffd37a;
+    letter-spacing: 8px;
+    margin: 30px auto;
+}
+
+/* PARTÍCULAS */
+
+.particle {
+    position: fixed;
+    bottom: -35px;
+    z-index: 3;
+    pointer-events: none;
+    text-shadow: 0 0 12px currentColor;
+    animation: rise linear forwards;
+}
+
+.star {
+    position: fixed;
+    pointer-events: none;
+    color: #f4d4ff;
+    animation: twinkle 3s infinite alternate;
+}
+
+/* ANIMACIONES */
+
+@keyframes turnKey {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dance {
+    0%, 100% {
+        transform: rotate(-5deg) translateX(-3px);
+    }
+
+    50% {
+        transform: rotate(5deg) translateX(3px);
+    }
+}
+
+@keyframes rotatePlatform {
+    to {
+        stroke-dashoffset: -28;
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes rise {
+    to {
+        transform:
+            translate(var(--drift), -115vh)
+            rotate(60deg);
+        opacity: 0;
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: .15;
+    }
+
+    to {
+        opacity: .8;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="ambient"></div>
+
+<main class="container">
+
+    <p class="date">16 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Bailando contigo 🔒</h1>
+
+        <p class="message">
+            Una pequeña melodía
+            está esperando por ti,
+            mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Una cajita musical para ti
+        </h1>
+
+        <p class="message" id="intro">
+            Hay algo muy especial
+            guardado dentro de ella...
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 390">
+
+                <defs>
+
+                    <!-- ROSA DE LA CAJITA -->
+
+                    <linearGradient id="boxPink"
+                                    x1="0" y1="0"
+                                    x2="0" y2="1">
+
+                        <stop stop-color="#ffc1e3"/>
+
+                        <stop offset=".45"
+                              stop-color="#d66aa9"/>
+
+                        <stop offset="1"
+                              stop-color="#7a285f"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="darkPink"
+                                    x1="0" y1="0"
+                                    x2="1" y2="1">
+
+                        <stop stop-color="#a94080"/>
+
+                        <stop offset="1"
+                              stop-color="#4e153f"/>
+
+                    </linearGradient>
+
+                    <!-- DETALLES DORADOS -->
+
+                    <linearGradient id="gold"
+                                    x1="0" y1="0"
+                                    x2="1" y2="1">
+
+                        <stop stop-color="#fff3bd"/>
+
+                        <stop offset=".3"
+                              stop-color="#ffd37a"/>
+
+                        <stop offset=".6"
+                              stop-color="#b57b29"/>
+
+                        <stop offset="1"
+                              stop-color="#ffe5a2"/>
+
+                    </linearGradient>
+
+                    <!-- GOTITAS -->
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#c1f5ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe0f3"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="heartColor">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset=".5"
+                              stop-color="#c18aff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                </defs>
+
+                <!-- SOMBRA -->
+
+                <ellipse cx="180" cy="355"
+                         rx="140" ry="15"
+                         fill="#ff79bd"
+                         opacity=".13"/>
+
+                <!-- TAPA ABIERTA -->
+
+                <g class="open-lid">
+
+                    <rect x="43" y="35"
+                          width="274" height="235"
+                          rx="35"
+                          fill="url(#boxPink)"
+                          stroke="url(#gold)"
+                          stroke-width="5"/>
+
+                    <rect x="55" y="47"
+                          width="250" height="210"
+                          rx="28"
+                          fill="#36132e"
+                          stroke="url(#gold)"
+                          stroke-width="2"/>
+
+                    <!-- DECORACIÓN INTERIOR -->
+
+                    <path d="
+                        M180 105
+                        C150 85 135 72 135 56
+                        C135 31 165 30 180 50
+                        C195 30 225 31 225 56
+                        C225 72 210 85 180 105Z
+                    "
+                    transform="translate(72 44) scale(.6)"
+                    fill="url(#gold)"
+                    opacity=".7"/>
+
+                    <g fill="#ffe5a2" opacity=".7">
+
+                        <text x="75" y="80"
+                              font-size="18">✧</text>
+
+                        <text x="275" y="80"
+                              font-size="18">✧</text>
+
+                        <text x="90" y="130"
+                              font-size="12">✦</text>
+
+                        <text x="260" y="130"
+                              font-size="12">✦</text>
+
+                        <text x="70" y="200"
+                              font-size="18">✧</text>
+
+                        <text x="280" y="200"
+                              font-size="18">✧</text>
+
+                    </g>
+
+                </g>
+
+                <!-- PARTE SUPERIOR DE LA CAJITA -->
+
+                <ellipse cx="180" cy="265"
+                         rx="145" ry="36"
+                         fill="url(#darkPink)"
+                         stroke="url(#gold)"
+                         stroke-width="4"/>
+
+                <!-- PLATAFORMA MUSICAL -->
+
+                <g class="dancers">
+
+                    <ellipse cx="180" cy="255"
+                             rx="104" ry="24"
+                             fill="url(#gold)"/>
+
+                    <ellipse cx="180" cy="249"
+                             rx="99" ry="20"
+                             fill="#f6b7dc"
+                             stroke="#ffe5a2"
+                             stroke-width="2"/>
+
+                    <ellipse class="platform-ring"
+                             cx="180" cy="249"
+                             rx="90" ry="15"
+                             fill="none"
+                             stroke="#fff0bd"
+                             stroke-width="3"/>
+
+                    <!-- NUESTRAS GOTITAS BAILANDO -->
+
+                    <g class="dancing-couple">
+
+                        <!-- GOTITA AZUL -->
+
+                        <g transform="translate(140 199)"
+                           style="filter:drop-shadow(0 0 8px #48baff)">
+
+                            <g fill="url(#blueDrop)">
+
+                                <ellipse cy="17"
+                                         rx="27" ry="30"/>
+
+                                <ellipse cx="-14" cy="42"
+                                         rx="13" ry="10"/>
+
+                                <ellipse cx="14" cy="42"
+                                         rx="13" ry="10"/>
+
+                                <ellipse cx="-27" cy="17"
+                                         rx="10" ry="18"/>
+
+                                <ellipse cy="-26"
+                                         rx="39" ry="39"/>
+
+                            </g>
+
+                            <ellipse cx="-15" cy="-43"
+                                     rx="12" ry="6"
+                                     fill="white"
+                                     opacity=".55"/>
+
+                            <ellipse cx="-12" cy="-23"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                            <ellipse cx="12" cy="-23"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                        </g>
+
+                        <!-- GOTITA ROSA -->
+
+                        <g transform="translate(220 199)"
+                           style="filter:drop-shadow(0 0 8px #ff79bd)">
+
+                            <g fill="url(#pinkDrop)">
+
+                                <ellipse cy="17"
+                                         rx="27" ry="30"/>
+
+                                <ellipse cx="-14" cy="42"
+                                         rx="13" ry="10"/>
+
+                                <ellipse cx="14" cy="42"
+                                         rx="13" ry="10"/>
+
+                                <ellipse cx="27" cy="17"
+                                         rx="10" ry="18"/>
+
+                                <ellipse cy="-26"
+                                         rx="39" ry="39"/>
+
+                            </g>
+
+                            <ellipse cx="-15" cy="-43"
+                                     rx="12" ry="6"
+                                     fill="white"
+                                     opacity=".55"/>
+
+                            <ellipse cx="-12" cy="-23"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                            <ellipse cx="12" cy="-23"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                        </g>
+
+                        <!-- BRACITOS JUNTOS -->
+
+                        <path d="M160 210 Q180 235 201 210"
+                              stroke="url(#blueDrop)"
+                              stroke-width="15"
+                              stroke-linecap="round"
+                              fill="none"/>
+
+                        <path d="M201 222 Q180 243 160 222"
+                              stroke="url(#pinkDrop)"
+                              stroke-width="14"
+                              stroke-linecap="round"
+                              fill="none"/>
+
+                        <!-- CORAZONCITO -->
+
+                        <g class="dance-heart"
+                           style="filter:drop-shadow(0 0 10px #ff79bd)">
+
+                            <path d="
+                                M180 145
+                                C160 132 150 120 150 109
+                                C150 91 172 88 180 103
+                                C188 88 210 91 210 109
+                                C210 120 200 132 180 145Z
+                            "
+                            fill="url(#heartColor)"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- CUERPO DE LA CAJITA -->
+
+                <path d="
+                    M35 265
+                    Q180 320 325 265
+                    L315 330
+                    Q180 375 45 330Z
+                "
+                fill="url(#boxPink)"
+                stroke="url(#gold)"
+                stroke-width="3"/>
+
+                <!-- BORDES DORADOS -->
+
+                <path d="M42 286 Q180 337 318 286"
+                      stroke="url(#gold)"
+                      stroke-width="3"
+                      fill="none"/>
+
+                <path d="M45 323 Q180 365 315 323"
+                      stroke="url(#gold)"
+                      stroke-width="3"
+                      fill="none"/>
+
+                <!-- PATITAS DE LA CAJITA -->
+
+                <rect x="57" y="334"
+                      width="25" height="17"
+                      rx="7"
+                      fill="url(#gold)"/>
+
+                <rect x="278" y="334"
+                      width="25" height="17"
+                      rx="7"
+                      fill="url(#gold)"/>
+
+                <!-- PLACA FRONTAL -->
+
+                <rect x="111" y="300"
+                      width="138" height="35"
+                      rx="12"
+                      fill="url(#gold)"/>
+
+                <rect x="115" y="304"
+                      width="130" height="27"
+                      rx="9"
+                      fill="#6d2857"/>
+
+                <text x="180" y="322"
+                      text-anchor="middle"
+                      font-size="12"
+                      fill="#ffe5a2">
+
+                    Para mi princesa ♡
+
+                </text>
+
+                <!-- TAPA CERRADA -->
+
+                <g class="lid">
+
+                    <path d="
+                        M35 255
+                        Q35 197 180 197
+                        Q325 197 325 255
+                        L325 270
+                        Q180 315 35 270Z
+                    "
+                    fill="url(#boxPink)"
+                    stroke="url(#gold)"
+                    stroke-width="4"/>
+
+                    <ellipse cx="180" cy="249"
+                             rx="145" ry="51"
+                             fill="#ee9dcd"
+                             stroke="url(#gold)"
+                             stroke-width="4"/>
+
+                    <ellipse cx="180" cy="249"
+                             rx="130" ry="41"
+                             fill="none"
+                             stroke="url(#gold)"
+                             stroke-width="2"/>
+
+                    <!-- CORAZÓN DORADO -->
+
+                    <path d="
+                        M180 272
+                        C150 258 138 248 138 237
+                        C138 219 166 217 180 232
+                        C194 217 222 219 222 237
+                        C222 248 210 258 180 272Z
+                    "
+                    fill="url(#gold)"
+                    stroke="#fff3bd"
+                    stroke-width="1.5"/>
+
+                    <!-- CERRADURA -->
+
+                    <rect x="167" y="282"
+                          width="26" height="24"
+                          rx="6"
+                          fill="url(#gold)"/>
+
+                    <circle cx="180" cy="290"
+                            r="4"
+                            fill="#6d2857"/>
+
+                    <path d="M178 291 L176 299 H184 L182 291Z"
+                          fill="#6d2857"/>
+
+                </g>
+
+            </svg>
+
+            <!-- LLAVECITA INTERACTIVA -->
+
+            <button class="key-button"
+                    id="keyButton"
+                    aria-label="Girar la llave de la cajita">
+
+                <svg viewBox="0 0 90 80">
+
+                    <defs>
+
+                        <linearGradient id="keyGold">
+
+                            <stop stop-color="#fff3bd"/>
+
+                            <stop offset=".5"
+                                  stop-color="#ffd37a"/>
+
+                            <stop offset="1"
+                                  stop-color="#b57b29"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <rect x="0" y="35"
+                          width="45" height="12"
+                          rx="5"
+                          fill="url(#keyGold)"/>
+
+                    <circle cx="60" cy="23"
+                            r="18"
+                            fill="none"
+                            stroke="url(#keyGold)"
+                            stroke-width="9"/>
+
+                    <circle cx="60" cy="58"
+                            r="18"
+                            fill="none"
+                            stroke="url(#keyGold)"
+                            stroke-width="9"/>
+
+                    <circle cx="60" cy="40"
+                            r="9"
+                            fill="url(#keyGold)"/>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+        <!-- INDICADOR DE VUELTAS -->
+
+        <div id="keyControls">
+
+            <div class="turns">
+
+                <span class="turn-dot"></span>
+                <span class="turn-dot"></span>
+                <span class="turn-dot"></span>
+
+            </div>
+
+            <p id="instruction">
+                Presiona la llavecita dorada
+                tres veces, mi princesa.
+            </p>
+
+        </div>
+
+        <!-- REPRODUCTOR MUSICAL -->
+
+        <section class="music-player"
+                 id="musicPlayer" hidden>
+
+            <p class="song-name">Pensándote</p>
+
+            <p class="artist">
+                Cris Mj & Lucky Brown
+            </p>
+
+            <input type="range"
+                   class="progress"
+                   id="musicProgress"
+                   min="0"
+                   max="100"
+                   value="0"
+                   step=".1"
+                   aria-label="Progreso de la canción">
+
+            <div class="times">
+
+                <span id="currentTime">0:00</span>
+
+                <span id="duration">0:00</span>
+
+            </div>
+
+            <button class="play-button"
+                    id="playButton"
+                    aria-label="Reproducir canción">
+
+                ▶
+
+            </button>
+
+            <p id="audioError" hidden></p>
+
+        </section>
+
+        <audio id="audio" preload="none"></audio>
+
+        <!-- FRASES DURANTE LA CANCIÓN -->
+
+        <div id="dedications" hidden>
+
+            <p class="phrase" id="phrase">
+
+                Si pudiera detener el tiempo,
+                lo detendría bailando contigo.
+
+            </p>
+
+            <button class="letter-button"
+                    id="letterButton">
+
+                Tengo algo más que decirte ♡
+
+            </button>
+
+        </div>
+
+        <!-- MENSAJE FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <h2 class="highlight">
+                Si pudiera detener el tiempo,
+                lo detendría bailando contigo.
+            </h2>
+
+            <p class="message">
+                Entre tantas canciones que escucho,
+                siempre termino encontrando alguna
+                que me hace pensar en ti.
+            </p>
+
+            <p class="message">
+                Y esta vez, quería que la escucharas
+                junto a nuestras gotitas.
+            </p>
+
+            <p class="message">
+                Quizá algún día podamos estar
+                abrazaditos, escuchando nuestras
+                canciones favoritas y olvidándonos
+                un ratito de todo lo demás.
+            </p>
+
+            <p class="message">
+                Si nuestra historia tuviera
+                una banda sonora,
+                me encantaría que esta canción
+                formara parte de ella.
+            </p>
+
+            <p class="message">
+                Y que cada vez que la escucharas,
+                recordaras un poquito de nosotros.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <h2 class="highlight">
+                Siempre termino pensándote,
+                mi princesa.
+            </h2>
+
+            <p class="message">
+                Te amo muchísimo,
+                mi hermosa gotita rosa.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 8 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+
+                Volver a darle cuerda ♡
+
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+
+        ← Volver al calendario
+
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 16, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const keyButton = document.getElementById("keyButton");
+const keyControls = document.getElementById("keyControls");
+const instruction = document.getElementById("instruction");
+const dots = document.querySelectorAll(".turn-dot");
+
+const audio = document.getElementById("audio");
+const musicPlayer = document.getElementById("musicPlayer");
+const playButton = document.getElementById("playButton");
+const musicProgress = document.getElementById("musicProgress");
+
+const currentTime = document.getElementById("currentTime");
+const duration = document.getElementById("duration");
+const audioError = document.getElementById("audioError");
+
+const dedications = document.getElementById("dedications");
+const phrase = document.getElementById("phrase");
+const letterButton = document.getElementById("letterButton");
+const final = document.getElementById("final");
+
+let turns = 0;
+let opened = false;
+let started = false;
+let turning = false;
+
+let particleInterval = null;
+let phraseIndex = -1;
+let phraseTimer = null;
+let timers = [];
+
+const phrases = [
+
+    "Si pudiera detener el tiempo, lo detendría bailando contigo.",
+
+    "Entre tantas canciones, siempre hay alguna que me recuerda a ti.",
+
+    "Me encanta compartir contigo hasta los momentos más sencillos.",
+
+    "Qué bonito sería estar abrazaditos escuchando esta canción.",
+
+    "Mi hermosa gotita rosa, qué bonito fue coincidir contigo.",
+
+    "No importa cuántas canciones escuche, siempre termino pensándote.",
+
+    "Te amo muchísimo, mi princesa."
+
+];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            audio.src = "../musica/pensandote.mp3";
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+/* GIRAR LA LLAVECITA */
+
+keyButton.addEventListener("click", () => {
+
+    if (
+        opened ||
+        turning ||
+        Date.now() < unlockDate
+    ) return;
+
+    turning = true;
+
+    turns++;
+
+    dots[turns - 1].classList.add("active");
+
+    keyButton.classList.remove("turning");
+
+    void keyButton.offsetWidth;
+
+    keyButton.classList.add("turning");
+
+    if (turns === 1) {
+
+        instruction.textContent =
+            "Dos vueltitas más, mi princesa...";
+
+    }
+
+    if (turns === 2) {
+
+        instruction.textContent =
+            "Ya casi, mi amor. Una más...";
+
+    }
+
+    if (turns === 3) {
+
+        instruction.textContent =
+            "Escucha con atención... ♡";
+
+        opened = true;
+
+        keyButton.disabled = true;
+
+        // Se solicita la reproducción directamente
+        // desde el toque para favorecer Safari en iPhone.
+
+        playMusic();
+
+        later(openMusicBox, 800);
+
+    }
+
+    later(() => {
+
+        turning = false;
+
+        keyButton.classList.remove("turning");
+
+    }, 800);
+
+});
+
+/* ABRIR LA CAJITA */
+
+function openMusicBox() {
+
+    scene.classList.add("opened");
+
+    document.body.classList.add("opened");
+
+    title.textContent =
+        "Bailando contigo";
+
+    intro.textContent =
+        "Una canción, dos gotitas y mucho amor.";
+
+    keyControls.hidden = true;
+
+    later(() => {
+
+        musicPlayer.hidden = false;
+
+        dedications.hidden = false;
+
+        updatePhrase();
+
+    }, 1800);
+
+}
+
+/* REPRODUCIR MÚSICA */
+
+async function playMusic() {
+
+    audioError.hidden = true;
+
+    try {
+
+        await audio.play();
+
+    } catch (error) {
+
+        audioError.hidden = false;
+
+        audioError.textContent =
+            "Presiona el botón de reproducción para escuchar nuestra canción. ♡";
+
+    }
+
+}
+
+playButton.addEventListener("click", () => {
+
+    if (!opened) return;
+
+    if (audio.paused) {
+
+        playMusic();
+
+    } else {
+
+        audio.pause();
+
+    }
+
+});
+
+/* SINCRONIZAR ANIMACIONES CON REPRODUCCIÓN */
+
+audio.addEventListener("playing", () => {
+
+    scene.classList.add("playing");
+
+    playButton.textContent = "❚❚";
+
+    playButton.setAttribute(
+        "aria-label",
+        "Pausar canción"
+    );
+
+    audioError.hidden = true;
+
+    startParticles();
+
+});
+
+function pauseAnimation() {
+
+    scene.classList.remove("playing");
+
+    playButton.textContent = "▶";
+
+    playButton.setAttribute(
+        "aria-label",
+        "Reproducir canción"
+    );
+
+    clearInterval(particleInterval);
+
+    particleInterval = null;
+
+}
+
+audio.addEventListener("pause", pauseAnimation);
+
+audio.addEventListener("waiting", pauseAnimation);
+
+audio.addEventListener("ended", () => {
+
+    pauseAnimation();
+
+    showFinal();
+
+});
+
+audio.addEventListener("error", () => {
+
+    pauseAnimation();
+
+    audioError.hidden = false;
+
+    audioError.textContent =
+        "No se pudo cargar la canción. Revisa que pensandote.mp3 esté dentro de la carpeta musica.";
+
+});
+
+/* DURACIÓN REAL DE LA CANCIÓN */
+
+function formatTime(seconds) {
+
+    if (!Number.isFinite(seconds)) {
+
+        return "0:00";
+
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    const remaining = Math.floor(seconds % 60);
+
+    return minutes + ":" +
+        String(remaining).padStart(2, "0");
+
+}
+
+audio.addEventListener("loadedmetadata", () => {
+
+    duration.textContent =
+        formatTime(audio.duration);
+
+});
+
+audio.addEventListener("timeupdate", () => {
+
+    currentTime.textContent =
+        formatTime(audio.currentTime);
+
+    if (
+        Number.isFinite(audio.duration) &&
+        audio.duration > 0
+    ) {
+
+        musicProgress.value =
+            audio.currentTime / audio.duration * 100;
+
+    }
+
+    updatePhrase();
+
+});
+
+/* ADELANTAR O RETROCEDER */
+
+musicProgress.addEventListener("input", () => {
+
+    if (
+        Number.isFinite(audio.duration) &&
+        audio.duration > 0
+    ) {
+
+        audio.currentTime =
+            musicProgress.value / 100 * audio.duration;
+
+    }
+
+});
+
+/* DEDICATORIAS DURANTE LA CANCIÓN */
+
+function updatePhrase() {
+
+    if (!opened) return;
+
+    const index =
+        Math.floor(audio.currentTime / 12) %
+        phrases.length;
+
+    if (index === phraseIndex) return;
+
+    phraseIndex = index;
+
+    clearTimeout(phraseTimer);
+
+    phrase.classList.add("changing");
+
+    phraseTimer = setTimeout(() => {
+
+        phrase.textContent = phrases[index];
+
+        phrase.classList.remove("changing");
+
+    }, 600);
+
+}
+
+/* NOTAS MUSICALES Y CORAZONES */
+
+function startParticles() {
+
+    if (particleInterval !== null) return;
+
+    particleInterval = setInterval(() => {
+
+        if (audio.paused || !opened) return;
+
+        createParticle();
+
+    }, 350);
+
+}
+
+function createParticle() {
+
+    const particle = document.createElement("span");
+
+    const symbols = [
+        "♥", "♡", "♫", "♪", "✧", "✦"
+    ];
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#c18aff",
+        "#ffd37a"
+    ];
+
+    particle.className = "particle";
+
+    particle.textContent =
+        symbols[Math.floor(Math.random() * symbols.length)];
+
+    particle.style.color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    particle.style.left =
+        Math.random() * 100 + "vw";
+
+    particle.style.fontSize =
+        12 + Math.random() * 23 + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        -50 + Math.random() * 100 + "px"
+    );
+
+    const life = 4 + Math.random() * 3;
+
+    particle.style.animationDuration =
+        life + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, life * 1000);
+
+}
+
+/* MOSTRAR LA DEDICATORIA FINAL */
+
+function showFinal() {
+
+    if (!opened || !final.hidden) return;
+
+    final.hidden = false;
+
+    letterButton.hidden = true;
+
+    for (let i = 0; i < 45; i++) {
+
+        later(createParticle, i * 80);
+
+    }
+
+}
+
+letterButton.addEventListener("click", () => {
+
+    showFinal();
+
+    final.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+});
+
+/* VOLVER A ABRIR LA CAJITA */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        audio.pause();
+
+        if (audio.readyState > 0) {
+
+            audio.currentTime = 0;
+
+        }
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        clearTimeout(phraseTimer);
+
+        clearInterval(particleInterval);
+
+        particleInterval = null;
+
+        turns = 0;
+
+        opened = false;
+
+        turning = false;
+
+        phraseIndex = -1;
+
+        scene.classList.remove(
+            "opened",
+            "playing"
+        );
+
+        document.body.classList.remove("opened");
+
+        keyButton.disabled = false;
+
+        keyButton.classList.remove("turning");
+
+        dots.forEach(dot => {
+
+            dot.classList.remove("active");
+
+        });
+
+        keyControls.hidden = false;
+
+        musicPlayer.hidden = true;
+
+        dedications.hidden = true;
+
+        final.hidden = true;
+
+        letterButton.hidden = false;
+
+        title.textContent =
+            "Una cajita musical para ti";
+
+        intro.textContent =
+            "Hay algo muy especial guardado dentro de ella...";
+
+        instruction.textContent =
+            "Presiona la llavecita dorada tres veces, mi princesa.";
+
+        phrase.textContent = phrases[0];
+
+        phrase.classList.remove("changing");
+
+        musicProgress.value = 0;
+
+        currentTime.textContent = "0:00";
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* DETENER MÚSICA AL SALIR */
+
+window.addEventListener("pagehide", () => {
+
+    audio.pause();
+
+});
+
+/* ESTRELLITAS DEL FONDO */
+
+for (let i = 0; i < 65; i++) {
+
+    const star = document.createElement("span");
+
+    star.className = "star";
+
+    star.textContent =
+        i % 4 === 0 ? "✧" : "·";
+
+    star.style.left =
+        Math.random() * 100 + "vw";
+
+    star.style.top =
+        Math.random() * 100 + "vh";
+
+    star.style.fontSize =
+        5 + Math.random() * 12 + "px";
+
+    star.style.animationDelay =
+        -Math.random() * 3 + "s";
+
+    document.body.appendChild(star);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

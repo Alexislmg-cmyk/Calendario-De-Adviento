@@ -1,0 +1,1480 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 14 | Atrapa mi amor 🩷</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #32143f,
+        #07040e 80%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    max-width: 460px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 30px;
+    line-height: 1.4;
+    text-shadow: 0 0 20px #ff49ac80;
+}
+
+.message {
+    color: #f5d8ed;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* MEDIDOR DE AMOR */
+
+.score {
+    color: #ffc1e3;
+    font-size: 21px;
+    margin: 15px auto;
+}
+
+.meter {
+    position: relative;
+    width: 90%;
+    height: 18px;
+    margin: 15px auto;
+    border: 1px solid #b47ab9;
+    border-radius: 30px;
+    background: #ffffff0a;
+    overflow: hidden;
+}
+
+.meter-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    background: linear-gradient(
+        90deg,
+        #55caff,
+        #c18aff,
+        #ff79bd
+    );
+    box-shadow: 0 0 15px #ff79bd;
+    transition: width .3s ease;
+}
+
+/* ESCENARIO DEL JUEGO */
+
+.game {
+    position: relative;
+    width: 100%;
+    height: clamp(310px, 52dvh, 440px);
+    margin: 20px auto 10px;
+    border: 1px solid #a56dc1;
+    border-radius: 25px;
+    background: linear-gradient(
+        #100b23,
+        #241333,
+        #391b43
+    );
+    box-shadow:
+        0 0 25px #b168d340,
+        inset 0 0 30px #b168d320;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.game-star {
+    position: absolute;
+    color: #e7caff;
+    pointer-events: none;
+    animation: twinkle 3s infinite alternate;
+}
+
+.floor {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 18px;
+    background: #a56dc120;
+    border-top: 1px solid #c18aff70;
+    box-shadow: 0 0 20px #c18aff40;
+}
+
+/* GOTITA ROSA */
+
+.player {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    width: 72px;
+    height: 90px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.player svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 0 9px #ff79bd);
+}
+
+.player.caught svg {
+    animation: happy .3s ease;
+}
+
+/* CORAZONES QUE CAEN */
+
+.falling-heart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    font-size: 32px;
+    line-height: 34px;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 0 12px currentColor;
+    will-change: transform;
+}
+
+.catch-effect {
+    position: absolute;
+    z-index: 5;
+    font-size: 19px;
+    color: #ffd5ed;
+    pointer-events: none;
+    text-shadow: 0 0 10px #ff79bd;
+    animation: catchEffect .8s forwards;
+}
+
+/* CONTROLES */
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 15px auto;
+}
+
+.arrow {
+    width: 85px;
+    height: 52px;
+    border: 1px solid #d9a5ec;
+    border-radius: 18px;
+    background: linear-gradient(
+        #654276,
+        #342040
+    );
+    color: #ffe0f3;
+    font-size: 27px;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 0 15px #c18aff30;
+}
+
+.arrow:active {
+    background: #a65b9e;
+    box-shadow: 0 0 20px #ff79bd;
+}
+
+.instruction {
+    color: #d9b6ff;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.start-button,
+.replay,
+.back {
+    display: inline-block;
+    margin: 20px auto 0;
+    padding: 14px 25px;
+    border: 1px solid #d9a5ec;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #ffc1e3;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.start-button {
+    background: linear-gradient(
+        135deg,
+        #854b9c,
+        #a93e7c
+    );
+    color: white;
+    box-shadow: 0 0 20px #ff79bd50;
+    animation: pulse 2s infinite;
+}
+
+/* PANTALLA DE INICIO */
+
+.start-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #10091ddd;
+    padding: 20px;
+}
+
+.start-heart {
+    color: #ff9bd5;
+    font-size: 65px;
+    text-shadow: 0 0 25px #ff49ac;
+    animation: pulse 1.5s infinite;
+}
+
+/* FINAL */
+
+#final {
+    animation: appear 1.5s ease;
+}
+
+.couple {
+    width: 100%;
+    max-width: 330px;
+    margin: 20px auto;
+}
+
+.couple svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.giant-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulse 1.5s infinite;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 27px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ff49ac80,
+        0 0 25px #bd83ef;
+}
+
+.celebration-heart {
+    position: fixed;
+    top: -45px;
+    z-index: 5;
+    pointer-events: none;
+    text-shadow: 0 0 12px currentColor;
+    animation: celebrate linear forwards;
+}
+
+.snowflake {
+    position: fixed;
+    top: -30px;
+    color: #e7caff;
+    pointer-events: none;
+    animation: celebrate linear infinite;
+}
+
+/* ANIMACIONES */
+
+@keyframes twinkle {
+    from { opacity: .2; }
+    to { opacity: .9; }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes happy {
+    50% {
+        transform: translateY(-7px) scale(1.08);
+    }
+}
+
+@keyframes catchEffect {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-45px);
+        opacity: 0;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes celebrate {
+    to {
+        transform: translateY(115vh) rotate(360deg);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">14 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Atrapa mi amor 🔒</h1>
+
+        <p class="message">
+            Nuestra gotita rosa tiene
+            una pequeña misión.
+        </p>
+
+        <p class="message">
+            Pronto podrás descubrirla,
+            mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <section id="gameSection">
+
+            <h1>Atrapa mi amor</h1>
+
+            <p class="message">
+                Atrapa los corazoncitos
+                que te manda tu gotita azul.
+            </p>
+
+            <div class="score">
+                ♥ <span id="score">0</span> / 14 ♥
+            </div>
+
+            <div class="meter">
+
+                <div class="meter-fill"
+                     id="meterFill"></div>
+
+            </div>
+
+            <div class="game" id="game">
+
+                <div id="gameStars"></div>
+
+                <div class="floor"></div>
+
+                <!-- NUESTRA GOTITA ROSA -->
+
+                <div class="player" id="player">
+
+                    <svg viewBox="0 0 100 125">
+
+                        <defs>
+
+                            <radialGradient id="playerPink"
+                                            cx="30%" cy="20%"
+                                            r="85%">
+
+                                <stop stop-color="#ffe0f3"/>
+
+                                <stop offset="40%"
+                                      stop-color="#ff9cd5"/>
+
+                                <stop offset="100%"
+                                      stop-color="#b52c85"/>
+
+                            </radialGradient>
+
+                        </defs>
+
+                        <ellipse cx="50" cy="118"
+                                 rx="35" ry="6"
+                                 fill="#ff79bd"
+                                 opacity=".3"/>
+
+                        <g fill="url(#playerPink)">
+
+                            <!-- CUERPECITO -->
+
+                            <ellipse cx="50" cy="84"
+                                     rx="27" ry="29"/>
+
+                            <!-- PIECITOS -->
+
+                            <rect x="25" y="99"
+                                  width="23" height="21"
+                                  rx="11"/>
+
+                            <rect x="52" y="99"
+                                  width="23" height="21"
+                                  rx="11"/>
+
+                            <!-- BRACITOS -->
+
+                            <ellipse cx="20" cy="77"
+                                     rx="11" ry="20"
+                                     transform="rotate(-30 20 77)"/>
+
+                            <ellipse cx="80" cy="77"
+                                     rx="11" ry="20"
+                                     transform="rotate(30 80 77)"/>
+
+                            <!-- CABECITA -->
+
+                            <ellipse cx="50" cy="38"
+                                     rx="38" ry="36"/>
+
+                        </g>
+
+                        <!-- BRILLITO -->
+
+                        <ellipse cx="33" cy="20"
+                                 rx="12" ry="6"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <!-- OJITOS -->
+
+                        <ellipse cx="36" cy="37"
+                                 rx="4.5" ry="9"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="64" cy="37"
+                                 rx="4.5" ry="9"
+                                 fill="#10101e"/>
+
+                    </svg>
+
+                </div>
+
+                <!-- PANTALLA DE INICIO -->
+
+                <div class="start-overlay"
+                     id="startOverlay">
+
+                    <div class="start-heart">♥</div>
+
+                    <h2>¿Lista, mi princesa?</h2>
+
+                    <p class="message">
+                        Atrapa 14 corazoncitos.
+                        No tienes límite de tiempo
+                        ni puedes perder.
+                    </p>
+
+                    <button class="start-button"
+                            id="startButton">
+
+                        ¡Vamos a jugar! ♡
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- CONTROLES -->
+
+            <div class="controls">
+
+                <button class="arrow"
+                        id="leftButton"
+                        aria-label="Mover a la izquierda">
+
+                    ←
+
+                </button>
+
+                <button class="arrow"
+                        id="rightButton"
+                        aria-label="Mover a la derecha">
+
+                    →
+
+                </button>
+
+            </div>
+
+            <p class="instruction">
+                Desliza tu dedo por el escenario
+                o utiliza las flechitas.
+            </p>
+
+        </section>
+
+        <!-- MENSAJE FINAL -->
+
+        <section id="final" hidden>
+
+            <h1>¡Lo lograste, mi princesa!</h1>
+
+            <div class="couple">
+
+                <svg viewBox="0 0 360 300">
+
+                    <defs>
+
+                        <radialGradient id="blueDrop"
+                                        cx="30%" cy="20%"
+                                        r="85%">
+
+                            <stop stop-color="#c1f5ff"/>
+
+                            <stop offset="40%"
+                                  stop-color="#55caff"/>
+
+                            <stop offset="100%"
+                                  stop-color="#1754bc"/>
+
+                        </radialGradient>
+
+                        <radialGradient id="pinkDrop"
+                                        cx="30%" cy="20%"
+                                        r="85%">
+
+                            <stop stop-color="#ffe0f3"/>
+
+                            <stop offset="40%"
+                                  stop-color="#ff9cd5"/>
+
+                            <stop offset="100%"
+                                  stop-color="#b52c85"/>
+
+                        </radialGradient>
+
+                        <linearGradient id="loveHeart"
+                                        x1="0" y1="0"
+                                        x2="1" y2="1">
+
+                            <stop stop-color="#69ceff"/>
+
+                            <stop offset="50%"
+                                  stop-color="#c18aff"/>
+
+                            <stop offset="100%"
+                                  stop-color="#ff79bd"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <!-- CORAZÓN GIGANTE -->
+
+                    <g class="giant-heart"
+                       style="filter:drop-shadow(0 0 15px #d18aff)">
+
+                        <path d="
+                            M180 155
+                            C140 130 90 100 90 58
+                            C90 8 150 0 180 43
+                            C210 0 270 8 270 58
+                            C270 100 220 130 180 155Z
+                        "
+                        fill="url(#loveHeart)"/>
+
+                        <path d="M108 56 Q113 24 143 29"
+                              stroke="white"
+                              stroke-width="7"
+                              stroke-linecap="round"
+                              fill="none"
+                              opacity=".5"/>
+
+                    </g>
+
+                    <!-- GOTITA AZUL -->
+
+                    <g id="finalBlue"
+                       transform="translate(120 211)"
+                       style="filter:drop-shadow(0 0 9px #48baff)">
+                    </g>
+
+                    <!-- GOTITA ROSA -->
+
+                    <g id="finalPink"
+                       transform="translate(240 211)"
+                       style="filter:drop-shadow(0 0 9px #ff79bd)">
+                    </g>
+
+                    <!-- BRACITOS JUNTOS -->
+
+                    <path d="M147 228 Q180 250 213 228"
+                          stroke="url(#blueDrop)"
+                          stroke-width="17"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M213 240 Q180 260 147 240"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="16"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                </svg>
+
+            </div>
+
+            <h2 class="highlight">
+                ¿De verdad pensabas que solamente
+                tenía 14 corazoncitos para darte?
+            </h2>
+
+            <p class="message">
+                Si pudiera convertir todo lo que
+                siento por ti en corazones,
+                llenaría la pantalla de tu celular.
+            </p>
+
+            <p class="message">
+                Y aun así, seguramente
+                me faltarían muchos más.
+            </p>
+
+            <h2 class="highlight">
+                Todo mi amor es para ti,
+                mi princesa.
+            </h2>
+
+            <p class="message">
+                Me encanta poder hacerte estas cositas,
+                imaginar tu carita mientras juegas
+                y pensar que pude sacarte una sonrisa.
+            </p>
+
+            <h2 class="highlight">
+                Te amo, mi hermosa gotita rosa.
+            </h2>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <p class="message">
+                Todavía te esperan 10 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Volver a jugar ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 14, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+
+const scoreElement = document.getElementById("score");
+const meterFill = document.getElementById("meterFill");
+
+const startOverlay = document.getElementById("startOverlay");
+const gameSection = document.getElementById("gameSection");
+const final = document.getElementById("final");
+
+const target = 14;
+
+let score = 0;
+let playerX = 0;
+let hearts = [];
+
+let running = false;
+let started = false;
+
+let leftPressed = false;
+let rightPressed = false;
+let dragging = false;
+
+let frameId = null;
+let lastTime = 0;
+let spawnTimer = 0;
+
+let celebrationTimers = [];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createGameStars();
+            drawFinalCouple();
+            centerPlayer();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* ESTRELLITAS DEL ESCENARIO */
+
+function createGameStars() {
+
+    const stars = document.getElementById("gameStars");
+
+    for (let i = 0; i < 45; i++) {
+
+        const star = document.createElement("span");
+
+        star.className = "game-star";
+
+        star.textContent =
+            i % 4 === 0 ? "✧" : "·";
+
+        star.style.left =
+            Math.random() * 100 + "%";
+
+        star.style.top =
+            Math.random() * 95 + "%";
+
+        star.style.fontSize =
+            6 + Math.random() * 10 + "px";
+
+        star.style.animationDelay =
+            -Math.random() * 3 + "s";
+
+        stars.appendChild(star);
+
+    }
+
+}
+
+/* POSICIÓN DE LA GOTITA */
+
+function centerPlayer() {
+
+    playerX = game.clientWidth / 2;
+
+    updatePlayer();
+
+}
+
+function updatePlayer() {
+
+    const half = player.offsetWidth / 2;
+
+    playerX = Math.max(
+        half,
+        Math.min(
+            game.clientWidth - half,
+            playerX
+        )
+    );
+
+    player.style.left = playerX + "px";
+
+}
+
+/* CONTROL CON EL DEDO */
+
+function moveToFinger(event) {
+
+    const rect = game.getBoundingClientRect();
+
+    playerX = event.clientX - rect.left - game.clientLeft;
+
+    updatePlayer();
+
+}
+
+game.addEventListener("pointerdown", event => {
+
+    if (!running) return;
+
+    dragging = true;
+
+    game.setPointerCapture(event.pointerId);
+
+    moveToFinger(event);
+
+});
+
+game.addEventListener("pointermove", event => {
+
+    if (!running || !dragging) return;
+
+    moveToFinger(event);
+
+});
+
+game.addEventListener("pointerup", () => {
+
+    dragging = false;
+
+});
+
+game.addEventListener("pointercancel", () => {
+
+    dragging = false;
+
+});
+
+game.addEventListener("lostpointercapture", () => {
+
+    dragging = false;
+
+});
+
+/* CONTROL CON LAS FLECHAS */
+
+function bindArrow(id, direction) {
+
+    const button = document.getElementById(id);
+
+    button.addEventListener("pointerdown", event => {
+
+        if (!running) return;
+
+        event.preventDefault();
+
+        button.setPointerCapture(event.pointerId);
+
+        if (direction === -1) {
+
+            leftPressed = true;
+
+        } else {
+
+            rightPressed = true;
+
+        }
+
+    });
+
+    function release() {
+
+        if (direction === -1) {
+
+            leftPressed = false;
+
+        } else {
+
+            rightPressed = false;
+
+        }
+
+    }
+
+    button.addEventListener("pointerup", release);
+
+    button.addEventListener("pointercancel", release);
+
+    button.addEventListener("lostpointercapture", release);
+
+}
+
+bindArrow("leftButton", -1);
+
+bindArrow("rightButton", 1);
+
+/* CONTROL CON EL TECLADO */
+
+document.addEventListener("keydown", event => {
+
+    if (!running) return;
+
+    if (event.key === "ArrowLeft") {
+
+        event.preventDefault();
+
+        leftPressed = true;
+
+    }
+
+    if (event.key === "ArrowRight") {
+
+        event.preventDefault();
+
+        rightPressed = true;
+
+    }
+
+});
+
+document.addEventListener("keyup", event => {
+
+    if (event.key === "ArrowLeft") {
+
+        leftPressed = false;
+
+    }
+
+    if (event.key === "ArrowRight") {
+
+        rightPressed = false;
+
+    }
+
+});
+
+window.addEventListener("blur", () => {
+
+    leftPressed = false;
+    rightPressed = false;
+    dragging = false;
+
+});
+
+/* CREAR CORAZONES */
+
+function spawnHeart() {
+
+    const element = document.createElement("span");
+
+    element.className = "falling-heart";
+
+    element.textContent = "♥";
+
+    const colors = [
+        "#ff79bd",
+        "#69ceff",
+        "#c18aff",
+        "#ffc1e3"
+    ];
+
+    const color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    element.style.color = color;
+
+    const x =
+        17 + Math.random() * Math.max(0, game.clientWidth - 34);
+
+    const heart = {
+
+        element: element,
+
+        x: x,
+
+        y: -35,
+
+        speed: 85 + Math.random() * 45
+
+    };
+
+    element.style.transform =
+        `translate(${x - 17}px, -35px)`;
+
+    game.appendChild(element);
+
+    hearts.push(heart);
+
+}
+
+/* COMENZAR EL JUEGO */
+
+function startGame() {
+
+    if (Date.now() < unlockDate || running) return;
+
+    score = 0;
+
+    scoreElement.textContent = "0";
+
+    meterFill.style.width = "0%";
+
+    hearts.forEach(heart => heart.element.remove());
+
+    hearts = [];
+
+    startOverlay.hidden = true;
+
+    final.hidden = true;
+
+    gameSection.hidden = false;
+
+    centerPlayer();
+
+    leftPressed = false;
+    rightPressed = false;
+    dragging = false;
+
+    running = true;
+
+    lastTime = 0;
+
+    spawnTimer = .8;
+
+    frameId = requestAnimationFrame(gameLoop);
+
+}
+
+document.getElementById("startButton")
+    .addEventListener("click", startGame);
+
+/* MOTOR DEL JUEGO */
+
+function gameLoop(time) {
+
+    if (!running) return;
+
+    if (!lastTime) lastTime = time;
+
+    const delta = Math.min(
+        (time - lastTime) / 1000,
+        .05
+    );
+
+    lastTime = time;
+
+    /* MOVIMIENTO */
+
+    const moveSpeed = 260;
+
+    if (leftPressed) {
+
+        playerX -= moveSpeed * delta;
+
+    }
+
+    if (rightPressed) {
+
+        playerX += moveSpeed * delta;
+
+    }
+
+    updatePlayer();
+
+    /* GENERAR CORAZONES */
+
+    spawnTimer += delta;
+
+    if (spawnTimer >= .85) {
+
+        spawnHeart();
+
+        spawnTimer = 0;
+
+    }
+
+    /* POSICIÓN DE LA GOTITA */
+
+    const playerTop = player.offsetTop;
+
+    const playerBottom =
+        playerTop + player.offsetHeight;
+
+    const playerLeft =
+        playerX - player.offsetWidth / 2 + 7;
+
+    const playerRight =
+        playerX + player.offsetWidth / 2 - 7;
+
+    /* MOVER LOS CORAZONES */
+
+    for (let i = hearts.length - 1; i >= 0; i--) {
+
+        const heart = hearts[i];
+
+        heart.y += heart.speed * delta;
+
+        heart.element.style.transform =
+            `translate(${heart.x - 17}px, ${heart.y}px)`;
+
+        const caught =
+
+            heart.x + 14 > playerLeft &&
+
+            heart.x - 14 < playerRight &&
+
+            heart.y + 30 > playerTop &&
+
+            heart.y < playerBottom;
+
+        if (caught) {
+
+            heart.element.remove();
+
+            hearts.splice(i, 1);
+
+            catchHeart(heart.x, heart.y);
+
+            if (!running) return;
+
+        } else if (heart.y > game.clientHeight) {
+
+            // Si pierde un corazón no pasa nada.
+
+            heart.element.remove();
+
+            hearts.splice(i, 1);
+
+        }
+
+    }
+
+    frameId = requestAnimationFrame(gameLoop);
+
+}
+
+/* ATRAPAR UN CORAZÓN */
+
+function catchHeart(x, y) {
+
+    score++;
+
+    scoreElement.textContent = score;
+
+    meterFill.style.width =
+        (score / target * 100) + "%";
+
+    player.classList.remove("caught");
+
+    void player.offsetWidth;
+
+    player.classList.add("caught");
+
+    const effect = document.createElement("span");
+
+    effect.className = "catch-effect";
+
+    effect.textContent = "+1 ♡";
+
+    effect.style.left = (x - 15) + "px";
+
+    effect.style.top = y + "px";
+
+    game.appendChild(effect);
+
+    setTimeout(() => effect.remove(), 800);
+
+    if (score >= target) {
+
+        finishGame();
+
+    }
+
+}
+
+/* GANAR EL JUEGO */
+
+function finishGame() {
+
+    running = false;
+
+    cancelAnimationFrame(frameId);
+
+    leftPressed = false;
+    rightPressed = false;
+    dragging = false;
+
+    hearts.forEach(heart => heart.element.remove());
+
+    hearts = [];
+
+    gameSection.hidden = true;
+
+    final.hidden = false;
+
+    createCelebration(140);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+/* DIBUJAR NUESTRAS GOTITAS */
+
+function dropBody(color) {
+
+    return `
+
+        <ellipse cy="60"
+                 rx="40" ry="7"
+                 fill="${color === "blue" ? "#69ceff" : "#ff79bd"}"
+                 opacity=".25"/>
+
+        <g fill="url(#${color}Drop)">
+
+            <ellipse cy="23"
+                     rx="29" ry="35"/>
+
+            <rect x="-25" y="42"
+                  width="24" height="25"
+                  rx="12"/>
+
+            <rect x="1" y="42"
+                  width="24" height="25"
+                  rx="12"/>
+
+            <ellipse cx="-30" cy="23"
+                     rx="11" ry="19"/>
+
+            <ellipse cx="30" cy="23"
+                     rx="11" ry="19"/>
+
+            <ellipse cy="-25"
+                     rx="42" ry="42"/>
+
+        </g>
+
+        <ellipse cx="-17" cy="-44"
+                 rx="13" ry="7"
+                 fill="white"
+                 opacity=".55"/>
+
+        <ellipse cx="-14" cy="-22"
+                 rx="5" ry="10"
+                 fill="#10101e"/>
+
+        <ellipse cx="14" cy="-22"
+                 rx="5" ry="10"
+                 fill="#10101e"/>
+
+    `;
+
+}
+
+function drawFinalCouple() {
+
+    document.getElementById("finalBlue").innerHTML =
+        dropBody("blue");
+
+    document.getElementById("finalPink").innerHTML =
+        dropBody("pink");
+
+}
+
+/* LLUVIA GIGANTE DE CORAZONES */
+
+function createCelebration(amount) {
+
+    const colors = [
+        "#ff79bd",
+        "#69ceff",
+        "#c18aff",
+        "#ffc1e3"
+    ];
+
+    for (let i = 0; i < amount; i++) {
+
+        const timer = setTimeout(() => {
+
+            const heart = document.createElement("span");
+
+            heart.className = "celebration-heart";
+
+            heart.textContent =
+                i % 4 === 0 ? "♡" : "♥";
+
+            heart.style.color =
+                colors[i % colors.length];
+
+            heart.style.left =
+                Math.random() * 100 + "vw";
+
+            heart.style.fontSize =
+                12 + Math.random() * 30 + "px";
+
+            const duration =
+                4 + Math.random() * 4;
+
+            heart.style.animationDuration =
+                duration + "s";
+
+            document.body.appendChild(heart);
+
+            setTimeout(
+                () => heart.remove(),
+                duration * 1000
+            );
+
+        }, i * 65);
+
+        celebrationTimers.push(timer);
+
+    }
+
+}
+
+/* VOLVER A JUGAR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        celebrationTimers.forEach(
+            timer => clearTimeout(timer)
+        );
+
+        celebrationTimers = [];
+
+        document.querySelectorAll(
+            ".celebration-heart, .catch-effect"
+        ).forEach(element => element.remove());
+
+        final.hidden = true;
+
+        gameSection.hidden = false;
+
+        startGame();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* AJUSTAR AL TAMAÑO DE LA PANTALLA */
+
+window.addEventListener("resize", () => {
+
+    if (!unlocked.hidden && !gameSection.hidden) {
+
+        updatePlayer();
+
+    }
+
+});
+
+/* NIEVECITA DEL FONDO */
+
+for (let i = 0; i < 30; i++) {
+
+    const flake = document.createElement("span");
+
+    flake.className = "snowflake";
+
+    flake.textContent = i % 2 === 0 ? "❄" : "✧";
+
+    flake.style.left =
+        Math.random() * 100 + "vw";
+
+    flake.style.fontSize =
+        5 + Math.random() * 12 + "px";
+
+    flake.style.opacity =
+        .15 + Math.random() * .4;
+
+    flake.style.animationDuration =
+        8 + Math.random() * 12 + "s";
+
+    flake.style.animationDelay =
+        -Math.random() * 20 + "s";
+
+    document.body.appendChild(flake);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

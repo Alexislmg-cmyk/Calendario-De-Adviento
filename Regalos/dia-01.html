@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 1 | Nuestro comienzo 💗</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(ellipse at bottom, #310d40, #09050f 70%);
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            padding: 35px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 38px;
+            color: #ffc1e3;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        .gift {
+            position: relative;
+            width: 150px;
+            height: 155px;
+            margin: 55px auto;
+            cursor: pointer;
+            animation: floating 2.5s ease-in-out infinite;
+        }
+
+        .gift-box {
+            position: absolute;
+            bottom: 0;
+            width: 150px;
+            height: 110px;
+            background: linear-gradient(135deg, #ff9bce, #c02c85);
+            border-radius: 8px;
+            box-shadow: 0 0 40px #ff48b080;
+        }
+
+        .gift-lid {
+            position: absolute;
+            top: 30px;
+            left: -8px;
+            width: 166px;
+            height: 35px;
+            background: #ffb6df;
+            border-radius: 6px;
+            z-index: 2;
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 28px;
+            height: 125px;
+            background: #a96aff;
+            left: 61px;
+            bottom: 0;
+            z-index: 3;
+        }
+
+        .bow {
+            position: absolute;
+            top: -10px;
+            width: 100%;
+            font-size: 65px;
+            z-index: 4;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #surprise {
+            display: none;
+        }
+
+        #surprise.visible {
+            display: block;
+            animation: appear 1.8s ease forwards;
+        }
+
+        .photo {
+            width: 100%;
+            max-height: 480px;
+            object-fit: contain;
+            border: 3px solid #ffb5dc;
+            border-radius: 18px;
+            box-shadow: 0 0 35px #ff4eae65;
+            margin: 20px 0;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        #countdown {
+            font-size: 23px;
+            color: #ffc1e3;
+            line-height: 1.8;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            z-index: 5;
+            animation: rise 4s ease-out forwards;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: scale(.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes snow {
+            to { transform: translateY(110vh); }
+        }
+
+        @keyframes rise {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-110vh) rotate(45deg); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">01 DE DICIEMBRE · 2026</p>
+
+        <section id="locked">
+            <h1>Aún no, princesa 🔒</h1>
+            <p class="message">
+                Tu primer regalito está esperando por ti.
+            </p>
+            <div id="countdown"></div>
+        </section>
+
+        <section id="unlocked" hidden>
+            <h1>Tu primer regalito</h1>
+
+            <div class="gift" id="gift" role="button"
+                 tabindex="0" aria-label="Abrir regalo">
+                <div class="gift-box"></div>
+                <div class="gift-lid"></div>
+                <div class="ribbon"></div>
+                <div class="bow">🎀</div>
+            </div>
+
+            <p class="message">
+                Presiona tu primer regalito, princesa.
+            </p>
+        </section>
+
+        <section id="surprise">
+
+            <h1>Nuestro comienzo ♡</h1>
+
+            <img id="photo" class="photo"
+                 alt="Nuestra primera foto juntos">
+
+            <p class="message">
+                Quién diría que aquella primera foto
+                sería el comienzo de tantos recuerdos juntos.
+            </p>
+
+            <p class="message">
+                Si pudiera regresar a ese día,
+                volvería a elegirte sin pensarlo.
+            </p>
+
+            <h2 style="color: #ff9bce;">
+                Te amo, mi princesa. 💗
+            </h2>
+
+            <p class="message">
+                Apenas es el primero de tus 24 regalitos...
+            </p>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+        // 1 de diciembre a medianoche, hora de CDMX.
+        const unlockDate = Date.UTC(2026, 11, 1, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+        const surprise = document.getElementById("surprise");
+        const gift = document.getElementById("gift");
+
+        let opened = false;
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+                locked.hidden = true;
+
+                if (!opened) {
+                    unlocked.hidden = false;
+                }
+
+                return;
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+        }
+
+        function openGift() {
+
+            if (Date.now() < unlockDate || opened) return;
+
+            opened = true;
+
+            unlocked.hidden = true;
+
+            document.getElementById("photo").src =
+                "../imagenes/primera-foto.jpg";
+
+            surprise.classList.add("visible");
+
+            for (let i = 0; i < 45; i++) {
+
+                setTimeout(() => {
+
+                    const heart = document.createElement("span");
+
+                    heart.className = "heart";
+                    heart.textContent = ["💗", "💕", "♡", "💜"][
+                        Math.floor(Math.random() * 4)
+                    ];
+
+                    heart.style.left = Math.random() * 100 + "vw";
+                    heart.style.fontSize = 15 + Math.random() * 25 + "px";
+
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4000);
+
+                }, i * 60);
+            }
+        }
+
+        gift.addEventListener("click", openGift);
+
+        gift.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openGift();
+            }
+        });
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+            snow.textContent = "❄";
+            snow.style.left = Math.random() * 100 + "vw";
+            snow.style.fontSize = 5 + Math.random() * 12 + "px";
+            snow.style.opacity = Math.random() * .6;
+            snow.style.animationDuration = 5 + Math.random() * 10 + "s";
+            snow.style.animationDelay = -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

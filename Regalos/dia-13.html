@@ -1,0 +1,1563 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 13 | Te extraño, mi princesa</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #19182e,
+        #050409 80%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+    transition: background 2s;
+}
+
+body.reunited {
+    background: radial-gradient(
+        ellipse at center,
+        #49264e,
+        #080611 85%
+    );
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 96%;
+    max-width: 500px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #c2a6e8;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #e4caff;
+    font-size: 30px;
+    line-height: 1.4;
+    text-shadow: 0 0 20px #a978e8;
+}
+
+.message {
+    color: #e6d5f4;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* HABITACIÓN */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    margin: 20px auto;
+    overflow: hidden;
+    border: 1px solid #65537e;
+    border-radius: 25px;
+    box-shadow: 0 0 30px #8c6ac030;
+}
+
+.scene > svg {
+    display: block;
+    width: 100%;
+}
+
+.room-light {
+    opacity: .1;
+    transition: opacity 2s;
+}
+
+.scene.reunited .room-light {
+    opacity: .85;
+}
+
+/* LLUVIA DE LA VENTANA */
+
+.raindrop {
+    animation: rainFall linear infinite;
+}
+
+@keyframes rainFall {
+    from {
+        transform: translateY(-160px);
+    }
+
+    to {
+        transform: translateY(180px);
+    }
+}
+
+/* GOTITAS */
+
+.blue-walk {
+    transition: transform 1.8s ease-in-out;
+}
+
+.scene.reunited .blue-walk {
+    transform: translate(232px, 282px);
+}
+
+.blue-breathe,
+.pink-breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.pink-breathe {
+    animation-delay: .5s;
+}
+
+.pink-arrival {
+    opacity: 0;
+    transition: opacity 1s, transform 1.8s;
+    transform: translate(312px, 282px);
+}
+
+.scene.reunited .pink-arrival {
+    opacity: 1;
+    transform: translate(290px, 282px);
+}
+
+.hug {
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.scene.hugging .hug {
+    opacity: 1;
+}
+
+.hug-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.5s infinite;
+}
+
+/* PUERTA */
+
+.door-panel {
+    transform-box: fill-box;
+    transform-origin: left center;
+    transition: transform 1s;
+}
+
+.scene.reunited .door-panel {
+    transform: scaleX(.12);
+}
+
+.door-button {
+    position: absolute;
+    left: 72.2%;
+    top: 39%;
+    width: 22%;
+    height: 46%;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.door-button.ready {
+    opacity: 1;
+    pointer-events: auto;
+    border: 2px solid #ffb3df;
+    box-shadow:
+        0 0 12px #ff79bd,
+        inset 0 0 12px #ff79bd;
+    animation: doorPulse 1.5s infinite;
+}
+
+.knock {
+    position: absolute;
+    top: 31%;
+    right: 5%;
+    color: #ffc1e3;
+    font-size: 15px;
+    text-shadow: 0 0 10px #ff79bd;
+    opacity: 0;
+}
+
+.knock.active {
+    animation: knocking 1.5s infinite;
+}
+
+/* BURBUJAS DE PENSAMIENTO */
+
+.thought {
+    position: absolute;
+    width: clamp(40px, 13vw, 57px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    border: 1px solid #c6a4ef;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 25%,
+        #8c73ae,
+        #392d55
+    );
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 0 15px #b68aff70;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .5s, opacity .5s;
+    animation: bubbleFloat 3s infinite;
+}
+
+.thought.opened {
+    background: radial-gradient(
+        circle at 30% 25%,
+        #ffc1e3,
+        #ae458e
+    );
+    border-color: #ffd7ec;
+    box-shadow: 0 0 15px #ff79bd;
+}
+
+.thought.selected {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+.scene.reunited .thought {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.thought:nth-child(1) {
+    left: 12%;
+    top: 12%;
+}
+
+.thought:nth-child(2) {
+    left: 31%;
+    top: 7%;
+    animation-delay: .4s;
+}
+
+.thought:nth-child(3) {
+    left: 51%;
+    top: 12%;
+    animation-delay: .8s;
+}
+
+.thought:nth-child(4) {
+    left: 21%;
+    top: 27%;
+    animation-delay: 1.2s;
+}
+
+.thought:nth-child(5) {
+    left: 41%;
+    top: 27%;
+    animation-delay: 1.6s;
+}
+
+/* MENSAJES */
+
+#instruction {
+    color: #e7caff;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 50px;
+}
+
+.counter {
+    display: inline-block;
+    padding: 10px 22px;
+    border: 1px solid #9676bb;
+    border-radius: 30px;
+    color: #e7caff;
+    background: #ffffff08;
+    font-size: 15px;
+}
+
+.memory-card {
+    margin: 25px auto;
+    padding: 25px 18px;
+    border: 1px solid #9875bc;
+    border-radius: 25px;
+    background: linear-gradient(
+        145deg,
+        #30233f,
+        #170e24
+    );
+    box-shadow: 0 0 25px #9875bc30;
+}
+
+.memory-card.animate {
+    animation: appear .7s ease;
+}
+
+#memoryIcon {
+    display: block;
+    font-size: 65px;
+    animation: memoryBounce 1.5s infinite;
+}
+
+#memoryTitle {
+    color: #ffc1e3;
+    font-size: 25px;
+}
+
+#memoryText {
+    color: #f5d8ed;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* FINAL */
+
+#final {
+    margin-top: 30px;
+    animation: appear 2s ease;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 27px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ff49ac80,
+        0 0 25px #a978e8;
+}
+
+.final-heart {
+    font-size: 70px;
+    color: #ffb3df;
+    text-shadow:
+        -8px 0 25px #48baff,
+        8px 0 25px #ff49ac;
+    animation: heartbeat 1.5s infinite;
+}
+
+.back,
+.replay {
+    display: inline-block;
+    margin: 25px auto 0;
+    padding: 13px 25px;
+    border: 1px solid #b68ad5;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* CORAZONES FLOTANTES */
+
+.particle {
+    position: fixed;
+    bottom: -40px;
+    pointer-events: none;
+    z-index: 5;
+    text-shadow: 0 0 12px currentColor;
+    animation: rise 5s ease-out forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes bubbleFloat {
+    0%, 100% {
+        transform: translate(-50%, -50%);
+    }
+
+    50% {
+        transform: translate(-50%, -60%);
+    }
+}
+
+@keyframes doorPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px #ff79bd;
+    }
+
+    50% {
+        box-shadow: 0 0 25px #ff79bd;
+    }
+}
+
+@keyframes knocking {
+    0%, 100% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    40%, 70% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes memoryBounce {
+    0%, 100% {
+        transform: scale(1) rotate(-5deg);
+    }
+
+    50% {
+        transform: scale(1.15) rotate(5deg);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rise {
+    to {
+        transform: translateY(-115vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .thought,
+    .blue-breathe,
+    .pink-breathe,
+    .hug-heart,
+    .final-heart,
+    #memoryIcon {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">13 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Alguien te está extrañando... 🔒</h1>
+
+        <p class="message">
+            Una pequeña gotita azul está esperando
+            volver a ver a su princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Cuando no estás conmigo...
+        </h1>
+
+        <p class="message" id="intro">
+            Hay muchas cositas que extraño de ti,
+            mi princesa.
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 360">
+
+                <defs>
+
+                    <linearGradient id="wall"
+                                    x2="0" y2="1">
+
+                        <stop stop-color="#29253e"/>
+
+                        <stop offset="1"
+                              stop-color="#191426"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="floor"
+                                    x2="0" y2="1">
+
+                        <stop stop-color="#30243e"/>
+
+                        <stop offset="1"
+                              stop-color="#110d1c"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="windowSky"
+                                    x2="0" y2="1">
+
+                        <stop stop-color="#111b39"/>
+
+                        <stop offset="1"
+                              stop-color="#455679"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="blanket"
+                                    x2="1" y2="1">
+
+                        <stop stop-color="#7760a0"/>
+
+                        <stop offset="1"
+                              stop-color="#34264f"/>
+
+                    </linearGradient>
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#c1f5ff"/>
+
+                        <stop offset="40%"
+                              stop-color="#55caff"/>
+
+                        <stop offset="100%"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe0f3"/>
+
+                        <stop offset="40%"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="100%"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkLight">
+
+                        <stop stop-color="#ff8bd1"
+                              stop-opacity=".6"/>
+
+                        <stop offset="1"
+                              stop-color="#ff8bd1"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="blueLight">
+
+                        <stop stop-color="#69ceff"
+                              stop-opacity=".6"/>
+
+                        <stop offset="1"
+                              stop-color="#69ceff"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="lampLight">
+
+                        <stop stop-color="#ffe2a6"
+                              stop-opacity=".4"/>
+
+                        <stop offset="1"
+                              stop-color="#ffe2a6"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <filter id="blueGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="4"
+                            flood-color="#38baff"/>
+
+                    </filter>
+
+                    <filter id="pinkGlow"
+                            x="-70%" y="-70%"
+                            width="240%" height="240%">
+
+                        <feDropShadow
+                            dx="0" dy="0"
+                            stdDeviation="4"
+                            flood-color="#ff62be"/>
+
+                    </filter>
+
+                    <clipPath id="windowClip">
+
+                        <rect x="25" y="107"
+                              width="130" height="105"
+                              rx="4"/>
+
+                    </clipPath>
+
+                </defs>
+
+                <!-- PARED Y PISO -->
+
+                <rect width="360" height="360"
+                      fill="url(#wall)"/>
+
+                <rect y="300" width="360"
+                      height="60"
+                      fill="url(#floor)"/>
+
+                <path d="M0 300 H360"
+                      stroke="#574464"
+                      stroke-width="4"/>
+
+                <g stroke="#44334e" opacity=".5">
+
+                    <path d="M0 325 H360"/>
+
+                    <path d="M0 345 H360"/>
+
+                    <path d="M70 300 L40 360"/>
+
+                    <path d="M170 300 L160 360"/>
+
+                    <path d="M270 300 L290 360"/>
+
+                </g>
+
+                <!-- VENTANA -->
+
+                <rect x="19" y="101"
+                      width="142" height="117"
+                      rx="7"
+                      fill="#574764"/>
+
+                <rect x="25" y="107"
+                      width="130" height="105"
+                      rx="4"
+                      fill="url(#windowSky)"/>
+
+                <g clip-path="url(#windowClip)">
+
+                    <circle cx="122" cy="132"
+                            r="15"
+                            fill="#d8d9ee"
+                            opacity=".6"/>
+
+                    <g id="rain"></g>
+
+                </g>
+
+                <path d="M90 107 V212
+                         M25 159 H155"
+                      stroke="#574764"
+                      stroke-width="5"/>
+
+                <!-- CORTINAS -->
+
+                <path d="M13 96 H166"
+                      stroke="#ad8eb7"
+                      stroke-width="4"
+                      stroke-linecap="round"/>
+
+                <path d="M15 99
+                         Q36 150 18 221
+                         L43 221
+                         Q52 160 45 99Z"
+                      fill="#55426f"/>
+
+                <path d="M135 99
+                         Q128 160 137 221
+                         L162 221
+                         Q144 150 165 99Z"
+                      fill="#55426f"/>
+
+                <!-- PUERTA -->
+
+                <rect x="256" y="137"
+                      width="87" height="169"
+                      rx="6"
+                      fill="#70536d"/>
+
+                <rect x="262" y="143"
+                      width="75" height="157"
+                      rx="3"
+                      fill="#130c1e"/>
+
+                <g class="door-panel">
+
+                    <rect x="262" y="143"
+                          width="75" height="157"
+                          rx="3"
+                          fill="#49334d"/>
+
+                    <rect x="269" y="152"
+                          width="61" height="65"
+                          rx="4"
+                          fill="none"
+                          stroke="#70536d"
+                          stroke-width="2"/>
+
+                    <rect x="269" y="230"
+                          width="61" height="61"
+                          rx="4"
+                          fill="none"
+                          stroke="#70536d"
+                          stroke-width="2"/>
+
+                    <circle cx="326" cy="223"
+                            r="4"
+                            fill="#e0bc8a"/>
+
+                </g>
+
+                <!-- LUZ ROSA Y AZUL -->
+
+                <g class="room-light">
+
+                    <ellipse cx="110" cy="230"
+                             rx="170" ry="160"
+                             fill="url(#blueLight)"/>
+
+                    <ellipse cx="300" cy="230"
+                             rx="170" ry="160"
+                             fill="url(#pinkLight)"/>
+
+                </g>
+
+                <!-- CUADRO EN LA PARED -->
+
+                <rect x="183" y="113"
+                      width="48" height="58"
+                      rx="4"
+                      fill="#70536d"/>
+
+                <rect x="188" y="118"
+                      width="38" height="48"
+                      rx="2"
+                      fill="#282039"/>
+
+                <path d="M207 150
+                         C185 136 197 124 207 135
+                         C217 124 229 136 207 150Z"
+                      fill="#dca0cf"/>
+
+                <!-- CAMITA -->
+
+                <ellipse cx="100" cy="315"
+                         rx="100" ry="12"
+                         fill="#080610"
+                         opacity=".6"/>
+
+                <rect x="16" y="236"
+                      width="16" height="77"
+                      rx="5"
+                      fill="#5b4264"/>
+
+                <rect x="16" y="235"
+                      width="42" height="40"
+                      rx="10"
+                      fill="#5b4264"/>
+
+                <rect x="22" y="270"
+                      width="170" height="37"
+                      rx="9"
+                      fill="#594263"/>
+
+                <rect x="25" y="258"
+                      width="164" height="27"
+                      rx="12"
+                      fill="#c4b4d7"/>
+
+                <rect x="32" y="248"
+                      width="58" height="22"
+                      rx="10"
+                      fill="#d8c9e7"/>
+
+                <path d="M82 257
+                         Q135 250 190 260
+                         V290
+                         Q135 302 82 290Z"
+                      fill="url(#blanket)"/>
+
+                <path d="M92 266
+                         Q140 259 183 267"
+                      stroke="#aa8fc9"
+                      stroke-width="2"
+                      fill="none"
+                      opacity=".6"/>
+
+                <rect x="28" y="302"
+                      width="10" height="15"
+                      rx="3"
+                      fill="#594263"/>
+
+                <rect x="176" y="302"
+                      width="10" height="15"
+                      rx="3"
+                      fill="#594263"/>
+
+                <!-- MESITA -->
+
+                <rect x="199" y="260"
+                      width="45" height="47"
+                      rx="5"
+                      fill="#62486b"/>
+
+                <rect x="204" y="266"
+                      width="35" height="17"
+                      rx="3"
+                      fill="#49354f"/>
+
+                <circle cx="221.5" cy="274"
+                        r="2"
+                        fill="#d5b38d"/>
+
+                <!-- LÁMPARA -->
+
+                <circle cx="221" cy="230"
+                        r="62"
+                        fill="url(#lampLight)"/>
+
+                <path d="M221 230 V257"
+                      stroke="#b79a7a"
+                      stroke-width="4"/>
+
+                <ellipse cx="221" cy="257"
+                         rx="14" ry="3"
+                         fill="#b79a7a"/>
+
+                <path d="M209 205
+                         H233
+                         L241 232
+                         H201Z"
+                      fill="#d9b6a0"/>
+
+                <!-- GOTITA AZUL -->
+
+                <g class="blue-walk"
+                   transform="translate(120 237)">
+
+                    <g class="blue-breathe">
+
+                        <g fill="url(#blueDrop)"
+                           filter="url(#blueGlow)">
+
+                            <ellipse cy="13"
+                                     rx="20" ry="23"/>
+
+                            <ellipse cx="-12" cy="30"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="12" cy="30"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="-21" cy="13"
+                                     rx="8" ry="13"/>
+
+                            <ellipse cx="21" cy="13"
+                                     rx="8" ry="13"/>
+
+                            <ellipse cy="-20"
+                                     rx="29" ry="29"/>
+
+                        </g>
+
+                        <ellipse cx="-12" cy="-34"
+                                 rx="9" ry="5"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-9" cy="-17"
+                                 rx="3.5" ry="7"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="9" cy="-17"
+                                 rx="3.5" ry="7"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g class="pink-arrival">
+
+                    <g class="pink-breathe">
+
+                        <g fill="url(#pinkDrop)"
+                           filter="url(#pinkGlow)">
+
+                            <ellipse cy="13"
+                                     rx="20" ry="23"/>
+
+                            <ellipse cx="-12" cy="30"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="12" cy="30"
+                                     rx="11" ry="8"/>
+
+                            <ellipse cx="-21" cy="13"
+                                     rx="8" ry="13"/>
+
+                            <ellipse cx="21" cy="13"
+                                     rx="8" ry="13"/>
+
+                            <ellipse cy="-20"
+                                     rx="29" ry="29"/>
+
+                        </g>
+
+                        <ellipse cx="-12" cy="-34"
+                                 rx="9" ry="5"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <ellipse cx="-9" cy="-17"
+                                 rx="3.5" ry="7"
+                                 fill="#10101e"/>
+
+                        <ellipse cx="9" cy="-17"
+                                 rx="3.5" ry="7"
+                                 fill="#10101e"/>
+
+                    </g>
+
+                </g>
+
+                <!-- ABRAZO FINAL -->
+
+                <g class="hug">
+
+                    <path d="M246 292
+                             Q263 306 281 290"
+                          stroke="url(#blueDrop)"
+                          stroke-width="12"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M278 300
+                             Q261 313 244 299"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="11"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path class="hug-heart"
+                          d="M261 226
+                             C248 217 240 209 240 199
+                             C240 185 254 185 261 196
+                             C268 185 282 185 282 199
+                             C282 209 274 217 261 226Z"
+                          fill="#ff9bd5"
+                          filter="url(#pinkGlow)"/>
+
+                </g>
+
+            </svg>
+
+            <!-- BURBUJAS INTERACTIVAS -->
+
+            <div id="thoughts">
+
+                <button class="thought"
+                        aria-label="Tus abrazos">🫂</button>
+
+                <button class="thought"
+                        aria-label="Tus besitos">💋</button>
+
+                <button class="thought"
+                        aria-label="Tu compañía">🛏️</button>
+
+                <button class="thought"
+                        aria-label="Tu sonrisa">🥹</button>
+
+                <button class="thought"
+                        aria-label="Tu presencia">🩷</button>
+
+            </div>
+
+            <!-- PUERTA INTERACTIVA -->
+
+            <span class="knock" id="knock">
+                Toc, toc...
+            </span>
+
+            <button class="door-button"
+                    id="doorButton"
+                    aria-label="Abrir la puerta"
+                    disabled>
+            </button>
+
+        </div>
+
+        <p id="instruction">
+            Presiona las burbujitas para descubrir
+            en qué piensa tu gotita azul.
+        </p>
+
+        <div class="counter" id="counter">
+            ♡ <span id="score">0</span> / 5 pensamientos ♡
+        </div>
+
+        <!-- RECUERDOS -->
+
+        <div class="memory-card"
+             id="memoryCard" hidden>
+
+            <span id="memoryIcon"></span>
+
+            <h2 id="memoryTitle"></h2>
+
+            <p id="memoryText"
+               aria-live="polite"></p>
+
+        </div>
+
+        <!-- MENSAJE FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="final-heart">♥</div>
+
+            <h2 class="highlight">
+                ¡Por fin llegó mi princesa!
+            </h2>
+
+            <p class="message">
+                Me gusta estar contigo, pero también
+                me encanta ese sentimiento de volver
+                a verte después de haberte extrañado.
+            </p>
+
+            <p class="message">
+                Me encanta saber que podré volver
+                a abrazarte, llenarte de besitos
+                y tenerte cerquita de mí.
+            </p>
+
+            <p class="message">
+                Incluso cuando estamos haciendo
+                nuestras propias cositas,
+                me gusta pensar en todos los momentos
+                bonitos que compartimos.
+            </p>
+
+            <h2 class="highlight">
+                Si por mí fuera...
+            </h2>
+
+            <p class="message">
+                Nuestros abrazos durarían
+                un poquito más y nuestras despedidas
+                un poquito menos.
+            </p>
+
+            <p class="message">
+                Qué bonito es volver a encontrarnos,
+                mi hermosa gotita rosa.
+            </p>
+
+            <h2 class="highlight">
+                Te amo, mi princesa.
+            </h2>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <p class="message">
+                Todavía te esperan 11 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Volver a encontrarnos ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 13, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const instruction = document.getElementById("instruction");
+const counter = document.getElementById("counter");
+const score = document.getElementById("score");
+
+const memoryCard = document.getElementById("memoryCard");
+const memoryIcon = document.getElementById("memoryIcon");
+const memoryTitle = document.getElementById("memoryTitle");
+const memoryText = document.getElementById("memoryText");
+
+const doorButton = document.getElementById("doorButton");
+const knock = document.getElementById("knock");
+const final = document.getElementById("final");
+
+const thoughts = [...document.querySelectorAll(".thought")];
+
+const opened = new Set();
+
+let started = false;
+let doorReady = false;
+let reunited = false;
+let timers = [];
+
+/* LOS CINCO PENSAMIENTOS */
+
+const memories = [
+
+    {
+        icon: "🫂",
+        title: "Tus abrazos",
+        text: "Extraño tenerte entre mis bracitos, abrazarte muy fuerte y sentir que podría quedarme así contigo durante horas."
+    },
+
+    {
+        icon: "💋",
+        title: "Tus besitos",
+        text: "Extraño llenarte esa carita hermosa de besitos y consentirte cada vez que tengo la oportunidad."
+    },
+
+    {
+        icon: "🛏️",
+        title: "Tu compañía",
+        text: "Extraño estar acostaditos juntos y esos ratitos en los que solamente quisiera que el tiempo pasara más despacio."
+    },
+
+    {
+        icon: "🥹",
+        title: "Tu sonrisa",
+        text: "Extraño verte feliz cuando te llevo alguno de mis pequeños regalitos."
+    },
+
+    {
+        icon: "🩷",
+        title: "Tu presencia",
+        text: "Extraño tenerte cerquita, incluso cuando no estamos haciendo nada. Porque compartir esos momentos sencillos contigo también me hace muy feliz."
+    }
+
+];
+
+/* CONTROL DE TIEMPOS */
+
+function later(callback, delay) {
+
+    const timer = setTimeout(callback, delay);
+
+    timers.push(timer);
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createRain();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* LLUVIA EN LA VENTANA */
+
+function createRain() {
+
+    const rain = document.getElementById("rain");
+
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    for (let i = 0; i < 45; i++) {
+
+        const drop = document.createElementNS(
+            svgNS, "line"
+        );
+
+        const x = 20 + Math.random() * 145;
+        const y = 90 + Math.random() * 130;
+
+        drop.setAttribute("x1", x);
+        drop.setAttribute("y1", y);
+        drop.setAttribute("x2", x - 4);
+        drop.setAttribute("y2", y + 13);
+
+        drop.setAttribute("stroke", "#b3d5ff");
+        drop.setAttribute("stroke-width", "1");
+        drop.setAttribute("stroke-linecap", "round");
+
+        drop.setAttribute("opacity",
+            .2 + Math.random() * .5
+        );
+
+        drop.setAttribute("class", "raindrop");
+
+        drop.style.animationDuration =
+            .8 + Math.random() * 1.2 + "s";
+
+        drop.style.animationDelay =
+            -Math.random() * 2 + "s";
+
+        rain.appendChild(drop);
+
+    }
+
+}
+
+/* ABRIR LOS PENSAMIENTOS */
+
+thoughts.forEach((button, index) => {
+
+    button.addEventListener("click", () => {
+
+        if (Date.now() < unlockDate || reunited) return;
+
+        const isNew = !opened.has(index);
+
+        opened.add(index);
+
+        thoughts.forEach(thought => {
+
+            thought.classList.remove("selected");
+
+        });
+
+        button.classList.add("opened", "selected");
+
+        memoryIcon.textContent = memories[index].icon;
+
+        memoryTitle.textContent = memories[index].title;
+
+        memoryText.textContent = memories[index].text;
+
+        memoryCard.hidden = false;
+
+        memoryCard.classList.remove("animate");
+
+        void memoryCard.offsetWidth;
+
+        memoryCard.classList.add("animate");
+
+        score.textContent = opened.size;
+
+        if (isNew) {
+
+            createParticles(7);
+
+        }
+
+        /* LOS CINCO PENSAMIENTOS ABIERTOS */
+
+        if (opened.size === 5 && !doorReady) {
+
+            doorReady = true;
+
+            later(() => {
+
+                instruction.textContent =
+                    "Espera... ¿Alguien está tocando la puerta?";
+
+                knock.classList.add("active");
+
+                doorButton.classList.add("ready");
+
+                doorButton.disabled = false;
+
+            }, 1800);
+
+            later(() => {
+
+                if (!reunited) {
+
+                    instruction.textContent =
+                        "Presiona la puerta, mi princesa.";
+
+                }
+
+            }, 3500);
+
+        }
+
+    });
+
+});
+
+/* ABRIR LA PUERTA */
+
+doorButton.addEventListener("click", () => {
+
+    if (!doorReady || reunited) return;
+
+    if (Date.now() < unlockDate) return;
+
+    reunited = true;
+
+    doorButton.disabled = true;
+
+    doorButton.classList.remove("ready");
+
+    knock.classList.remove("active");
+
+    memoryCard.hidden = true;
+
+    counter.hidden = true;
+
+    thoughts.forEach(button => {
+
+        button.disabled = true;
+
+    });
+
+    instruction.textContent =
+        "¡Es nuestra gotita rosa!";
+
+    scene.classList.add("reunited");
+
+    document.body.classList.add("reunited");
+
+    title.textContent =
+        "Qué bonito volver a verte";
+
+    intro.textContent =
+        "Mi persona favorita está aquí otra vez.";
+
+    /* ABRAZO */
+
+    later(() => {
+
+        scene.classList.add("hugging");
+
+        instruction.textContent =
+            "Por fin estamos juntitos otra vez. ♡";
+
+        createParticles(70);
+
+    }, 1900);
+
+    /* DEDICATORIA */
+
+    later(() => {
+
+        final.hidden = false;
+
+    }, 3500);
+
+});
+
+/* CORAZONES FLOTANTES */
+
+function createParticles(amount) {
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#c18aff",
+        "#ffc1e3"
+    ];
+
+    for (let i = 0; i < amount; i++) {
+
+        later(() => {
+
+            const particle = document.createElement("span");
+
+            particle.className = "particle";
+
+            particle.textContent =
+                i % 3 === 0 ? "♡" : "♥";
+
+            particle.style.color =
+                colors[i % colors.length];
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+            particle.style.fontSize =
+                12 + Math.random() * 25 + "px";
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => particle.remove(), 5000);
+
+        }, i * 70);
+
+    }
+
+}
+
+/* VOLVER A JUGAR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        opened.clear();
+
+        doorReady = false;
+        reunited = false;
+
+        scene.classList.remove("reunited", "hugging");
+
+        document.body.classList.remove("reunited");
+
+        thoughts.forEach(button => {
+
+            button.classList.remove("opened", "selected");
+
+            button.disabled = false;
+
+        });
+
+        doorButton.classList.remove("ready");
+
+        doorButton.disabled = true;
+
+        knock.classList.remove("active");
+
+        memoryCard.hidden = true;
+
+        final.hidden = true;
+
+        counter.hidden = false;
+
+        score.textContent = "0";
+
+        title.textContent =
+            "Cuando no estás conmigo...";
+
+        intro.textContent =
+            "Hay muchas cositas que extraño de ti, mi princesa.";
+
+        instruction.textContent =
+            "Presiona las burbujitas para descubrir en qué piensa tu gotita azul.";
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

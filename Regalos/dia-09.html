@@ -1,0 +1,1734 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestro primer año juntos 💗</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: #030205;
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* FONDO */
+
+.ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 15% 85%, #1759b32b, transparent 50%),
+        radial-gradient(ellipse at 85% 15%, #e94d9e25, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, #7139a52b, transparent 65%);
+    animation: ambient 8s ease-in-out infinite alternate;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 94%;
+    max-width: 500px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 35px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: #d8a6f3;
+}
+
+h1 {
+    color: #ffc6e6;
+    font-size: 36px;
+    line-height: 1.4;
+    text-shadow: 0 0 25px #ff49ac80;
+}
+
+.message {
+    font-size: 20px;
+    line-height: 1.9;
+    color: #f5d8ed;
+}
+
+.highlight {
+    color: #ffc1e3;
+    font-size: 28px;
+    line-height: 1.6;
+    text-shadow: 0 0 20px #ff49ac70;
+}
+
+.small {
+    color: #cba4d6;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ESCENAS */
+
+.scene {
+    animation: sceneIn 1.5s ease both;
+}
+
+.scene.leaving {
+    animation: sceneOut .65s ease both;
+}
+
+.scene-number {
+    color: #a982bc;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 35px;
+}
+
+.big-date {
+    font-size: clamp(35px, 10vw, 55px);
+    font-weight: normal;
+    color: white;
+    letter-spacing: 3px;
+    text-shadow:
+        0 0 15px #ff49ac,
+        0 0 40px #a55be0;
+    animation: dateGlow 3s infinite alternate;
+}
+
+.divider {
+    color: #ffb4df;
+    font-size: 22px;
+    letter-spacing: 10px;
+    margin: 30px auto;
+}
+
+.next {
+    display: inline-block;
+    margin: 35px auto 10px;
+    padding: 15px 28px;
+    border: 1px solid #d18ecb;
+    border-radius: 35px;
+    background: #ffffff08;
+    color: #ffc6e6;
+    font-family: Georgia, serif;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ff49ac20;
+    animation: buttonPulse 2s infinite;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.next:active {
+    transform: scale(.95);
+}
+
+/* INDICADORES */
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px auto 5px;
+}
+
+.indicator {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #50344f;
+    transition: .5s;
+}
+
+.indicator.active {
+    background: #ffb3de;
+    box-shadow: 0 0 12px #ff49ac;
+    transform: scale(1.4);
+}
+
+/* CONTADOR DEL AÑO */
+
+.days-number {
+    font-size: clamp(80px, 23vw, 115px);
+    color: #ffc6e6;
+    text-shadow:
+        0 0 25px #ff49ac,
+        0 0 60px #b16eea70;
+    line-height: 1;
+    margin-top: 35px;
+}
+
+.days-label {
+    color: #e5b9f8;
+    font-size: 25px;
+    letter-spacing: 8px;
+    margin: 12px 0 35px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 25px auto;
+}
+
+.stat {
+    padding: 22px 5px;
+    border: 1px solid #a86bc450;
+    border-radius: 18px;
+    background: #ffffff05;
+}
+
+.stat strong {
+    display: block;
+    color: #ffc6e6;
+    font-size: 27px;
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+.stat span {
+    color: #cba4d6;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+/* GALERÍA */
+
+.photo-frame {
+    position: relative;
+    width: 100%;
+    max-width: 330px;
+    margin: 25px auto;
+    padding: 6px;
+    border-radius: 23px;
+    background: linear-gradient(
+        135deg,
+        #71cfff,
+        #bd83ef,
+        #ff9cd5
+    );
+    box-shadow:
+        0 0 25px #bd83ef50,
+        0 0 40px #ff49ac30;
+}
+
+.photo-frame img {
+    display: block;
+    width: 100%;
+    height: clamp(230px, 78vw, 350px);
+    object-fit: contain;
+    border-radius: 17px;
+    background: #100919;
+}
+
+.photo-frame.animate {
+    animation: photoIn 1s ease;
+}
+
+.photo-counter {
+    color: #d9a6ff;
+    font-size: 13px;
+    letter-spacing: 4px;
+}
+
+#photoMessage {
+    min-height: 100px;
+    font-size: 20px;
+    line-height: 1.7;
+    color: #ffd0e9;
+}
+
+.gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.gallery-button {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #b16eea;
+    border-radius: 50%;
+    background: #ffffff08;
+    color: #ffc6e6;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.gallery-button:disabled {
+    opacity: .3;
+    cursor: default;
+}
+
+/* NUESTRAS GOTITAS */
+
+.couple {
+    width: 100%;
+    max-width: 370px;
+    margin: 25px auto;
+}
+
+.couple svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.blue-drop {
+    animation: blueApproach 3s ease forwards;
+}
+
+.pink-drop {
+    animation: pinkApproach 3s ease forwards;
+}
+
+.drop-body {
+    transform-origin: 0px 75px;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+.hug {
+    opacity: 0;
+    animation: reveal 1s ease 3s forwards;
+}
+
+.couple-heart {
+    opacity: 0;
+    transform-origin: 180px 70px;
+    animation:
+        reveal 1s ease 3.5s forwards,
+        heartbeat 1.6s ease 4.5s infinite;
+}
+
+/* CARTA */
+
+.letter {
+    position: relative;
+    padding: 30px 20px;
+    margin: 25px auto;
+    background: linear-gradient(
+        145deg,
+        #27132e,
+        #120b1a
+    );
+    border: 1px solid #b16eea70;
+    border-radius: 25px;
+    box-shadow: 0 0 30px #b16eea20;
+    text-align: left;
+}
+
+.letter p {
+    color: #f6d9ee;
+    font-size: 18px;
+    line-height: 1.9;
+    margin: 0 0 22px;
+}
+
+.letter .signature {
+    text-align: right;
+    color: #ffc1e3;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+/* PREGUNTA FINAL */
+
+.question-heart {
+    display: block;
+    margin: 35px auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    width: 150px;
+    cursor: pointer;
+    animation: heartbeat 1.5s infinite;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.question-heart svg {
+    width: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 0 15px #ff49ac);
+}
+
+.question-heart:active {
+    transform: scale(.9);
+}
+
+#celebration {
+    animation: sceneIn 2s ease;
+}
+
+.infinity {
+    font-size: 110px;
+    line-height: 1.2;
+    color: #ffc1e3;
+    text-shadow:
+        -10px 0 25px #48baff,
+        10px 0 25px #ff49ac;
+    animation: heartbeat 3s infinite;
+}
+
+.final-name {
+    font-size: clamp(42px, 13vw, 65px);
+    color: #ffc1e3;
+    text-shadow:
+        0 0 20px #ff49ac,
+        0 0 50px #b16eea;
+    margin: 25px auto;
+}
+
+.back {
+    display: inline-block;
+    margin: 30px auto 0;
+    color: #cba4d6;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 13px 22px;
+    border: 1px solid #79527d;
+    border-radius: 30px;
+}
+
+/* PARTÍCULAS */
+
+.sparkle {
+    position: fixed;
+    top: -30px;
+    pointer-events: none;
+    animation: snowfall linear infinite;
+}
+
+.particle {
+    position: fixed;
+    bottom: -40px;
+    pointer-events: none;
+    z-index: 10;
+    animation: rise 7s ease-out forwards;
+}
+
+.heart-rain {
+    position: fixed;
+    top: -50px;
+    pointer-events: none;
+    z-index: 10;
+    animation: heartFall linear forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes ambient {
+    from { opacity: .5; }
+    to { opacity: 1; }
+}
+
+@keyframes sceneIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sceneOut {
+    to {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes dateGlow {
+    from {
+        text-shadow: 0 0 15px #ff49ac;
+    }
+
+    to {
+        text-shadow:
+            0 0 25px #ff49ac,
+            0 0 50px #b16eea;
+    }
+}
+
+@keyframes buttonPulse {
+    50% {
+        box-shadow: 0 0 25px #ff49ac60;
+    }
+}
+
+@keyframes photoIn {
+    from {
+        opacity: .15;
+        transform: scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes blueApproach {
+    from {
+        transform: translate(65px, 190px);
+    }
+
+    to {
+        transform: translate(132px, 190px);
+    }
+}
+
+@keyframes pinkApproach {
+    from {
+        transform: translate(295px, 190px);
+    }
+
+    to {
+        transform: translate(228px, 190px);
+    }
+}
+
+@keyframes breathe {
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes reveal {
+    to { opacity: 1; }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.09;
+    }
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(115vh);
+    }
+}
+
+@keyframes rise {
+    to {
+        transform: translateY(-115vh) rotate(40deg);
+        opacity: 0;
+    }
+}
+
+@keyframes heartFall {
+    to {
+        transform: translateY(115vh) rotate(180deg);
+        opacity: .2;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ambient,
+    .sparkle,
+    .particle,
+    .heart-rain,
+    .question-heart,
+    .next,
+    .infinity,
+    .drop-body {
+        animation: none;
+    }
+
+    .sparkle,
+    .particle,
+    .heart-rain {
+        display: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="ambient"></div>
+
+<main class="container">
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <p class="date">09 DE DICIEMBRE · 2026</p>
+
+        <h1>Un día muy especial nos espera 🔒</h1>
+
+        <p class="message">
+            Este no es un regalito cualquiera,
+            mi princesa.
+        </p>
+
+        <p class="message">
+            Falta muy poquito para celebrar
+            algo hermoso de nosotros.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- HISTORIA DEL ANIVERSARIO -->
+
+    <section id="unlocked" hidden>
+
+        <!-- ESCENA 1 -->
+
+        <section class="scene" data-scene="0">
+
+            <p class="scene-number">
+                CAPÍTULO I · EL COMIENZO
+            </p>
+
+            <p class="message">
+                Hace exactamente un año...
+            </p>
+
+            <h1 class="big-date">09 · 12 · 2025</h1>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Comenzó una de las historias
+                más bonitas de mi vida.
+            </p>
+
+            <p class="message">
+                La nuestra.
+            </p>
+
+            <button class="next" data-next>
+                Continuar, mi amor →
+            </button>
+
+        </section>
+
+        <!-- ESCENA 2 -->
+
+        <section class="scene" data-scene="1" hidden>
+
+            <p class="scene-number">
+                CAPÍTULO II · EL TIEMPO
+            </p>
+
+            <p class="message">
+                Desde aquel día han pasado...
+            </p>
+
+            <div class="days-number" id="daysNumber">0</div>
+
+            <div class="days-label">DÍAS</div>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <strong>12</strong>
+                    <span>MESES</span>
+                </div>
+
+                <div class="stat">
+                    <strong>8,760</strong>
+                    <span>HORAS</span>
+                </div>
+
+                <div class="stat">
+                    <strong>525,600</strong>
+                    <span>MINUTOS</span>
+                </div>
+
+                <div class="stat">
+                    <strong>31,536,000</strong>
+                    <span>SEGUNDOS</span>
+                </div>
+
+            </div>
+
+            <p class="message">
+                Y después de todo este tiempo,
+                todavía me sigues encantando.
+            </p>
+
+            <p class="highlight">
+                Un año siendo nosotros.
+            </p>
+
+            <button class="next" data-next>
+                Sigamos recordando →
+            </button>
+
+        </section>
+
+        <!-- ESCENA 3 -->
+
+        <section class="scene" data-scene="2" hidden>
+
+            <p class="scene-number">
+                CAPÍTULO III · LOS RECUERDOS
+            </p>
+
+            <h1>Un año de momentos contigo</h1>
+
+            <p class="message">
+                Si pudiera guardar cada instante
+                a tu lado, lo haría.
+            </p>
+
+            <div class="photo-frame" id="photoFrame">
+
+                <img id="anniversaryPhoto"
+                     alt="Uno de nuestros recuerdos juntos">
+
+            </div>
+
+            <div class="gallery-controls">
+
+                <button class="gallery-button"
+                        id="previousPhoto"
+                        aria-label="Fotografía anterior">
+                    ←
+                </button>
+
+                <span class="photo-counter" id="photoCounter">
+                    1 / 3
+                </span>
+
+                <button class="gallery-button"
+                        id="nextPhoto"
+                        aria-label="Siguiente fotografía">
+                    →
+                </button>
+
+            </div>
+
+            <p id="photoMessage"></p>
+
+            <button class="next" id="galleryContinue"
+                    data-next hidden>
+                Nuestra historia continúa →
+            </button>
+
+        </section>
+
+        <!-- ESCENA 4 -->
+
+        <section class="scene" data-scene="3" hidden>
+
+            <p class="scene-number">
+                CAPÍTULO IV · NOSOTROS
+            </p>
+
+            <h1>Dos gotitas, una historia</h1>
+
+            <div class="couple" id="couple"></div>
+
+            <p class="message">
+                Entre tantas personas en el mundo,
+                qué bonito fue encontrarte.
+            </p>
+
+            <p class="message">
+                Hemos tenido días hermosos,
+                días difíciles y momentos
+                que nos han enseñado mucho.
+            </p>
+
+            <p class="highlight">
+                Y aquí seguimos,
+                mi gotita rosa.
+            </p>
+
+            <p class="message">
+                Quiero seguir aprendiendo a amarte,
+                a comprenderte y a cuidar
+                lo bonito que tenemos.
+            </p>
+
+            <button class="next" data-next>
+                Tengo algo que decirte →
+            </button>
+
+        </section>
+
+        <!-- ESCENA 5 -->
+
+        <section class="scene" data-scene="4" hidden>
+
+            <p class="scene-number">
+                CAPÍTULO V · PARA TI
+            </p>
+
+            <h1>
+                Feliz primer aniversario,
+                mi princesa.
+            </h1>
+
+            <p class="date">09 · 12 · 2026</p>
+
+            <div class="letter">
+
+                <p>Mi hermosa Karina:</p>
+
+                <p>
+                    Hoy cumplimos nuestro primer año juntos
+                    y no sabes lo feliz que me hace
+                    poder decir eso.
+                </p>
+
+                <p>
+                    Quién diría que aquella persona
+                    que me encantó desde el primer día
+                    terminaría siendo alguien
+                    tan importante en mi vida.
+                </p>
+
+                <p>
+                    Me encantan nuestros abrazos,
+                    nuestros besitos, estar acostaditos
+                    juntos y todos esos pequeños momentos
+                    que quizá parecen simples,
+                    pero que para mí significan muchísimo.
+                </p>
+
+                <p>
+                    Me encanta consentirte, llevarte
+                    tus chocolatitos, tus Takis,
+                    tus donitas de maple y hacerte
+                    estas pequeñas páginas,
+                    imaginando tu carita al abrirlas.
+                </p>
+
+                <p>
+                    Sé que tengo defectos,
+                    que cometo errores y que todavía
+                    tengo muchas cosas que aprender.
+                    No quiero prometerte que seré perfecto,
+                    pero sí quiero seguir esforzándome
+                    por ser una mejor persona.
+                </p>
+
+                <p>
+                    Gracias por este año,
+                    por las risas, por los abrazos,
+                    por los recuerdos y por cada
+                    oportunidad de seguir creciendo juntos.
+                </p>
+
+                <p>
+                    Si pudiera regresar al día
+                    en que te conocí, me encantaría
+                    volver a vivir todos esos momentos
+                    que me hicieron enamorarme de ti.
+                </p>
+
+                <p>
+                    Espero que este sea solamente
+                    el primero de muchos años,
+                    muchas aventuras y muchos recuerdos.
+                </p>
+
+                <p>
+                    Te amo muchísimo,
+                    mi princesa hermosa.
+                </p>
+
+                <p class="signature">
+                    Con todo mi amor,<br>
+                    Tu gotita azul. 💙
+                </p>
+
+            </div>
+
+            <button class="next" data-next>
+                Una última cosita... ♡
+            </button>
+
+        </section>
+
+        <!-- ESCENA 6 -->
+
+        <section class="scene" data-scene="5" hidden>
+
+            <div id="question">
+
+                <p class="scene-number">
+                    EL SIGUIENTE CAPÍTULO
+                </p>
+
+                <p class="message">
+                    Después de estos 365 días,
+                    solamente quiero preguntarte algo...
+                </p>
+
+                <h1>
+                    ¿Me permites seguir sumando
+                    años a tu lado?
+                </h1>
+
+                <button class="question-heart"
+                        id="answerHeart"
+                        aria-label="Sí, sigamos sumando años">
+
+                    <svg viewBox="0 0 100 95">
+
+                        <defs>
+
+                            <linearGradient id="finalHeartColor"
+                                            x1="0" y1="0"
+                                            x2="1" y2="1">
+
+                                <stop offset="0%"
+                                      stop-color="#69ceff"/>
+
+                                <stop offset="48%"
+                                      stop-color="#bb8df1"/>
+
+                                <stop offset="100%"
+                                      stop-color="#ff8acb"/>
+
+                            </linearGradient>
+
+                        </defs>
+
+                        <path d="
+                            M50 88
+                            C35 75 4 54 4 29
+                            C4 3 34 -3 50 20
+                            C66 -3 96 3 96 29
+                            C96 54 65 75 50 88Z
+                        "
+                        fill="url(#finalHeartColor)"/>
+
+                        <path d="M17 26 Q21 10 35 15"
+                              stroke="white"
+                              stroke-width="4"
+                              stroke-linecap="round"
+                              fill="none"
+                              opacity=".6"/>
+
+                    </svg>
+
+                </button>
+
+                <p class="small">
+                    Presiona el corazoncito
+                    si quieres seguir escribiendo
+                    nuestra historia. ♡
+                </p>
+
+            </div>
+
+            <!-- CELEBRACIÓN FINAL -->
+
+            <div id="celebration" hidden>
+
+                <p class="date">NUESTRO PRIMER AÑO</p>
+
+                <div class="infinity">∞</div>
+
+                <h1>Por muchos años más.</h1>
+
+                <p class="message">
+                    Que nunca nos falten
+                    los motivos para sonreír,
+                    los abrazos y las ganas
+                    de seguir eligiéndonos.
+                </p>
+
+                <p class="big-date">
+                    09 · 12 · 2026
+                </p>
+
+                <p class="message">
+                    Feliz aniversario,
+                    mi hermosa gotita rosa.
+                </p>
+
+                <div class="final-name">
+                    Te amo,<br>Karina.
+                </div>
+
+                <p class="highlight">💙 + 🩷</p>
+
+                <p class="message">
+                    Nuestro primer año juntos...
+                </p>
+
+                <p class="highlight">
+                    Y espero que apenas sea el comienzo.
+                </p>
+
+                <div class="divider">✧ ♡ ✧</div>
+
+                <p class="small">
+                    Gracias por ser parte de mi vida.
+                </p>
+
+                <p class="small">
+                    Todavía te esperan 15 sorpresas más,
+                    mi princesa.
+                </p>
+
+                <button class="next" id="replay">
+                    Volver a vivir nuestra historia ♡
+                </button>
+
+            </div>
+
+        </section>
+
+        <div class="indicators" id="indicators"></div>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 9, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scenes = [...document.querySelectorAll(".scene")];
+
+const indicators = document.getElementById("indicators");
+
+let currentScene = 0;
+let started = false;
+let transitioning = false;
+let celebrating = false;
+
+let counterAnimation = 0;
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createIndicators();
+
+            updateIndicators();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* INDICADORES DE CAPÍTULOS */
+
+function createIndicators() {
+
+    indicators.innerHTML = "";
+
+    scenes.forEach(() => {
+
+        const dot = document.createElement("span");
+
+        dot.className = "indicator";
+
+        indicators.appendChild(dot);
+
+    });
+
+}
+
+function updateIndicators() {
+
+    indicators.querySelectorAll(".indicator")
+        .forEach((dot, index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === currentScene
+            );
+
+        });
+
+}
+
+/* TRANSICIONES ENTRE ESCENAS */
+
+function showScene(index) {
+
+    if (Date.now() < unlockDate) return;
+
+    if (transitioning) return;
+
+    if (index < 0 || index >= scenes.length) return;
+
+    transitioning = true;
+
+    const oldScene = scenes[currentScene];
+
+    oldScene.classList.add("leaving");
+
+    setTimeout(() => {
+
+        oldScene.hidden = true;
+
+        oldScene.classList.remove("leaving");
+
+        currentScene = index;
+
+        const newScene = scenes[currentScene];
+
+        newScene.hidden = false;
+
+        newScene.style.animation = "none";
+
+        void newScene.offsetWidth;
+
+        newScene.style.animation = "";
+
+        updateIndicators();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "instant"
+        });
+
+        if (currentScene === 1) {
+
+            animateDays();
+
+        }
+
+        if (currentScene === 2) {
+
+            showPhoto(photoIndex);
+
+        }
+
+        if (currentScene === 3) {
+
+            drawCouple();
+
+            createParticles(25);
+
+        }
+
+        transitioning = false;
+
+    }, 650);
+
+}
+
+document.querySelectorAll("[data-next]")
+    .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            showScene(currentScene + 1);
+
+        });
+
+    });
+
+/* CONTADOR ANIMADO DE 365 DÍAS */
+
+function animateDays() {
+
+    cancelAnimationFrame(counterAnimation);
+
+    const number = document.getElementById("daysNumber");
+
+    const duration = 2500;
+
+    const start = performance.now();
+
+    number.textContent = "0";
+
+    function frame(now) {
+
+        const progress = Math.min(
+            (now - start) / duration,
+            1
+        );
+
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        number.textContent = Math.floor(365 * eased);
+
+        if (progress < 1) {
+
+            counterAnimation = requestAnimationFrame(frame);
+
+        } else {
+
+            number.textContent = "365";
+
+            createParticles(25);
+
+        }
+
+    }
+
+    counterAnimation = requestAnimationFrame(frame);
+
+}
+
+/* FOTOGRAFÍAS DEL ANIVERSARIO */
+
+const photos = [
+
+    {
+        src: "../imagenes/aniversario-1.jpg",
+        message:
+            "Qué bonito poder mirar atrás y recordar todo lo que hemos vivido juntos."
+    },
+
+    {
+        src: "../imagenes/aniversario-2.jpg",
+        message:
+            "Me encanta compartir mi vida contigo, incluso en los momentos más sencillos."
+    },
+
+    {
+        src: "../imagenes/aniversario-3.jpg",
+        message:
+            "Tres fotografías no son suficientes para guardar todo lo bonito que siento por ti."
+    }
+
+];
+
+let photoIndex = 0;
+
+const viewedPhotos = new Set();
+
+const anniversaryPhoto =
+    document.getElementById("anniversaryPhoto");
+
+const photoFrame =
+    document.getElementById("photoFrame");
+
+const photoCounter =
+    document.getElementById("photoCounter");
+
+const photoMessage =
+    document.getElementById("photoMessage");
+
+const previousPhoto =
+    document.getElementById("previousPhoto");
+
+const nextPhoto =
+    document.getElementById("nextPhoto");
+
+const galleryContinue =
+    document.getElementById("galleryContinue");
+
+function showPhoto(index) {
+
+    if (index < 0 || index >= photos.length) return;
+
+    photoIndex = index;
+
+    viewedPhotos.add(index);
+
+    anniversaryPhoto.src = photos[index].src;
+
+    photoMessage.textContent = photos[index].message;
+
+    photoCounter.textContent =
+        (index + 1) + " / " + photos.length;
+
+    previousPhoto.disabled = index === 0;
+
+    nextPhoto.disabled = index === photos.length - 1;
+
+    photoFrame.classList.remove("animate");
+
+    void photoFrame.offsetWidth;
+
+    photoFrame.classList.add("animate");
+
+    if (viewedPhotos.size === photos.length) {
+
+        galleryContinue.hidden = false;
+
+    }
+
+}
+
+previousPhoto.addEventListener("click", () => {
+
+    showPhoto(photoIndex - 1);
+
+});
+
+nextPhoto.addEventListener("click", () => {
+
+    showPhoto(photoIndex + 1);
+
+});
+
+/* DESLIZAR LAS FOTOS CON EL DEDO */
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+photoFrame.addEventListener("touchstart", event => {
+
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+
+}, { passive: true });
+
+photoFrame.addEventListener("touchend", event => {
+
+    const dx =
+        event.changedTouches[0].clientX - touchStartX;
+
+    const dy =
+        event.changedTouches[0].clientY - touchStartY;
+
+    if (Math.abs(dx) < 45) return;
+
+    if (Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) {
+
+        showPhoto(photoIndex + 1);
+
+    } else {
+
+        showPhoto(photoIndex - 1);
+
+    }
+
+}, { passive: true });
+
+/* DIBUJAR NUESTRAS GOTITAS */
+
+function dropBody(color) {
+
+    const pink = color === "pink";
+
+    const fill = pink ? "url(#pink9)" : "url(#blue9)";
+
+    const glow = pink ? "url(#pinkGlow9)" : "url(#blueGlow9)";
+
+    return `
+
+        <ellipse cx="0" cy="81"
+                 rx="46" ry="9"
+                 fill="${pink ? "#ff79cb" : "#48cfff"}"
+                 opacity=".3"/>
+
+        <g class="drop-body" filter="${glow}">
+
+            <g fill="${fill}">
+
+                <rect x="-23" y="42"
+                      width="21" height="36" rx="11"/>
+
+                <rect x="2" y="42"
+                      width="21" height="36" rx="11"/>
+
+                <ellipse cx="-35" cy="25"
+                         rx="12" ry="24"
+                         transform="rotate(25 -35 25)"/>
+
+                <ellipse cx="35" cy="25"
+                         rx="12" ry="24"
+                         transform="rotate(-25 35 25)"/>
+
+                <ellipse cx="0" cy="25"
+                         rx="33" ry="38"/>
+
+                <ellipse cx="0" cy="-30"
+                         rx="48" ry="47"/>
+
+            </g>
+
+            <ellipse cx="-22" cy="-53"
+                     rx="15" ry="8"
+                     transform="rotate(-30 -22 -53)"
+                     fill="white" opacity=".55"/>
+
+            <ellipse cx="-14" cy="-25"
+                     rx="5.5" ry="11"
+                     fill="#10101e"/>
+
+            <ellipse cx="14" cy="-25"
+                     rx="5.5" ry="11"
+                     fill="#10101e"/>
+
+        </g>
+
+    `;
+
+}
+
+function drawCouple() {
+
+    document.getElementById("couple").innerHTML = `
+
+        <svg viewBox="0 0 360 295">
+
+            <defs>
+
+                <radialGradient id="blue9"
+                                cx="32%" cy="22%" r="85%">
+
+                    <stop offset="0%"
+                          stop-color="#c1f5ff"/>
+
+                    <stop offset="35%"
+                          stop-color="#55caff"/>
+
+                    <stop offset="75%"
+                          stop-color="#1689ed"/>
+
+                    <stop offset="100%"
+                          stop-color="#1754bc"/>
+
+                </radialGradient>
+
+                <radialGradient id="pink9"
+                                cx="32%" cy="22%" r="85%">
+
+                    <stop offset="0%"
+                          stop-color="#ffe0f3"/>
+
+                    <stop offset="35%"
+                          stop-color="#ff9cd5"/>
+
+                    <stop offset="75%"
+                          stop-color="#ed55b3"/>
+
+                    <stop offset="100%"
+                          stop-color="#b52c85"/>
+
+                </radialGradient>
+
+                <filter id="blueGlow9"
+                        x="-60%" y="-60%"
+                        width="220%" height="220%">
+
+                    <feDropShadow dx="0" dy="0"
+                                  stdDeviation="7"
+                                  flood-color="#38baff"
+                                  flood-opacity=".85"/>
+
+                </filter>
+
+                <filter id="pinkGlow9"
+                        x="-60%" y="-60%"
+                        width="220%" height="220%">
+
+                    <feDropShadow dx="0" dy="0"
+                                  stdDeviation="7"
+                                  flood-color="#ff62be"
+                                  flood-opacity=".85"/>
+
+                </filter>
+
+            </defs>
+
+            <ellipse cx="180" cy="277"
+                     rx="145" ry="13"
+                     fill="#b16eea" opacity=".15"/>
+
+            <g class="blue-drop">
+
+                ${dropBody("blue")}
+
+            </g>
+
+            <g class="pink-drop">
+
+                ${dropBody("pink")}
+
+            </g>
+
+            <g class="hug">
+
+                <path d="M157 205 Q183 233 211 207"
+                      stroke="url(#blue9)"
+                      stroke-width="19"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <path d="M204 218 Q181 237 153 218"
+                      stroke="url(#pink9)"
+                      stroke-width="17"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+            </g>
+
+            <g class="couple-heart"
+               filter="url(#pinkGlow9)">
+
+                <path d="
+                    M180 98
+                    C168 87 145 73 145 54
+                    C145 32 169 28 180 46
+                    C191 28 215 32 215 54
+                    C215 73 192 87 180 98Z
+                "
+                fill="#ff9bd5"/>
+
+            </g>
+
+        </svg>
+
+    `;
+
+}
+
+/* RESPUESTA Y CELEBRACIÓN */
+
+const question = document.getElementById("question");
+
+const celebration = document.getElementById("celebration");
+
+document.getElementById("answerHeart")
+    .addEventListener("click", () => {
+
+        if (Date.now() < unlockDate) return;
+
+        if (celebrating) return;
+
+        celebrating = true;
+
+        question.hidden = true;
+
+        celebration.hidden = false;
+
+        indicators.hidden = true;
+
+        createParticles(80);
+
+        rainHearts(120);
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* VOLVER A VIVIR LA HISTORIA */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        celebrating = false;
+
+        question.hidden = false;
+
+        celebration.hidden = true;
+
+        indicators.hidden = false;
+
+        viewedPhotos.clear();
+
+        photoIndex = 0;
+
+        galleryContinue.hidden = true;
+
+        showScene(0);
+
+    });
+
+/* CORAZONES FLOTANTES */
+
+function createParticles(amount) {
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#bd83ef",
+        "#ffc6e6"
+    ];
+
+    for (let i = 0; i < amount; i++) {
+
+        setTimeout(() => {
+
+            const particle = document.createElement("span");
+
+            particle.className = "particle";
+
+            particle.textContent =
+                ["♥", "♡", "✦", "✧"][i % 4];
+
+            particle.style.color =
+                colors[i % colors.length];
+
+            particle.style.textShadow =
+                "0 0 15px currentColor";
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+            particle.style.fontSize =
+                12 + Math.random() * 30 + "px";
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => particle.remove(), 7000);
+
+        }, i * 60);
+
+    }
+
+}
+
+/* LLUVIA DE CORAZONES ROSAS Y AZULES */
+
+function rainHearts(amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        setTimeout(() => {
+
+            if (!celebrating) return;
+
+            const heart = document.createElement("span");
+
+            heart.className = "heart-rain";
+
+            heart.textContent = i % 2 === 0 ? "♥" : "♡";
+
+            heart.style.color =
+                i % 2 === 0 ? "#69ceff" : "#ff9bd5";
+
+            heart.style.textShadow =
+                "0 0 12px currentColor";
+
+            heart.style.left =
+                Math.random() * 100 + "vw";
+
+            heart.style.fontSize =
+                12 + Math.random() * 30 + "px";
+
+            const duration = 4 + Math.random() * 5;
+
+            heart.style.animationDuration =
+                duration + "s";
+
+            document.body.appendChild(heart);
+
+            setTimeout(
+                () => heart.remove(),
+                duration * 1000
+            );
+
+        }, i * 85);
+
+    }
+
+}
+
+/* ESTRELLITAS Y NIEVE DE FONDO */
+
+for (let i = 0; i < 40; i++) {
+
+    const sparkle = document.createElement("span");
+
+    sparkle.className = "sparkle";
+
+    sparkle.textContent =
+        ["✧", "·", "❄", "✦"][i % 4];
+
+    sparkle.style.color =
+        ["#ffffff", "#ffbce3", "#a8dfff", "#d9a6ff"][i % 4];
+
+    sparkle.style.left =
+        Math.random() * 100 + "vw";
+
+    sparkle.style.fontSize =
+        5 + Math.random() * 12 + "px";
+
+    sparkle.style.opacity =
+        .15 + Math.random() * .45;
+
+    sparkle.style.animationDuration =
+        7 + Math.random() * 12 + "s";
+
+    sparkle.style.animationDelay =
+        -Math.random() * 20 + "s";
+
+    document.body.appendChild(sparkle);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,851 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 7 | Un recuerdo para siempre 🐾</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(
+                ellipse at bottom,
+                #32113e,
+                #07040c 80%
+            );
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 480px;
+            padding: 35px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            color: #ffc1e3;
+            font-size: 32px;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        /* ESCENA DE LA CÁMARA */
+
+        .scene {
+            position: relative;
+            width: 290px;
+            max-width: 100%;
+            margin: 45px auto 20px;
+        }
+
+        .camera {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 205px;
+            border-radius: 30px;
+            background: linear-gradient(
+                145deg,
+                #ffd1e9,
+                #e98cbd 45%,
+                #b855a3
+            );
+            border: 2px solid #ffbce2;
+            box-shadow:
+                0 0 35px #ff62be60,
+                0 15px 35px #0008,
+                inset 0 5px 10px #ffffff60;
+        }
+
+        .camera-top {
+            position: absolute;
+            top: -16px;
+            left: 28px;
+            width: 90px;
+            height: 25px;
+            border-radius: 12px 12px 0 0;
+            background: #f3a5d0;
+        }
+
+        .stripe {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 105px;
+            height: 35px;
+            background: linear-gradient(
+                to bottom,
+                #be7be3 0%,
+                #be7be3 33%,
+                #e6a5ef 33%,
+                #e6a5ef 66%,
+                #ffd0e8 66%
+            );
+        }
+
+        .flash-window {
+            position: absolute;
+            top: 19px;
+            right: 20px;
+            width: 57px;
+            height: 29px;
+            border: 4px solid #a85d98;
+            border-radius: 8px;
+            background: linear-gradient(
+                135deg,
+                white,
+                #d5c6e5
+            );
+            box-shadow: inset 0 0 5px #ffffff;
+        }
+
+        .viewfinder {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 37px;
+            height: 26px;
+            border: 4px solid #bb76aa;
+            border-radius: 7px;
+            background: #442a54;
+        }
+
+        .lens {
+            position: absolute;
+            top: 43px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 115px;
+            height: 115px;
+            border: 9px solid #e4b4dc;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at 35% 30%,
+                #9673b8,
+                #352044 40%,
+                #130e22 70%
+            );
+            box-shadow:
+                0 0 0 5px #b26ca7,
+                0 7px 15px #0005,
+                inset 0 0 10px #000;
+            display: grid;
+            place-items: center;
+        }
+
+        .lens::before {
+            content: "";
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 3px solid #765197;
+            background: radial-gradient(
+                circle at 30% 25%,
+                #bca5ef,
+                #5c3d88 25%,
+                #21122e 60%
+            );
+        }
+
+        .lens::after {
+            content: "";
+            position: absolute;
+            width: 19px;
+            height: 10px;
+            top: 22px;
+            left: 22px;
+            border-radius: 50%;
+            transform: rotate(-35deg);
+            background: #ffffff80;
+        }
+
+        .shutter {
+            position: absolute;
+            top: 60px;
+            left: 19px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 3px solid #ffd0e8;
+            background: linear-gradient(
+                145deg,
+                #ff85c8,
+                #c94d9d
+            );
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff62be;
+            animation: pulse 1.6s infinite;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .shutter:active {
+            transform: scale(.9);
+        }
+
+        .shutter:disabled {
+            animation: none;
+            cursor: default;
+            opacity: .7;
+        }
+
+        .camera-paw {
+            position: absolute;
+            right: 24px;
+            top: 73px;
+            font-size: 27px;
+            transform: rotate(20deg);
+        }
+
+        .brand {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            color: #783664;
+            font-size: 12px;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .slot {
+            position: absolute;
+            bottom: 13px;
+            left: 10%;
+            width: 80%;
+            height: 10px;
+            background: #482038;
+            border-radius: 10px;
+            box-shadow: inset 0 3px 5px #0008;
+        }
+
+        /* FOTOGRAFÍA POLAROID */
+
+        .print-area {
+            position: relative;
+            width: 88%;
+            height: 0;
+            margin: -5px auto 0;
+            overflow: hidden;
+            transition: height 3s ease;
+        }
+
+        .scene.printing .print-area {
+            height: 325px;
+        }
+
+        .polaroid {
+            width: 100%;
+            padding: 12px 12px 18px;
+            background: #fff7fc;
+            color: #6e3b65;
+            border-radius: 3px;
+            box-shadow: 0 10px 25px #0005;
+            transform: translateY(-110%);
+            transition: transform 3s ease;
+        }
+
+        .scene.printing .polaroid {
+            transform: translateY(0);
+        }
+
+        .photo {
+            width: 100%;
+            height: 235px;
+            display: block;
+            object-fit: contain;
+            background: #281d30;
+            opacity: 0;
+            filter: brightness(2) blur(12px);
+            transition:
+                opacity 3s ease,
+                filter 4s ease;
+        }
+
+        .scene.developed .photo {
+            opacity: 1;
+            filter: brightness(1) blur(0);
+        }
+
+        .photo-caption {
+            font-size: 17px;
+            margin: 15px 0 0;
+            line-height: 1.4;
+        }
+
+        /* FLASH */
+
+        #flash {
+            position: fixed;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        #flash.active {
+            animation: flash .7s ease-out;
+        }
+
+        #instruction {
+            color: #ffc1e3;
+            font-size: 18px;
+            min-height: 50px;
+            line-height: 1.6;
+        }
+
+        #instruction.waiting {
+            animation: pulse 2s infinite;
+        }
+
+        /* DEDICATORIA */
+
+        #dedication {
+            animation: appear 1.5s ease;
+        }
+
+        .highlight {
+            color: #ffc1e3;
+            font-size: 27px;
+            line-height: 1.5;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        /* CORAZÓN DE HUELLITAS */
+
+        .paw-heart {
+            position: relative;
+            width: 240px;
+            height: 230px;
+            margin: 25px auto;
+        }
+
+        .paw {
+            position: absolute;
+            font-size: 23px;
+            opacity: 0;
+            color: #ff9cd5;
+            filter: drop-shadow(0 0 6px #ff49ac);
+            animation: pawAppear .6s ease forwards;
+        }
+
+        .paw-center {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            color: #ffc1e3;
+            font-size: 27px;
+            text-shadow: 0 0 15px #ff49ac;
+            opacity: 0;
+            animation: appear 1s ease 3.5s forwards;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .particle {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            animation: rise 6s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                scale: 1;
+            }
+
+            50% {
+                scale: 1.07;
+            }
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: .85;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pawAppear {
+            from {
+                opacity: 0;
+                scale: .4;
+            }
+
+            to {
+                opacity: 1;
+                scale: 1;
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                transform: translateY(-115vh) rotate(35deg);
+                opacity: 0;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="flash"></div>
+
+    <main class="container">
+
+        <p class="date">07 DE DICIEMBRE · 2026</p>
+
+        <!-- REGALO BLOQUEADO -->
+
+        <section id="locked">
+
+            <h1>Un recuerdo te espera 🔒</h1>
+
+            <p class="message">
+                Hay momentos que merecen guardarse
+                para siempre, mi princesa.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <!-- REGALO DESBLOQUEADO -->
+
+        <section id="unlocked" hidden>
+
+            <h1>Un recuerdo para siempre</h1>
+
+            <p class="message">
+                Hoy quiero que recordemos
+                un día muy especial. 🐾
+            </p>
+
+            <div class="scene" id="scene">
+
+                <div class="camera">
+
+                    <div class="camera-top"></div>
+
+                    <div class="stripe"></div>
+
+                    <div class="flash-window"></div>
+
+                    <div class="viewfinder"></div>
+
+                    <div class="lens"></div>
+
+                    <button class="shutter"
+                            id="shutter"
+                            aria-label="Tomar fotografía">
+                        ♡
+                    </button>
+
+                    <div class="camera-paw">🐾</div>
+
+                    <div class="brand">NALA · MEMORIES</div>
+
+                    <div class="slot"></div>
+
+                </div>
+
+                <div class="print-area">
+
+                    <div class="polaroid">
+
+                        <img class="photo"
+                             id="photo"
+                             alt="Un recuerdo especial con Nala">
+
+                        <p class="photo-caption">
+                            El día que llegó Nala ♡
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p id="instruction" class="waiting">
+                Presiona el corazoncito de la cámara.
+            </p>
+
+            <!-- DEDICATORIA FINAL -->
+
+            <section id="dedication" hidden>
+
+                <h2 class="highlight">
+                    El día que te regalé a Nala
+                </h2>
+
+                <p class="message">
+                    Uno de mis recuerdos favoritos contigo
+                    es el día que te regalé a Nala.
+                </p>
+
+                <p class="message">
+                    Me encantó verte tan feliz,
+                    abrazándola.
+                </p>
+
+                <p class="message">
+                    No sabes lo bonito que fue para mí
+                    verte así y lo mucho que ese momento
+                    me movió los sentimientos.
+                </p>
+
+                <p class="message">
+                    Hay momentos que quisiera guardar
+                    para siempre, y definitivamente
+                    ese es uno de ellos.
+                </p>
+
+                <h2 class="highlight">
+                    Porque verte feliz también
+                    me hace feliz a mí.
+                </h2>
+
+                <div class="paw-heart" id="pawHeart">
+
+                    <div class="paw-center">
+                        Nala
+                        <span>♡</span>
+                    </div>
+
+                </div>
+
+                <p class="message">
+                    Te amo, mi princesa. 🩷
+                </p>
+
+                <p class="message">
+                    Todavía te esperan 17 sorpresas más...
+                </p>
+
+            </section>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 7, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+
+        const shutter = document.getElementById("shutter");
+        const scene = document.getElementById("scene");
+        const flash = document.getElementById("flash");
+        const photo = document.getElementById("photo");
+        const instruction = document.getElementById("instruction");
+        const dedication = document.getElementById("dedication");
+        const pawHeart = document.getElementById("pawHeart");
+
+        let taken = false;
+
+        // Cuenta regresiva
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+                unlocked.hidden = false;
+
+                return;
+
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        // Tomar fotografía
+
+        shutter.addEventListener("click", async () => {
+
+            if (Date.now() < unlockDate || taken) return;
+
+            taken = true;
+            shutter.disabled = true;
+
+            instruction.classList.remove("waiting");
+            instruction.textContent = "Preparando nuestro recuerdo...";
+
+            // Cargar la fotografía antes de revelarla
+
+            photo.src = "../imagenes/recuerdo.jpg";
+
+            try {
+
+                await photo.decode();
+
+            } catch (error) {
+
+                instruction.textContent =
+                    "No se pudo cargar la fotografía. Inténtalo otra vez.";
+
+                taken = false;
+                shutter.disabled = false;
+
+                return;
+
+            }
+
+            // Flash de la cámara
+
+            flash.classList.add("active");
+
+            instruction.textContent = "¡Click! 📸";
+
+            setTimeout(() => {
+
+                flash.classList.remove("active");
+
+            }, 700);
+
+            // La fotografía comienza a salir
+
+            setTimeout(() => {
+
+                scene.classList.add("printing");
+
+                instruction.textContent =
+                    "Espera un poquito, mi amor...";
+
+            }, 800);
+
+            // Revelar la fotografía
+
+            setTimeout(() => {
+
+                scene.classList.add("developed");
+
+                instruction.textContent =
+                    "¿Te acuerdas de este día? 🐾";
+
+            }, 3800);
+
+            // Mostrar la dedicatoria
+
+            setTimeout(() => {
+
+                dedication.hidden = false;
+
+                createPawHeart();
+
+                createParticles(40);
+
+            }, 8000);
+
+        });
+
+        // Formar un corazón con huellitas
+
+        function createPawHeart() {
+
+            const total = 26;
+
+            for (let i = 0; i < total; i++) {
+
+                const t = i / total * Math.PI * 2;
+
+                const x = 16 * Math.pow(Math.sin(t), 3);
+
+                const y =
+                    13 * Math.cos(t)
+                    - 5 * Math.cos(2 * t)
+                    - 2 * Math.cos(3 * t)
+                    - Math.cos(4 * t);
+
+                const paw = document.createElement("span");
+
+                paw.className = "paw";
+
+                paw.textContent = "🐾";
+
+                paw.style.left =
+                    120 + x * 6 - 12 + "px";
+
+                paw.style.top =
+                    110 - y * 6 - 12 + "px";
+
+                paw.style.transform =
+                    `rotate(${i * 13}deg)`;
+
+                paw.style.animationDelay =
+                    i * .12 + "s";
+
+                pawHeart.appendChild(paw);
+
+            }
+
+        }
+
+        // Corazones y huellitas flotantes
+
+        function createParticles(amount) {
+
+            for (let i = 0; i < amount; i++) {
+
+                setTimeout(() => {
+
+                    const particle = document.createElement("span");
+
+                    particle.className = "particle";
+
+                    particle.textContent = [
+                        "🐾", "💗", "🩷", "♡", "💜"
+                    ][Math.floor(Math.random() * 5)];
+
+                    particle.style.left =
+                        Math.random() * 100 + "vw";
+
+                    particle.style.fontSize =
+                        12 + Math.random() * 24 + "px";
+
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 6000);
+
+                }, i * 80);
+
+            }
+
+        }
+
+        // Nieve de fondo
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+
+            snow.textContent = "❄";
+
+            snow.style.left =
+                Math.random() * 100 + "vw";
+
+            snow.style.fontSize =
+                5 + Math.random() * 12 + "px";
+
+            snow.style.opacity =
+                Math.random() * .6;
+
+            snow.style.animationDuration =
+                5 + Math.random() * 10 + "s";
+
+            snow.style.animationDelay =
+                -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        updateCountdown();
+
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

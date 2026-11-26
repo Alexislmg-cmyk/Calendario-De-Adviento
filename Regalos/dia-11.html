@@ -1,0 +1,1096 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 11 | Mi hermosa princesa 👑</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #30142e,
+        #08040c 75%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 480px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 35px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #e7c6a2;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+h1 {
+    color: #ffd0e9;
+    font-size: 30px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff49ac80;
+}
+
+.message {
+    color: #f5d8ed;
+    font-size: 19px;
+    line-height: 1.8;
+}
+
+#countdown {
+    color: #ffe3b0;
+    font-size: 24px;
+    line-height: 1.8;
+    margin: 25px auto;
+}
+
+/* ESPEJO MÁGICO */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    margin: 20px auto;
+}
+
+.mirror-button {
+    display: block;
+    width: 100%;
+    max-width: 310px;
+    margin: auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mirror-button svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.mirror-button:disabled {
+    cursor: default;
+}
+
+.mirror-glow {
+    animation: glow 3s infinite alternate;
+}
+
+.diamond {
+    animation: sparkle 2s infinite;
+}
+
+.mirror-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.5s infinite;
+}
+
+.dark-glass {
+    opacity: 1;
+    transition: opacity 2.5s ease;
+}
+
+.princess-photo {
+    opacity: 0;
+    transition: opacity 2.5s ease;
+}
+
+.scene.revealed .dark-glass {
+    opacity: 0;
+}
+
+.scene.revealed .princess-photo {
+    opacity: 1;
+}
+
+.scene.revealed .mirror-heart {
+    animation: none;
+}
+
+.scene.revealed .mirror-glow {
+    opacity: .8;
+}
+
+/* PALABRAS ALREDEDOR DEL ESPEJO */
+
+.word {
+    position: absolute;
+    color: #ffe3b0;
+    font-size: clamp(12px, 3.5vw, 16px);
+    text-shadow:
+        0 0 8px #ffb76b,
+        0 0 15px #ff49ac;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s, transform 1.5s;
+    transform: translateY(12px);
+    z-index: 4;
+}
+
+.word.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: floatWord 3s ease-in-out infinite;
+}
+
+.word:nth-of-type(1) {
+    left: 0;
+    top: 20%;
+}
+
+.word:nth-of-type(2) {
+    right: 0;
+    top: 30%;
+}
+
+.word:nth-of-type(3) {
+    left: 0;
+    top: 52%;
+}
+
+.word:nth-of-type(4) {
+    right: 0;
+    top: 70%;
+}
+
+.word:nth-of-type(5) {
+    left: 0;
+    top: 87%;
+}
+
+/* DESTELLO MÁGICO */
+
+.flash {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: radial-gradient(
+        circle,
+        #fff9eb,
+        #ffc6e6
+    );
+    opacity: 0;
+    pointer-events: none;
+}
+
+.flash.active {
+    animation: flash 1.4s ease-out;
+}
+
+/* DEDICATORIA */
+
+#instruction {
+    color: #ffe3b0;
+    font-size: 17px;
+    animation: softPulse 2s infinite;
+}
+
+#final {
+    margin-top: 25px;
+    animation: appear 2s ease;
+}
+
+.highlight {
+    color: #ffe3b0;
+    font-size: 28px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 15px #ffb76b80,
+        0 0 25px #ff49ac60;
+}
+
+.crown {
+    font-size: 65px;
+    filter: drop-shadow(0 0 15px #ffc36e);
+    animation: floatWord 3s infinite;
+}
+
+.divider {
+    color: #e8c28d;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+.back,
+.replay {
+    display: inline-block;
+    margin: 25px auto 0;
+    padding: 13px 25px;
+    color: #ffe3b0;
+    border: 1px solid #d5a369;
+    border-radius: 30px;
+    text-decoration: none;
+    background: #ffffff08;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* PARTÍCULAS */
+
+.sparkle {
+    position: fixed;
+    top: -25px;
+    pointer-events: none;
+    animation: snowfall linear infinite;
+}
+
+.petal {
+    position: fixed;
+    top: -40px;
+    pointer-events: none;
+    z-index: 5;
+    border-radius: 75% 20% 75% 20%;
+    background: linear-gradient(
+        135deg,
+        #ffe0ef,
+        #ff79bd
+    );
+    box-shadow: 0 0 10px #ff49ac60;
+    animation: petalFall linear forwards;
+}
+
+.magic-particle {
+    position: fixed;
+    top: -30px;
+    color: #ffe3b0;
+    text-shadow: 0 0 12px #ffc36e;
+    pointer-events: none;
+    z-index: 5;
+    animation: snowfall linear forwards;
+}
+
+/* ANIMACIONES */
+
+@keyframes glow {
+    from { opacity: .2; }
+    to { opacity: .65; }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: .5; }
+    50% { opacity: 1; }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+@keyframes softPulse {
+    0%, 100% { opacity: .65; }
+    50% { opacity: 1; }
+}
+
+@keyframes floatWord {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes flash {
+    0% { opacity: 0; }
+    25% { opacity: .95; }
+    100% { opacity: 0; }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(115vh) rotate(180deg);
+    }
+}
+
+@keyframes petalFall {
+    0% {
+        transform: translate(0, 0) rotate(0);
+    }
+
+    50% {
+        transform: translate(40px, 55vh) rotate(180deg);
+    }
+
+    100% {
+        transform: translate(-30px, 115vh) rotate(360deg);
+        opacity: .3;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="flash" id="flash"></div>
+
+<main class="container">
+
+    <p class="date">11 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Un espejito mágico 🔒</h1>
+
+        <p class="message">
+            Hay alguien muy especial
+            esperando aparecer en este espejo.
+        </p>
+
+        <p class="message">
+            Pronto descubrirás quién es,
+            mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            ¿Quieres conocer a la niña
+            que tanto me encanta?
+        </h1>
+
+        <div class="scene" id="scene">
+
+            <button class="mirror-button"
+                    id="mirrorButton"
+                    aria-label="Descubrir el espejo mágico">
+
+                <svg viewBox="0 0 300 370">
+
+                    <defs>
+
+                        <!-- DORADO -->
+
+                        <linearGradient id="gold"
+                                        x1="0" y1="0"
+                                        x2="1" y2="1">
+
+                            <stop offset="0%"
+                                  stop-color="#fff0bc"/>
+
+                            <stop offset="25%"
+                                  stop-color="#d5a369"/>
+
+                            <stop offset="50%"
+                                  stop-color="#ffe3b0"/>
+
+                            <stop offset="75%"
+                                  stop-color="#a77553"/>
+
+                            <stop offset="100%"
+                                  stop-color="#ffe5b8"/>
+
+                        </linearGradient>
+
+                        <!-- CRISTAL OSCURO -->
+
+                        <linearGradient id="glass"
+                                        x1="0" y1="0"
+                                        x2="1" y2="1">
+
+                            <stop offset="0%"
+                                  stop-color="#362540"/>
+
+                            <stop offset="45%"
+                                  stop-color="#140c20"/>
+
+                            <stop offset="100%"
+                                  stop-color="#4c2b54"/>
+
+                        </linearGradient>
+
+                        <filter id="pinkGlow"
+                                x="-100%" y="-100%"
+                                width="300%" height="300%">
+
+                            <feGaussianBlur stdDeviation="8"/>
+
+                        </filter>
+
+                        <!-- RECORTE OVALADO DE LA FOTO -->
+
+                        <clipPath id="photoClip">
+
+                            <ellipse cx="150" cy="202"
+                                     rx="88" ry="125"/>
+
+                        </clipPath>
+
+                    </defs>
+
+                    <!-- RESPLANDOR ROSA -->
+
+                    <ellipse class="mirror-glow"
+                             cx="150" cy="202"
+                             rx="112" ry="150"
+                             fill="#f38ed1"
+                             filter="url(#pinkGlow)"/>
+
+                    <!-- CORONITA -->
+
+                    <path d="
+                        M110 45
+                        L99 12
+                        L130 30
+                        L150 3
+                        L170 30
+                        L201 12
+                        L190 45Z
+                    "
+                    fill="url(#gold)"
+                    stroke="#ffe6b8"
+                    stroke-width="2"/>
+
+                    <circle cx="99" cy="12"
+                            r="4" fill="#fff0bc"/>
+
+                    <circle cx="150" cy="5"
+                            r="4" fill="#fff0bc"/>
+
+                    <circle cx="201" cy="12"
+                            r="4" fill="#fff0bc"/>
+
+                    <rect x="109" y="43"
+                          width="82" height="10"
+                          rx="5"
+                          fill="url(#gold)"/>
+
+                    <path d="M150 19
+                             L158 29
+                             L150 39
+                             L142 29Z"
+                          fill="#ff8dca"
+                          stroke="#ffe2f1"/>
+
+                    <!-- MARCO DORADO Y ROSA -->
+
+                    <ellipse cx="150" cy="202"
+                             rx="108" ry="145"
+                             fill="url(#gold)"/>
+
+                    <ellipse cx="150" cy="202"
+                             rx="100" ry="137"
+                             fill="#b96198"
+                             stroke="#ffe3b0"
+                             stroke-width="2"/>
+
+                    <ellipse cx="150" cy="202"
+                             rx="90" ry="127"
+                             fill="#180d20"
+                             stroke="url(#gold)"
+                             stroke-width="5"/>
+
+                    <!-- FOTOGRAFÍA -->
+
+                    <image id="princessPhoto"
+                           class="princess-photo"
+                           x="62" y="77"
+                           width="176" height="250"
+                           preserveAspectRatio="xMidYMid slice"
+                           clip-path="url(#photoClip)"/>
+
+                    <!-- CRISTAL ANTES DE REVELAR -->
+
+                    <g class="dark-glass">
+
+                        <ellipse cx="150" cy="202"
+                                 rx="88" ry="125"
+                                 fill="url(#glass)"/>
+
+                        <g clip-path="url(#photoClip)">
+
+                            <path d="
+                                M65 160
+                                L177 78
+                                L195 100
+                                L65 197Z
+                            "
+                            fill="white"
+                            opacity=".07"/>
+
+                            <path d="
+                                M65 210
+                                L215 100
+                                L223 113
+                                L65 226Z
+                            "
+                            fill="white"
+                            opacity=".05"/>
+
+                        </g>
+
+                        <!-- CORAZÓN INTERACTIVO -->
+
+                        <g class="mirror-heart">
+
+                            <path d="
+                                M150 230
+                                C132 216 108 199 108 180
+                                C108 155 137 150 150 173
+                                C163 150 192 155 192 180
+                                C192 199 168 216 150 230Z
+                            "
+                            fill="#ff9bd5"
+                            filter="url(#pinkGlow)"/>
+
+                            <path d="
+                                M150 230
+                                C132 216 108 199 108 180
+                                C108 155 137 150 150 173
+                                C163 150 192 155 192 180
+                                C192 199 168 216 150 230Z
+                            "
+                            fill="#ff9bd5"/>
+
+                            <path d="M119 179
+                                     Q122 164 135 170"
+                                  stroke="white"
+                                  stroke-width="4"
+                                  stroke-linecap="round"
+                                  fill="none"
+                                  opacity=".65"/>
+
+                        </g>
+
+                    </g>
+
+                    <!-- DIAMANTES DEL MARCO -->
+
+                    <g id="diamonds"></g>
+
+                    <!-- DESTELLOS EXTERIORES -->
+
+                    <g id="sparkles"></g>
+
+                </svg>
+
+            </button>
+
+            <!-- PALABRAS MÁGICAS -->
+
+            <span class="word">Hermosa ✧</span>
+
+            <span class="word">Preciosa ♡</span>
+
+            <span class="word">Adorable ✧</span>
+
+            <span class="word">Encantadora ♡</span>
+
+            <span class="word">Mi princesa 👑</span>
+
+        </div>
+
+        <p id="instruction">
+            Presiona el espejito mágico. ♡
+        </p>
+
+        <!-- MENSAJE FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="crown">👑</div>
+
+            <h2 class="highlight">
+                Sí, eres tú, mi princesa.
+            </h2>
+
+            <p class="message">
+                Ojalá pudieras verte por un instante
+                a través de mis ojos, para que entendieras
+                lo hermosa que eres para mí.
+            </p>
+
+            <p class="message">
+                Me encantan tus ojitos,
+                tu sonrisa, tu carita
+                y todas esas pequeñas cositas
+                que te hacen ser tú.
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Pero no solamente me encanta
+                lo hermosa que eres por fuera.
+            </p>
+
+            <p class="message">
+                También me encanta tu forma de ser,
+                tus ocurrencias y la persona
+                que voy conociendo cada día.
+            </p>
+
+            <h2 class="highlight">
+                La niña de mis ojos.
+            </h2>
+
+            <p class="message">
+                Mi niña preciosa,<br>
+                mi hermosa Karina,<br>
+                mi gotita rosa.
+            </p>
+
+            <h2 class="highlight">
+                Te amo muchísimo. 🩷
+            </h2>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <p class="message">
+                Todavía te esperan 13 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Volver a descubrir ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 11, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const mirrorButton = document.getElementById("mirrorButton");
+const princessPhoto = document.getElementById("princessPhoto");
+
+const title = document.getElementById("title");
+const instruction = document.getElementById("instruction");
+const flash = document.getElementById("flash");
+const final = document.getElementById("final");
+
+const words = [...document.querySelectorAll(".word")];
+
+const svgNS = "http://www.w3.org/2000/svg";
+
+const photoPath = "../imagenes/princesa.jpg";
+
+let started = false;
+let revealed = false;
+let revealing = false;
+let timers = [];
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createDiamonds();
+            createSparkles();
+
+        }
+
+        return;
+
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining / 3600000) % 24);
+    const minutes = Math.floor((remaining / 60000) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* DIAMANTES ALREDEDOR DEL MARCO */
+
+function createDiamonds() {
+
+    const diamonds = document.getElementById("diamonds");
+
+    for (let i = 0; i < 24; i++) {
+
+        const angle = i * Math.PI * 2 / 24;
+
+        const x = 150 + 100 * Math.cos(angle);
+        const y = 202 + 137 * Math.sin(angle);
+
+        const diamond = document.createElementNS(
+            svgNS, "path"
+        );
+
+        diamond.setAttribute(
+            "d",
+            "M0 -5 L4 0 L0 5 L-4 0Z"
+        );
+
+        diamond.setAttribute(
+            "transform",
+            `translate(${x} ${y})`
+        );
+
+        diamond.setAttribute(
+            "fill",
+            i % 2 === 0 ? "#fff2cf" : "#ffb4df"
+        );
+
+        diamond.setAttribute("stroke", "white");
+        diamond.setAttribute("stroke-width", ".6");
+
+        diamond.setAttribute("class", "diamond");
+
+        diamond.style.animationDelay =
+            i * .13 + "s";
+
+        diamonds.appendChild(diamond);
+
+    }
+
+}
+
+/* DESTELLOS ALREDEDOR DEL ESPEJO */
+
+function createSparkles() {
+
+    const sparkles = document.getElementById("sparkles");
+
+    const positions = [
+        [27, 100],
+        [270, 90],
+        [23, 260],
+        [275, 245],
+        [75, 35],
+        [245, 325],
+        [20, 180],
+        [280, 170]
+    ];
+
+    positions.forEach(([x, y], index) => {
+
+        const star = document.createElementNS(
+            svgNS, "path"
+        );
+
+        star.setAttribute(
+            "d",
+            "M0 -9 Q0 0 9 0 Q0 0 0 9 Q0 0 -9 0 Q0 0 0 -9Z"
+        );
+
+        star.setAttribute(
+            "transform",
+            `translate(${x} ${y})`
+        );
+
+        star.setAttribute("fill", "#ffe4bf");
+
+        star.setAttribute("class", "diamond");
+
+        star.style.animationDelay =
+            index * .3 + "s";
+
+        sparkles.appendChild(star);
+
+    });
+
+}
+
+/* CONTROL DE TIEMPOS */
+
+function later(callback, delay) {
+
+    const timer = setTimeout(callback, delay);
+
+    timers.push(timer);
+
+}
+
+/* REVELAR A NUESTRA PRINCESA */
+
+mirrorButton.addEventListener("click", () => {
+
+    if (Date.now() < unlockDate) return;
+
+    if (revealed || revealing) return;
+
+    revealing = true;
+
+    mirrorButton.disabled = true;
+
+    instruction.textContent =
+        "Descubriendo a mi princesa...";
+
+    // Comprobar que la fotografía exista.
+
+    const image = new Image();
+
+    image.onload = () => {
+
+        princessPhoto.setAttribute("href", photoPath);
+
+        princessPhoto.setAttributeNS(
+            "http://www.w3.org/1999/xlink",
+            "xlink:href",
+            photoPath
+        );
+
+        revealed = true;
+        revealing = false;
+
+        flash.classList.remove("active");
+
+        void flash.offsetWidth;
+
+        flash.classList.add("active");
+
+        later(() => {
+
+            scene.classList.add("revealed");
+
+            title.textContent = "La niña de mis ojos";
+
+            instruction.hidden = true;
+
+            createMagicRain(100);
+
+        }, 350);
+
+        words.forEach((word, index) => {
+
+            later(() => {
+
+                word.classList.add("visible");
+
+            }, 1800 + index * 900);
+
+        });
+
+        later(() => {
+
+            final.hidden = false;
+
+        }, 6500);
+
+    };
+
+    image.onerror = () => {
+
+        revealing = false;
+
+        mirrorButton.disabled = false;
+
+        instruction.textContent =
+            "No se encontró princesa.jpg. Revisa la carpeta imagenes.";
+
+    };
+
+    image.src = photoPath;
+
+});
+
+/* LLUVIA DE PÉTALOS Y POLVO DORADO */
+
+function createMagicRain(amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        later(() => {
+
+            if (!revealed) return;
+
+            const particle = document.createElement("span");
+
+            const duration = 5 + Math.random() * 5;
+
+            if (i % 3 === 0) {
+
+                particle.className = "magic-particle";
+
+                particle.textContent =
+                    ["✧", "✦", "·"][i % 3];
+
+                particle.style.fontSize =
+                    8 + Math.random() * 16 + "px";
+
+            } else {
+
+                particle.className = "petal";
+
+                const size = 8 + Math.random() * 15;
+
+                particle.style.width = size + "px";
+
+                particle.style.height =
+                    size * 1.4 + "px";
+
+            }
+
+            particle.style.left =
+                Math.random() * 100 + "vw";
+
+            particle.style.animationDuration =
+                duration + "s";
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+
+                particle.remove();
+
+            }, duration * 1000);
+
+        }, i * 100);
+
+    }
+
+}
+
+/* VOLVER A DESCUBRIR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        revealed = false;
+        revealing = false;
+
+        scene.classList.remove("revealed");
+
+        flash.classList.remove("active");
+
+        words.forEach(word => {
+
+            word.classList.remove("visible");
+
+        });
+
+        document.querySelectorAll(".petal, .magic-particle")
+            .forEach(particle => particle.remove());
+
+        final.hidden = true;
+
+        instruction.hidden = false;
+
+        instruction.textContent =
+            "Presiona el espejito mágico. ♡";
+
+        title.textContent =
+            "¿Quieres conocer a la niña que tanto me encanta?";
+
+        mirrorButton.disabled = false;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* ESTRELLITAS Y NIEVE DE FONDO */
+
+for (let i = 0; i < 35; i++) {
+
+    const sparkle = document.createElement("span");
+
+    sparkle.className = "sparkle";
+
+    sparkle.textContent =
+        ["✧", "✦", "❄", "·"][i % 4];
+
+    sparkle.style.color =
+        ["#ffe3b0", "#ffb4df", "#ffffff"][i % 3];
+
+    sparkle.style.left =
+        Math.random() * 100 + "vw";
+
+    sparkle.style.fontSize =
+        5 + Math.random() * 12 + "px";
+
+    sparkle.style.opacity =
+        .2 + Math.random() * .5;
+
+    sparkle.style.animationDuration =
+        7 + Math.random() * 12 + "s";
+
+    sparkle.style.animationDelay =
+        -Math.random() * 20 + "s";
+
+    document.body.appendChild(sparkle);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

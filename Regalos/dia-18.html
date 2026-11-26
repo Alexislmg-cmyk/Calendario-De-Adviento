@@ -1,0 +1,1274 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 18 | Dos gotitas</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #030307;
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+    transition: background 5s;
+}
+
+body.in-love {
+    background: #1c102c;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 520px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd70;
+}
+
+.message {
+    color: #f3d9ef;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ILUMINACIÓN */
+
+.ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 5s;
+    background:
+        radial-gradient(
+            ellipse at 20% 65%,
+            #269dff40,
+            transparent 60%
+        ),
+        radial-gradient(
+            ellipse at 80% 65%,
+            #ff49ac40,
+            transparent 60%
+        );
+}
+
+body.in-love .ambient {
+    opacity: 1;
+}
+
+/* CORTOMETRAJE */
+
+.scene {
+    position: relative;
+    width: 100%;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+#filmTitle {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+#filmTitle.visible {
+    opacity: 1;
+}
+
+.subtitle {
+    min-height: 125px;
+    padding: 10px;
+    font-size: 22px;
+    line-height: 1.7;
+    color: #f5d8ed;
+    opacity: 0;
+    transition: opacity .8s;
+}
+
+.subtitle.visible {
+    opacity: 1;
+}
+
+/* GOTITAS */
+
+.blue-position {
+    transform: translate(180px, 260px);
+    transition: transform 3s ease-in-out;
+}
+
+.pink-position {
+    transform: translate(310px, 260px);
+    opacity: 0;
+    transition:
+        transform 4s ease-in-out,
+        opacity 3s;
+}
+
+.scene.meeting .blue-position {
+    transform: translate(65px, 260px);
+}
+
+.scene.meeting .pink-position {
+    opacity: 1;
+}
+
+.scene.approaching .blue-position {
+    transform: translate(140px, 260px);
+}
+
+.scene.approaching .pink-position {
+    transform: translate(220px, 260px);
+}
+
+.scene.hugging .blue-position {
+    transform: translate(145px, 260px);
+}
+
+.scene.hugging .pink-position {
+    transform: translate(215px, 260px);
+}
+
+.blue-body {
+    filter: drop-shadow(0 0 12px #48baff);
+}
+
+.pink-body {
+    filter: drop-shadow(0 0 12px #ff79bd);
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s ease-in-out infinite;
+}
+
+.blue-eyes,
+.pink-eyes {
+    transition: transform 1.5s;
+}
+
+.scene.meeting .blue-eyes {
+    transform: translateX(5px);
+}
+
+.scene.meeting .pink-eyes {
+    transform: translateX(-5px);
+}
+
+.scene.hugging .blue-eyes,
+.scene.hugging .pink-eyes {
+    transform: translateX(0);
+}
+
+/* ABRAZOS */
+
+.hands,
+.hug-arms,
+.big-heart {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.scene.holding .hands {
+    opacity: 1;
+}
+
+.scene.hugging .hands {
+    opacity: 0;
+}
+
+.scene.hugging .hug-arms,
+.scene.hugging .big-heart {
+    opacity: 1;
+}
+
+.heart-beat {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.7s infinite;
+}
+
+/* SUELO */
+
+.ground {
+    opacity: .15;
+    transition: opacity 4s;
+}
+
+.scene.holding .ground {
+    opacity: .85;
+}
+
+.reflection {
+    opacity: .1;
+    transition: opacity 4s;
+}
+
+.scene.holding .reflection {
+    opacity: .6;
+}
+
+/* FLORES */
+
+.flower {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    transform: scale(0);
+    opacity: 0;
+}
+
+.scene.blooming .flower {
+    animation: bloom 2s ease-out forwards;
+    animation-delay: var(--delay);
+}
+
+/* LLUVIA */
+
+.rain {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 3s;
+}
+
+.rain.visible {
+    opacity: .65;
+}
+
+.raindrop {
+    position: absolute;
+    top: -100px;
+    width: 1.5px;
+    height: 45px;
+    border-radius: 5px;
+    background: linear-gradient(
+        transparent,
+        #a5d7ff
+    );
+    animation: rainFall linear infinite;
+}
+
+/* LLUVIA DE CORAZONES */
+
+.falling-heart {
+    position: fixed;
+    top: -40px;
+    pointer-events: none;
+    z-index: 3;
+    text-shadow: 0 0 12px currentColor;
+    animation: heartFall linear forwards;
+}
+
+/* FINAL */
+
+#final {
+    animation: appear 3s ease;
+}
+
+.final-title {
+    font-size: 32px;
+    line-height: 1.6;
+    color: #ffc1e3;
+    text-shadow:
+        0 0 15px #ff79bd,
+        0 0 35px #8d66e5;
+}
+
+.final-heart {
+    font-size: 85px;
+    color: #ffc1e3;
+    text-shadow:
+        -12px 0 25px #48baff,
+        12px 0 25px #ff49ac;
+    animation: heartbeat 1.7s infinite;
+}
+
+.divider {
+    color: #d9b6ff;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+.back,
+.replay {
+    display: inline-block;
+    margin: 20px auto 0;
+    padding: 13px 25px;
+    border: 1px solid #b68ad5;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f1d5ff;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes bloom {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    75% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rainFall {
+    from {
+        transform: translate(30px, -100px);
+    }
+
+    to {
+        transform: translate(-40px, 120vh);
+    }
+}
+
+@keyframes heartFall {
+    from {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: .85;
+    }
+
+    to {
+        transform:
+            translate(var(--drift), 115vh)
+            rotate(80deg);
+        opacity: 0;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .heart-beat,
+    .final-heart {
+        animation: none;
+    }
+
+    .raindrop {
+        animation-duration: 4s !important;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="ambient"></div>
+
+<div class="rain" id="rain"></div>
+
+<main class="container">
+
+    <p class="date">18 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>La historia de dos gotitas 🔒</h1>
+
+        <p class="message">
+            Una pequeña historia de amor
+            está esperando por ti.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="filmTitle">
+            La historia de dos gotitas
+        </h1>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 350">
+
+                <defs>
+
+                    <radialGradient id="blueDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#d2f8ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pinkDrop"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe5f4"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="love">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset=".5"
+                              stop-color="#c18aff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                    <linearGradient id="groundColor">
+
+                        <stop stop-color="#243b64"/>
+
+                        <stop offset=".5"
+                              stop-color="#49325d"/>
+
+                        <stop offset="1"
+                              stop-color="#71365e"/>
+
+                    </linearGradient>
+
+                    <filter id="blur">
+
+                        <feGaussianBlur stdDeviation="8"/>
+
+                    </filter>
+
+                </defs>
+
+                <!-- REFLEJOS -->
+
+                <g class="reflection"
+                   filter="url(#blur)">
+
+                    <ellipse cx="125" cy="308"
+                             rx="70" ry="14"
+                             fill="#48baff"/>
+
+                    <ellipse cx="235" cy="308"
+                             rx="70" ry="14"
+                             fill="#ff79bd"/>
+
+                </g>
+
+                <!-- SUELO -->
+
+                <ellipse class="ground"
+                         cx="180" cy="315"
+                         rx="170" ry="22"
+                         fill="url(#groundColor)"/>
+
+                <!-- FLORES -->
+
+                <g id="flowersBack"></g>
+
+                <!-- GOTITA AZUL -->
+
+                <g class="blue-position">
+
+                    <g class="breathe blue-body">
+
+                        <g fill="url(#blueDrop)">
+
+                            <!-- CUERPECITO -->
+
+                            <ellipse cy="14"
+                                     rx="26" ry="31"/>
+
+                            <!-- PIES -->
+
+                            <ellipse cx="-14" cy="39"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="14" cy="39"
+                                     rx="13" ry="10"/>
+
+                            <!-- BRACITOS -->
+
+                            <ellipse cx="-27" cy="13"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cx="27" cy="13"
+                                     rx="9" ry="16"/>
+
+                            <!-- CABECITA -->
+
+                            <ellipse cy="-27"
+                                     rx="39" ry="39"/>
+
+                        </g>
+
+                        <!-- BRILLO -->
+
+                        <ellipse cx="-15" cy="-44"
+                                 rx="13" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <!-- OJITOS -->
+
+                        <g class="blue-eyes">
+
+                            <ellipse cx="-12" cy="-24"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                            <ellipse cx="12" cy="-24"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g class="pink-position">
+
+                    <g class="breathe pink-body">
+
+                        <g fill="url(#pinkDrop)">
+
+                            <ellipse cy="14"
+                                     rx="26" ry="31"/>
+
+                            <ellipse cx="-14" cy="39"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="14" cy="39"
+                                     rx="13" ry="10"/>
+
+                            <ellipse cx="-27" cy="13"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cx="27" cy="13"
+                                     rx="9" ry="16"/>
+
+                            <ellipse cy="-27"
+                                     rx="39" ry="39"/>
+
+                        </g>
+
+                        <ellipse cx="-15" cy="-44"
+                                 rx="13" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <g class="pink-eyes">
+
+                            <ellipse cx="-12" cy="-24"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                            <ellipse cx="12" cy="-24"
+                                     rx="4.5" ry="9"
+                                     fill="#10101e"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- TOMADAS DE LA MANITA -->
+
+                <g class="hands">
+
+                    <path d="M160 270 Q170 287 180 281"
+                          fill="none"
+                          stroke="url(#blueDrop)"
+                          stroke-width="13"
+                          stroke-linecap="round"/>
+
+                    <path d="M200 270 Q190 287 180 281"
+                          fill="none"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="13"
+                          stroke-linecap="round"/>
+
+                </g>
+
+                <!-- ABRACITO -->
+
+                <g class="hug-arms">
+
+                    <path d="M155 270 Q180 297 215 270"
+                          fill="none"
+                          stroke="url(#blueDrop)"
+                          stroke-width="15"
+                          stroke-linecap="round"/>
+
+                    <path d="M205 282 Q180 306 145 282"
+                          fill="none"
+                          stroke="url(#pinkDrop)"
+                          stroke-width="15"
+                          stroke-linecap="round"/>
+
+                </g>
+
+                <!-- CORAZÓN -->
+
+                <g class="big-heart">
+
+                    <g class="heart-beat"
+                       style="filter:drop-shadow(0 0 14px #ff79bd)">
+
+                        <path d="
+                            M180 168
+                            C130 137 112 112 112 89
+                            C112 48 160 46 180 79
+                            C200 46 248 48 248 89
+                            C248 112 230 137 180 168Z
+                        "
+                        fill="url(#love)"/>
+
+                    </g>
+
+                </g>
+
+                <!-- FLORES DEL FRENTE -->
+
+                <g id="flowersFront"></g>
+
+            </svg>
+
+        </div>
+
+        <!-- FRASES DEL CORTOMETRAJE -->
+
+        <p class="subtitle" id="subtitle"></p>
+
+        <!-- DEDICATORIA FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <h2 class="final-title">
+                En todas mis vidas,
+                espero coincidir contigo.
+            </h2>
+
+            <div class="final-heart">♥</div>
+
+            <p class="message">
+                Qué bonito fue que nuestras
+                dos gotitas se encontraran.
+            </p>
+
+            <p class="message">
+                No siempre tendremos días soleados.
+                Habrá días de lluvia, tormentas
+                y momentos difíciles.
+            </p>
+
+            <p class="message">
+                Pero quiero seguir aprendiendo
+                a caminar de tu manita,
+                a comprenderte y a cuidar
+                lo bonito que tenemos.
+            </p>
+
+            <p class="message">
+                Porque entre todas las gotitas
+                que pudieron coincidir conmigo,
+                me hace muy feliz haberte encontrado a ti.
+            </p>
+
+            <h2 class="final-title">
+                Mi hermosa gotita rosa.
+            </h2>
+
+            <p class="message">
+                Te amo muchísimo, Karina.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 6 sorpresas más...
+            </p>
+
+            <button class="replay" id="replay">
+                Volver a ver nuestra historia ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 18, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const filmTitle = document.getElementById("filmTitle");
+const subtitle = document.getElementById("subtitle");
+
+const rain = document.getElementById("rain");
+const final = document.getElementById("final");
+
+const flowersBack =
+    document.getElementById("flowersBack");
+
+const flowersFront =
+    document.getElementById("flowersFront");
+
+let started = false;
+let timers = [];
+let heartInterval = null;
+let subtitleTimer = null;
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            startFilm();
+
+        }
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* FUNCIONES */
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(
+        setTimeout(callback, delay)
+    );
+
+}
+
+/* CREAR LLUVIA */
+
+function createRain() {
+
+    rain.innerHTML = "";
+
+    for (let i = 0; i < 65; i++) {
+
+        const drop = document.createElement("span");
+
+        drop.className = "raindrop";
+
+        drop.style.left =
+            random(0, 100) + "vw";
+
+        drop.style.height =
+            random(20, 55) + "px";
+
+        drop.style.animationDuration =
+            random(.8, 1.7) + "s";
+
+        drop.style.animationDelay =
+            random(-3, 0) + "s";
+
+        rain.appendChild(drop);
+
+    }
+
+}
+
+/* CREAR FLORECITAS */
+
+function flower(x, y, scale, delay) {
+
+    const colors = [
+        "#ff9bd5",
+        "#c7a4ff",
+        "#69ceff",
+        "#ffc1e3"
+    ];
+
+    const color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    let petals = "";
+
+    for (let i = 0; i < 6; i++) {
+
+        petals += `
+            <ellipse cx="0" cy="-8"
+                     rx="4.5" ry="7"
+                     transform="rotate(${i * 60})"
+                     fill="${color}"/>
+        `;
+
+    }
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+
+            <g class="flower"
+               style="--delay:${delay}s">
+
+                <path d="M0 0 Q-3 12 0 27"
+                      fill="none"
+                      stroke="#65b68b"
+                      stroke-width="2.5"/>
+
+                <path d="M0 17 Q-14 7 -12 20 Q-5 23 0 17Z"
+                      fill="#65b68b"/>
+
+                <path d="M0 23 Q14 10 12 24 Q5 27 0 23Z"
+                      fill="#85cba0"/>
+
+                ${petals}
+
+                <circle r="4"
+                        fill="#ffe5a2"/>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+function createFlowers() {
+
+    flowersBack.innerHTML = "";
+    flowersFront.innerHTML = "";
+
+    for (let i = 0; i < 20; i++) {
+
+        const x = i < 10
+            ? random(10, 95)
+            : random(265, 350);
+
+        flowersBack.innerHTML += flower(
+            x,
+            random(260, 292),
+            random(.6, 1.15),
+            random(0, 3)
+        );
+
+    }
+
+    for (let i = 0; i < 15; i++) {
+
+        flowersFront.innerHTML += flower(
+            random(12, 348),
+            random(308, 322),
+            random(.35, .65),
+            random(0, 3)
+        );
+
+    }
+
+}
+
+/* MOSTRAR FRASES */
+
+function showPhrase(text) {
+
+    clearTimeout(subtitleTimer);
+
+    subtitle.classList.remove("visible");
+
+    subtitleTimer = setTimeout(() => {
+
+        subtitle.textContent = text;
+
+        subtitle.classList.add("visible");
+
+    }, 800);
+
+}
+
+/* LLUVIA DE CORAZONES */
+
+function createHeart() {
+
+    const heart = document.createElement("span");
+
+    heart.className = "falling-heart";
+
+    heart.textContent =
+        Math.random() > .5 ? "♥" : "♡";
+
+    const colors = [
+        "#69ceff",
+        "#ff9bd5",
+        "#c7a4ff"
+    ];
+
+    heart.style.color =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    heart.style.left =
+        random(0, 100) + "vw";
+
+    heart.style.fontSize =
+        random(10, 28) + "px";
+
+    heart.style.setProperty(
+        "--drift",
+        random(-60, 60) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    heart.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+
+        heart.remove();
+
+    }, duration * 1000);
+
+}
+
+function startHeartRain() {
+
+    clearInterval(heartInterval);
+
+    heartInterval = setInterval(
+        createHeart,
+        180
+    );
+
+    later(() => {
+
+        clearInterval(heartInterval);
+
+        heartInterval = null;
+
+    }, 18000);
+
+}
+
+/* CORTOMETRAJE AUTOMÁTICO */
+
+function startFilm() {
+
+    createRain();
+    createFlowers();
+
+    /* SEGUNDO 1 */
+
+    later(() => {
+
+        filmTitle.classList.add("visible");
+
+        showPhrase(
+            "Érase una vez una gotita azul..."
+        );
+
+    }, 1000);
+
+    /* SEGUNDO 4 */
+
+    later(() => {
+
+        rain.classList.add("visible");
+
+    }, 4000);
+
+    /* SEGUNDO 7 */
+
+    later(() => {
+
+        scene.classList.add("meeting");
+
+        showPhrase(
+            "Que un día conoció a una hermosa gotita rosa."
+        );
+
+    }, 7000);
+
+    /* SEGUNDO 13 */
+
+    later(() => {
+
+        scene.classList.add("approaching");
+
+        showPhrase(
+            "Y sin imaginarlo, aquella gotita se convirtió en alguien muy especial para ella."
+        );
+
+    }, 13000);
+
+    /* SEGUNDO 18 */
+
+    later(() => {
+
+        scene.classList.add("holding");
+
+        document.body.classList.add("in-love");
+
+    }, 18000);
+
+    /* SEGUNDO 21 */
+
+    later(() => {
+
+        scene.classList.add("blooming");
+
+        showPhrase(
+            "Desde entonces, hasta los días lluviosos comenzaron a tener algo bonito."
+        );
+
+    }, 21000);
+
+    /* SEGUNDO 28 */
+
+    later(() => {
+
+        scene.classList.add("hugging");
+
+        showPhrase(
+            "Porque no necesitaba que dejara de llover, solamente quería compartir la lluvia contigo."
+        );
+
+    }, 28000);
+
+    /* SEGUNDO 31 */
+
+    later(() => {
+
+        rain.classList.remove("visible");
+
+        startHeartRain();
+
+    }, 31000);
+
+    /* SEGUNDO 38 */
+
+    later(() => {
+
+        subtitle.classList.remove("visible");
+
+        final.hidden = false;
+
+        final.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }, 38000);
+
+}
+
+/* REPETIR NUESTRA HISTORIA */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => {
+
+            clearTimeout(timer);
+
+        });
+
+        timers = [];
+
+        clearTimeout(subtitleTimer);
+
+        clearInterval(heartInterval);
+
+        heartInterval = null;
+
+        document.body.classList.remove("in-love");
+
+        scene.className = "scene";
+
+        rain.classList.remove("visible");
+
+        filmTitle.classList.remove("visible");
+
+        subtitle.classList.remove("visible");
+
+        subtitle.textContent = "";
+
+        final.hidden = true;
+
+        flowersBack.innerHTML = "";
+
+        flowersFront.innerHTML = "";
+
+        document.querySelectorAll(".falling-heart")
+            .forEach(heart => heart.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        later(startFilm, 1500);
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

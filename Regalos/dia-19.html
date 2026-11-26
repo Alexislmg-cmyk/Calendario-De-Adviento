@@ -1,0 +1,1422 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 19 | Besitos para mi princesa</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #20132f,
+        #050308 85%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 500px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #d9b6ff;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd70;
+}
+
+h2 {
+    color: #ffc1e3;
+    line-height: 1.5;
+}
+
+.message {
+    color: #f3d9ef;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ESCENARIO */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+.blue-position {
+    transform: translate(180px, 210px);
+    transition: transform 2s ease-in-out;
+}
+
+.pink-position {
+    transform: translate(310px, 210px);
+    opacity: 0;
+    transition:
+        transform 2s ease-in-out,
+        opacity 1.5s;
+}
+
+.scene.together .blue-position {
+    transform: translate(136px, 210px);
+}
+
+.scene.together .pink-position {
+    transform: translate(224px, 210px);
+    opacity: 1;
+}
+
+.blue-glow {
+    filter: drop-shadow(0 0 13px #48baff);
+}
+
+.pink-glow {
+    filter: drop-shadow(0 0 13px #ff79bd);
+}
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.blush {
+    opacity: 0;
+    transition: opacity .4s;
+}
+
+.kiss-mark {
+    animation: kissAppear .45s ease-out both;
+}
+
+.kiss-animation {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: bounce .4s ease-out;
+}
+
+.held-heart {
+    transition: opacity .7s;
+}
+
+.scene.together .held-heart {
+    opacity: 0;
+}
+
+.hug {
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+.scene.hugging .hug {
+    opacity: 1;
+}
+
+.beating-heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 1.7s infinite;
+}
+
+/* CONTADOR */
+
+.counter {
+    color: #ffc1e3;
+    font-size: 22px;
+    margin: 12px auto;
+}
+
+.progress {
+    width: 85%;
+    height: 9px;
+    margin: 15px auto;
+    border-radius: 20px;
+    background: #ffffff15;
+    overflow: hidden;
+    border: 1px solid #ffffff15;
+}
+
+#progressFill {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        #69ceff,
+        #c18aff,
+        #ff79bd
+    );
+    transition: width .3s;
+    box-shadow: 0 0 12px #ff79bd;
+}
+
+#reaction {
+    min-height: 65px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #ffd2eb;
+}
+
+/* BOTONES */
+
+button,
+.back {
+    display: inline-block;
+    padding: 14px 28px;
+    margin: 15px auto;
+    border: 1px solid #d29de8;
+    border-radius: 30px;
+    background: #ffffff0b;
+    color: #f6d8ff;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#kissButton {
+    background: linear-gradient(
+        135deg,
+        #743d9e,
+        #c34b90
+    );
+    font-size: 20px;
+    box-shadow: 0 0 25px #ff79bd55;
+    transition: transform .15s;
+}
+
+#kissButton:active {
+    transform: scale(.94);
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+/* PARTÍCULAS */
+
+.particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 5;
+    text-shadow: 0 0 12px currentColor;
+    animation: floatAway linear forwards;
+}
+
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    color: #d9b6ff;
+    animation: twinkle 3s infinite alternate;
+}
+
+/* DEDICATORIA FINAL */
+
+#final {
+    animation: appear 2s ease both;
+}
+
+.divider {
+    color: #ffd9a0;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+/* CUPÓN */
+
+.coupon {
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    margin: 30px auto;
+    padding: 28px 18px;
+    border: 2px solid #e9c77d;
+    border-radius: 20px;
+    background: linear-gradient(
+        145deg,
+        #ffd4e9,
+        #eaa2cb,
+        #e4c4f6
+    );
+    color: #74365d;
+    box-shadow:
+        0 0 30px #ff79bd50,
+        inset 0 0 25px #ffffff70;
+}
+
+.coupon::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed #b78a55;
+    border-radius: 13px;
+    pointer-events: none;
+}
+
+.coupon-small {
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.coupon-heart {
+    font-size: 50px;
+    color: #b84988;
+    margin: 15px auto;
+}
+
+.coupon h2 {
+    color: #873b70;
+    font-size: 30px;
+    margin: 10px auto;
+}
+
+.infinity {
+    font-size: 85px;
+    line-height: 1;
+    color: #9c5087;
+    text-shadow: 0 0 15px #ffffff;
+}
+
+.coupon p {
+    line-height: 1.7;
+}
+
+.coupon-rule {
+    width: 85%;
+    margin: 20px auto;
+    border-top: 1px dashed #b78a55;
+}
+
+.coupon-signature {
+    font-style: italic;
+    font-size: 18px;
+}
+
+.coupon-number {
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .98);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.13);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: translateY(-7px) scale(.96, 1.04);
+    }
+
+    70% {
+        transform: scale(1.05, .95);
+    }
+}
+
+@keyframes kissAppear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: .95;
+    }
+}
+
+@keyframes floatAway {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(.5);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translate(var(--drift), -70vh)
+            rotate(var(--rotation))
+            scale(1.2);
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: .15;
+    }
+
+    to {
+        opacity: .8;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .beating-heart,
+    .sparkle,
+    .kiss-animation {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">19 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>19 besitos para mi princesa 🔒</h1>
+
+        <p class="message">
+            Tu gotita azul tiene algo
+            que pedirte, mi princesa.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            ¿Me das un besito, mi princesa?
+        </h1>
+
+        <p class="message" id="intro">
+            Tu gotita azul necesita
+            un poquito de cariño.
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 310">
+
+                <defs>
+
+                    <radialGradient id="blue"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#d2f8ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pink"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe5f4"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="love">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset=".5"
+                              stop-color="#c18aff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                    <radialGradient id="cheek">
+
+                        <stop stop-color="#ff6ca8"
+                              stop-opacity=".95"/>
+
+                        <stop offset="1"
+                              stop-color="#ff6ca8"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <clipPath id="faceClip">
+
+                        <ellipse cy="-30"
+                                 rx="44" ry="44"/>
+
+                    </clipPath>
+
+                </defs>
+
+                <!-- REFLEJO DEL SUELO -->
+
+                <ellipse cx="180" cy="272"
+                         rx="120" ry="15"
+                         fill="url(#love)"
+                         opacity=".12"/>
+
+                <!-- GOTITA AZUL -->
+
+                <g class="blue-position">
+
+                    <g id="blueBounce">
+
+                        <g class="breathe blue-glow">
+
+                            <g fill="url(#blue)">
+
+                                <ellipse cy="20"
+                                         rx="29" ry="34"/>
+
+                                <ellipse cx="-15" cy="46"
+                                         rx="14" ry="11"/>
+
+                                <ellipse cx="15" cy="46"
+                                         rx="14" ry="11"/>
+
+                                <ellipse cx="-30" cy="18"
+                                         rx="10" ry="17"/>
+
+                                <ellipse cx="30" cy="18"
+                                         rx="10" ry="17"/>
+
+                                <ellipse cy="-30"
+                                         rx="44" ry="44"/>
+
+                            </g>
+
+                            <ellipse cx="-17" cy="-50"
+                                     rx="14" ry="7"
+                                     fill="white"
+                                     opacity=".55"/>
+
+                            <!-- SONROJADO -->
+
+                            <g class="blush" id="blueBlush">
+
+                                <ellipse cx="-26" cy="-12"
+                                         rx="16" ry="12"
+                                         fill="url(#cheek)"/>
+
+                                <ellipse cx="26" cy="-12"
+                                         rx="16" ry="12"
+                                         fill="url(#cheek)"/>
+
+                            </g>
+
+                            <!-- BESITOS -->
+
+                            <g id="kissMarks"
+                               clip-path="url(#faceClip)">
+                            </g>
+
+                            <!-- OJITOS -->
+
+                            <g fill="#10101e">
+
+                                <ellipse cx="-14" cy="-31"
+                                         rx="5" ry="10"/>
+
+                                <ellipse cx="14" cy="-31"
+                                         rx="5" ry="10"/>
+
+                            </g>
+
+                            <!-- CORAZÓN EN LAS MANITAS -->
+
+                            <g class="held-heart">
+
+                                <g transform="translate(0 23)">
+
+                                    <g class="beating-heart">
+
+                                        <path d="
+                                            M0 22
+                                            C-48 -6 -25 -38 0 -18
+                                            C25 -38 48 -6 0 22Z
+                                        "
+                                        fill="#ff9bd5"
+                                        stroke="#ffc9e5"
+                                        stroke-width="1.5"/>
+
+                                    </g>
+
+                                </g>
+
+                                <ellipse cx="-25" cy="22"
+                                         rx="9" ry="11"
+                                         fill="url(#blue)"/>
+
+                                <ellipse cx="25" cy="22"
+                                         rx="9" ry="11"
+                                         fill="url(#blue)"/>
+
+                            </g>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- GOTITA ROSA -->
+
+                <g class="pink-position">
+
+                    <g class="breathe pink-glow">
+
+                        <g fill="url(#pink)">
+
+                            <ellipse cy="20"
+                                     rx="29" ry="34"/>
+
+                            <ellipse cx="-15" cy="46"
+                                     rx="14" ry="11"/>
+
+                            <ellipse cx="15" cy="46"
+                                     rx="14" ry="11"/>
+
+                            <ellipse cx="-30" cy="18"
+                                     rx="10" ry="17"/>
+
+                            <ellipse cx="30" cy="18"
+                                     rx="10" ry="17"/>
+
+                            <ellipse cy="-30"
+                                     rx="44" ry="44"/>
+
+                        </g>
+
+                        <ellipse cx="-17" cy="-50"
+                                 rx="14" ry="7"
+                                 fill="white"
+                                 opacity=".55"/>
+
+                        <g id="pinkBlush" class="blush">
+
+                            <ellipse cx="-26" cy="-12"
+                                     rx="16" ry="12"
+                                     fill="url(#cheek)"/>
+
+                            <ellipse cx="26" cy="-12"
+                                     rx="16" ry="12"
+                                     fill="url(#cheek)"/>
+
+                        </g>
+
+                        <g id="pinkKisses"
+                           clip-path="url(#faceClip)">
+                        </g>
+
+                        <g fill="#10101e">
+
+                            <ellipse cx="-14" cy="-31"
+                                     rx="5" ry="10"/>
+
+                            <ellipse cx="14" cy="-31"
+                                     rx="5" ry="10"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+                <!-- ABRAZO FINAL -->
+
+                <g class="hug">
+
+                    <path d="M146 225 Q180 252 224 225"
+                          stroke="url(#blue)"
+                          stroke-width="16"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M214 238 Q180 265 136 238"
+                          stroke="url(#pink)"
+                          stroke-width="16"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <g transform="translate(180 75)">
+
+                        <g class="beating-heart">
+
+                            <path d="
+                                M0 45
+                                C-95 -10 -55 -75 0 -38
+                                C55 -75 95 -10 0 45Z
+                            "
+                            fill="url(#love)"
+                            style="filter:drop-shadow(0 0 15px #ff79bd)"/>
+
+                        </g>
+
+                    </g>
+
+                </g>
+
+            </svg>
+
+        </div>
+
+        <!-- INTERACCIÓN -->
+
+        <section id="interaction">
+
+            <div class="counter">
+
+                <span id="kissCount">0</span>
+                / 19 besitos 💋
+
+            </div>
+
+            <div class="progress">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+            <p id="reaction">
+                Anda, mi princesa... 🥺
+            </p>
+
+            <button id="kissButton">
+                Dame un besito 💋
+            </button>
+
+        </section>
+
+        <!-- FINAL -->
+
+        <section id="final" hidden>
+
+            <h2>
+                ¡Ahora me toca consentirte a mí!
+            </h2>
+
+            <p class="message">
+                Te pedí 19 besitos, pero los dos
+                sabemos que nunca me conformaría
+                solamente con 19.
+            </p>
+
+            <p class="message">
+                Me encanta llenarte esa carita
+                hermosa de besitos, abrazarte
+                y consentirte.
+            </p>
+
+            <p class="message">
+                Así que tengo otro regalito
+                para ti, mi princesa.
+            </p>
+
+            <!-- CUPÓN ROMÁNTICO -->
+
+            <div class="coupon">
+
+                <p class="coupon-small">
+                    EXCLUSIVO PARA KARINA
+                </p>
+
+                <div class="coupon-heart">♥</div>
+
+                <p class="coupon-small">
+                    CUPÓN OFICIAL
+                </p>
+
+                <h2>Besitos ilimitados</h2>
+
+                <div class="infinity">∞</div>
+
+                <p>
+                    Válido por infinitos besitos,
+                    abracitos y apapachos
+                    de tu gotita azul.
+                </p>
+
+                <div class="coupon-rule"></div>
+
+                <p>
+                    <strong>Beneficiaria:</strong>
+                    Mi hermosa princesa.
+                </p>
+
+                <p>
+                    <strong>Fecha de caducidad:</strong>
+                    Nunca.
+                </p>
+
+                <p>
+                    <strong>Usos disponibles:</strong>
+                    Infinitos.
+                </p>
+
+                <p>
+                    Canjeable en persona,
+                    siempre que quieras un besito
+                    y podamos dárnoslo.
+                </p>
+
+                <div class="coupon-rule"></div>
+
+                <p class="coupon-signature">
+                    Firmado con mucho amor,
+                    <br>
+                    Tu gotita azul. 💙
+                </p>
+
+                <p class="coupon-number">
+                    ♡ 09 · 12 · 2025 ♡
+                </p>
+
+            </div>
+
+            <p class="message">
+                Puedes guardar este cuponcito
+                con una captura de pantalla,
+                mi princesa.
+            </p>
+
+            <p class="message">
+                Aunque ni siquiera necesitas
+                un cupón para pedirme un besito.
+            </p>
+
+            <h2>
+                Te amo muchísimo,
+                mi hermosa gotita rosa.
+            </h2>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Todavía te esperan 5 sorpresas más...
+            </p>
+
+            <button id="replay">
+                Quiero más besitos ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 19, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const kissCount = document.getElementById("kissCount");
+const kissButton = document.getElementById("kissButton");
+const progressFill = document.getElementById("progressFill");
+const reaction = document.getElementById("reaction");
+
+const kissMarks = document.getElementById("kissMarks");
+const pinkKisses = document.getElementById("pinkKisses");
+
+const blueBlush = document.getElementById("blueBlush");
+const pinkBlush = document.getElementById("pinkBlush");
+const blueBounce = document.getElementById("blueBounce");
+
+const interaction = document.getElementById("interaction");
+const final = document.getElementById("final");
+
+let kisses = 0;
+let completed = false;
+let timers = [];
+
+const svgNS = "http://www.w3.org/2000/svg";
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        return;
+
+    }
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    countdown.innerHTML = `
+        ${days} días<br>
+        ${hours}h : ${minutes}m : ${seconds}s
+    `;
+
+}
+
+/* FRASES DE LOS 19 BESITOS */
+
+const reactions = [
+
+    "Ay, qué bonito besito. 🥹",
+
+    "Otro, por favor...",
+
+    "Me encantan tus besitos.",
+
+    "¿Uno más, mi princesa?",
+
+    "Ya me estoy sonrojando.",
+
+    "JAJAJA, me estás consintiendo mucho.",
+
+    "Pero todavía quiero más.",
+
+    "Qué bonita eres conmigo.",
+
+    "Mua, mua, mua. 💋",
+
+    "Ya van diez, mi amor.",
+
+    "Esos no son suficientes.",
+
+    "Me estás llenando de besitos.",
+
+    "Mi carita ya está toda rosita.",
+
+    "Me encanta que me consientas.",
+
+    "Quiero abrazarte también.",
+
+    "Casi llegamos, mi princesa.",
+
+    "¿Cómo que ya casi se acaban?",
+
+    "Uno más, mi hermosa gotita rosa.",
+
+    "¡Ahora me toca a mí! 💙"
+
+];
+
+/* POSICIONES DE LOS BESITOS */
+
+const positions = [
+
+    [-27, -13],
+    [27, -13],
+    [-24, -48],
+    [24, -48],
+    [0, -59],
+    [-33, -31],
+    [33, -31],
+    [-15, -5],
+    [15, -5],
+    [0, -14],
+    [-12, -49],
+    [12, -49],
+    [-33, -43],
+    [33, -43],
+    [-27, -3],
+    [27, -3],
+    [-9, -63],
+    [9, -63],
+    [0, 3]
+
+];
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+/* DIBUJAR MARCA DE BESITO */
+
+function addKissMark(target, index, color) {
+
+    const position =
+        positions[index % positions.length];
+
+    const mark = document.createElementNS(
+        svgNS,
+        "g"
+    );
+
+    mark.setAttribute(
+        "transform",
+        `translate(${position[0]} ${position[1]})
+         rotate(${random(-40, 40)})
+         scale(${random(.65, .95)})`
+    );
+
+    const lips = document.createElementNS(
+        svgNS,
+        "g"
+    );
+
+    lips.setAttribute("class", "kiss-mark");
+
+    lips.innerHTML = `
+        <path d="
+            M-9 0
+            Q-6 -5 -3 -4
+            Q0 -2 3 -4
+            Q6 -5 9 0
+            Q0 -1 -9 0Z
+        "
+        fill="${color}"/>
+
+        <path d="
+            M-9 1
+            Q0 3 9 1
+            Q0 12 -9 1Z
+        "
+        fill="${color}"/>
+    `;
+
+    mark.appendChild(lips);
+
+    target.appendChild(mark);
+
+}
+
+/* PARTÍCULAS */
+
+function createParticle(x, y, symbol) {
+
+    const particle =
+        document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.textContent = symbol;
+
+    particle.style.left = x + "px";
+    particle.style.top = y + "px";
+
+    particle.style.color =
+        Math.random() > .5
+        ? "#ff9bd5"
+        : "#69ceff";
+
+    particle.style.fontSize =
+        random(15, 35) + "px";
+
+    particle.style.setProperty(
+        "--drift",
+        random(-140, 140) + "px"
+    );
+
+    particle.style.setProperty(
+        "--rotation",
+        random(-90, 90) + "deg"
+    );
+
+    const duration = random(2, 4);
+
+    particle.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+
+        particle.remove();
+
+    }, duration * 1000);
+
+}
+
+function kissParticles() {
+
+    const rect = scene.getBoundingClientRect();
+
+    for (let i = 0; i < 7; i++) {
+
+        createParticle(
+            rect.left + rect.width / 2
+                + random(-50, 50),
+
+            rect.top + rect.height * .6
+                + random(-30, 30),
+
+            i % 3 === 0 ? "💋" : "♥"
+        );
+
+    }
+
+}
+
+/* RECIBIR BESITO */
+
+kissButton.addEventListener("click", () => {
+
+    if (completed || Date.now() < unlockDate) {
+        return;
+    }
+
+    kisses++;
+
+    kissCount.textContent = kisses;
+
+    progressFill.style.width =
+        (kisses / 19 * 100) + "%";
+
+    blueBlush.style.opacity =
+        Math.min(kisses / 10, 1);
+
+    reaction.textContent =
+        reactions[kisses - 1];
+
+    addKissMark(
+        kissMarks,
+        kisses - 1,
+        "#d94b8d"
+    );
+
+    blueBounce.classList.remove(
+        "kiss-animation"
+    );
+
+    void blueBounce.getBoundingClientRect();
+
+    blueBounce.classList.add(
+        "kiss-animation"
+    );
+
+    kissParticles();
+
+    if (kisses === 5) {
+
+        title.textContent =
+            "Me estás poniendo rosita...";
+
+    }
+
+    if (kisses === 10) {
+
+        title.textContent =
+            "¡Me encantan tus besitos!";
+
+    }
+
+    if (kisses === 15) {
+
+        title.textContent =
+            "Qué bonito es ser tu gotita azul";
+
+    }
+
+    if (kisses >= 19) {
+
+        finishKisses();
+
+    }
+
+});
+
+/* BESITOS DE REGRESO */
+
+function finishKisses() {
+
+    completed = true;
+
+    kissButton.disabled = true;
+
+    title.textContent =
+        "¡Ahora ven aquí, mi princesa!";
+
+    intro.textContent =
+        "Tu gotita azul también quiere consentirte.";
+
+    reaction.textContent =
+        "Prepárate para recibir muchos besitos...";
+
+    later(() => {
+
+        interaction.hidden = true;
+
+        scene.classList.add("together");
+
+    }, 1200);
+
+    later(() => {
+
+        scene.classList.add("hugging");
+
+        for (let i = 0; i < 19; i++) {
+
+            later(() => {
+
+                addKissMark(
+                    pinkKisses,
+                    i,
+                    "#b83c80"
+                );
+
+                pinkBlush.style.opacity =
+                    Math.min((i + 1) / 10, 1);
+
+                const rect =
+                    scene.getBoundingClientRect();
+
+                createParticle(
+                    rect.left + rect.width * .62,
+                    rect.top + rect.height * .6,
+                    "💋"
+                );
+
+            }, i * 140);
+
+        }
+
+    }, 3400);
+
+    later(() => {
+
+        title.textContent =
+            "¡Besitos para mi hermosa gotita rosa!";
+
+        for (let i = 0; i < 100; i++) {
+
+            later(() => {
+
+                createParticle(
+                    random(0, window.innerWidth),
+                    random(
+                        window.innerHeight * .6,
+                        window.innerHeight
+                    ),
+                    i % 5 === 0 ? "💋" : "♥"
+                );
+
+            }, i * 45);
+
+        }
+
+    }, 6300);
+
+    later(() => {
+
+        final.hidden = false;
+
+    }, 7500);
+
+}
+
+/* VOLVER A JUGAR */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        kisses = 0;
+        completed = false;
+
+        kissCount.textContent = "0";
+
+        progressFill.style.width = "0%";
+
+        kissMarks.innerHTML = "";
+        pinkKisses.innerHTML = "";
+
+        blueBlush.style.opacity = "0";
+        pinkBlush.style.opacity = "0";
+
+        scene.className = "scene";
+
+        blueBounce.classList.remove(
+            "kiss-animation"
+        );
+
+        title.textContent =
+            "¿Me das un besito, mi princesa?";
+
+        intro.textContent =
+            "Tu gotita azul necesita un poquito de cariño.";
+
+        reaction.textContent =
+            "Anda, mi princesa... 🥺";
+
+        interaction.hidden = false;
+
+        kissButton.disabled = false;
+
+        final.hidden = true;
+
+        document.querySelectorAll(".particle")
+            .forEach(particle => particle.remove());
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+/* ESTRELLITAS DE FONDO */
+
+for (let i = 0; i < 45; i++) {
+
+    const sparkle =
+        document.createElement("span");
+
+    sparkle.className = "sparkle";
+
+    sparkle.textContent =
+        i % 4 === 0 ? "✧" : "·";
+
+    sparkle.style.left =
+        random(0, 100) + "vw";
+
+    sparkle.style.top =
+        random(0, 100) + "vh";
+
+    sparkle.style.fontSize =
+        random(7, 16) + "px";
+
+    sparkle.style.animationDelay =
+        random(-3, 0) + "s";
+
+    document.body.appendChild(sparkle);
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>

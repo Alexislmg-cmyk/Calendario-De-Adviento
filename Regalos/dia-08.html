@@ -1,0 +1,1085 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día 8 | Gracias por llegar a mi vida ⭐</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            background: radial-gradient(
+                ellipse at bottom,
+                #321341,
+                #07040c 80%
+            );
+            color: white;
+            font-family: Georgia, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 480px;
+            padding: 35px 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .date {
+            color: #d9a6ff;
+            letter-spacing: 4px;
+            font-size: 13px;
+        }
+
+        h1 {
+            color: #ffc1e3;
+            font-size: 32px;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .message {
+            color: #f3c8ed;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #countdown {
+            color: #ffc1e3;
+            font-size: 23px;
+            line-height: 1.8;
+        }
+
+        /* FRASQUITO */
+
+        .scene {
+            position: relative;
+            width: 100%;
+            max-width: 390px;
+            margin: 15px auto;
+        }
+
+        .jar {
+            width: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        .jar-star {
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        /* ESTRELLAS EN EL PISO */
+
+        .floor {
+            position: relative;
+            width: 100%;
+            height: 115px;
+            margin-top: -35px;
+        }
+
+        .floor-glow {
+            position: absolute;
+            left: 5%;
+            bottom: 12px;
+            width: 90%;
+            height: 55px;
+            border-radius: 50%;
+            background: #c66bff;
+            filter: blur(30px);
+            opacity: .12;
+            pointer-events: none;
+        }
+
+        .floor-star {
+            position: absolute;
+            width: 49px;
+            height: 49px;
+            padding: 5px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .floor-star svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            filter: drop-shadow(0 0 8px var(--glow));
+            animation: starPulse 1.8s ease-in-out infinite;
+        }
+
+        .floor-star:active svg {
+            scale: .85;
+        }
+
+        .floor-star.opened svg {
+            animation: none;
+            opacity: .35;
+            filter: drop-shadow(0 0 3px var(--glow));
+        }
+
+        .floor-star.selected svg {
+            opacity: 1;
+            filter: drop-shadow(0 0 15px var(--glow));
+        }
+
+        .floor-star:nth-of-type(1) {
+            left: 9%;
+            top: 36%;
+        }
+
+        .floor-star:nth-of-type(2) {
+            left: 25%;
+            top: 72%;
+        }
+
+        .floor-star:nth-of-type(3) {
+            left: 36%;
+            top: 23%;
+        }
+
+        .floor-star:nth-of-type(4) {
+            left: 50%;
+            top: 75%;
+        }
+
+        .floor-star:nth-of-type(5) {
+            left: 64%;
+            top: 23%;
+        }
+
+        .floor-star:nth-of-type(6) {
+            left: 75%;
+            top: 72%;
+        }
+
+        .floor-star:nth-of-type(7) {
+            left: 91%;
+            top: 36%;
+        }
+
+        /* MENSAJES */
+
+        #instruction {
+            color: #ffc1e3;
+            font-size: 17px;
+            line-height: 1.6;
+            animation: softPulse 2s infinite;
+        }
+
+        .counter {
+            display: inline-block;
+            padding: 10px 22px;
+            border: 1px solid #a96ec5;
+            border-radius: 30px;
+            color: #e6b7ff;
+            background: #ffffff08;
+            font-size: 15px;
+        }
+
+        .message-card {
+            position: relative;
+            padding: 25px 20px;
+            margin: 25px auto;
+            border: 1px solid #bd75d0;
+            border-radius: 22px;
+            background: linear-gradient(
+                145deg,
+                #32173f,
+                #1b1027
+            );
+            box-shadow: 0 0 25px #bd65ff30;
+        }
+
+        .message-card.animate {
+            animation: appear .8s ease;
+        }
+
+        #starNumber {
+            color: #d8a6f1;
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        #starMessage {
+            color: #ffd0e9;
+            font-size: 21px;
+            line-height: 1.7;
+        }
+
+        .message-star {
+            font-size: 35px;
+            color: #ffc1e3;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        /* MENSAJE FINAL */
+
+        #final {
+            margin-top: 35px;
+            animation: appear 1.5s ease;
+        }
+
+        .highlight {
+            color: #ffc1e3;
+            font-size: 29px;
+            line-height: 1.5;
+            text-shadow: 0 0 20px #ff49ac;
+        }
+
+        .final-heart {
+            font-size: 85px;
+            color: #ff9bd5;
+            text-shadow:
+                0 0 20px #ff49ac,
+                0 0 45px #b16eea;
+            animation: starPulse 1.5s infinite;
+        }
+
+        .tomorrow {
+            padding: 25px 15px;
+            margin-top: 30px;
+            border-top: 1px solid #a95dbe;
+            border-bottom: 1px solid #a95dbe;
+            color: #ffd0e9;
+            font-size: 22px;
+            line-height: 1.7;
+            text-shadow: 0 0 15px #ff49ac;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 13px 25px;
+            color: #ffc6e6;
+            border: 1px solid #d680c9;
+            border-radius: 30px;
+            text-decoration: none;
+            background: #ffffff08;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: white;
+            pointer-events: none;
+            animation: snow linear infinite;
+        }
+
+        .particle {
+            position: fixed;
+            bottom: -40px;
+            pointer-events: none;
+            animation: rise 6s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: .55;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes starPulse {
+            0%, 100% {
+                scale: 1;
+            }
+
+            50% {
+                scale: 1.15;
+            }
+        }
+
+        @keyframes softPulse {
+            0%, 100% {
+                opacity: .7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @keyframes rise {
+            to {
+                transform: translateY(-115vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <p class="date">08 DE DICIEMBRE · 2026</p>
+
+        <!-- REGALO BLOQUEADO -->
+
+        <section id="locked">
+
+            <h1>Estrellitas para ti 🔒</h1>
+
+            <p class="message">
+                Hay muchas cosas que quiero agradecerte,
+                pero tendrás que esperar un poquito.
+            </p>
+
+            <div id="countdown"></div>
+
+        </section>
+
+        <!-- REGALO DESBLOQUEADO -->
+
+        <section id="unlocked" hidden>
+
+            <h1>Tengo mucho que agradecerte</h1>
+
+            <p class="message">
+                Cada estrellita guarda algo
+                que quiero agradecerte, mi princesa.
+            </p>
+
+            <div class="scene">
+
+                <!-- FRASCO DE CRISTAL -->
+
+                <svg class="jar" viewBox="0 0 320 320">
+
+                    <defs>
+
+                        <linearGradient id="glass"
+                                        x1="0" y1="0"
+                                        x2="1" y2=".2">
+
+                            <stop offset="0%"
+                                  stop-color="#d6a8ff"
+                                  stop-opacity=".25"/>
+
+                            <stop offset="50%"
+                                  stop-color="#b66bff"
+                                  stop-opacity=".04"/>
+
+                            <stop offset="100%"
+                                  stop-color="#ffbce9"
+                                  stop-opacity=".25"/>
+
+                        </linearGradient>
+
+                        <linearGradient id="lid"
+                                        x1="0" y1="0"
+                                        x2="0" y2="1">
+
+                            <stop offset="0%"
+                                  stop-color="#ffc6e8"/>
+
+                            <stop offset="100%"
+                                  stop-color="#b75098"/>
+
+                        </linearGradient>
+
+                        <linearGradient id="ribbon"
+                                        x1="0" y1="0"
+                                        x2="1" y2="1">
+
+                            <stop offset="0%"
+                                  stop-color="#e1b0ff"/>
+
+                            <stop offset="100%"
+                                  stop-color="#8f4fc2"/>
+
+                        </linearGradient>
+
+                        <filter id="starGlow"
+                                x="-100%" y="-100%"
+                                width="300%" height="300%">
+
+                            <feGaussianBlur stdDeviation="3"/>
+
+                        </filter>
+
+                        <clipPath id="jarClip">
+
+                            <path d="
+                                M109 64
+                                L109 87
+                                Q109 97 91 111
+                                Q72 125 72 148
+                                L72 249
+                                Q72 275 100 278
+                                L220 278
+                                Q248 275 248 249
+                                L248 148
+                                Q248 125 229 111
+                                Q211 97 211 87
+                                L211 64 Z
+                            "/>
+
+                        </clipPath>
+
+                    </defs>
+
+                    <!-- Resplandor del suelo -->
+
+                    <ellipse cx="160" cy="286"
+                             rx="100" ry="13"
+                             fill="#c06aff"
+                             opacity=".2"/>
+
+                    <!-- Fondo del frasco -->
+
+                    <path d="
+                        M109 64
+                        L109 87
+                        Q109 97 91 111
+                        Q72 125 72 148
+                        L72 249
+                        Q72 275 100 278
+                        L220 278
+                        Q248 275 248 249
+                        L248 148
+                        Q248 125 229 111
+                        Q211 97 211 87
+                        L211 64 Z
+                    "
+                    fill="#381a4d"
+                    fill-opacity=".65"/>
+
+                    <!-- Muchas estrellas decorativas -->
+
+                    <g id="jarStars"
+                       clip-path="url(#jarClip)">
+                    </g>
+
+                    <!-- Cristal -->
+
+                    <path d="
+                        M109 64
+                        L109 87
+                        Q109 97 91 111
+                        Q72 125 72 148
+                        L72 249
+                        Q72 275 100 278
+                        L220 278
+                        Q248 275 248 249
+                        L248 148
+                        Q248 125 229 111
+                        Q211 97 211 87
+                        L211 64 Z
+                    "
+                    fill="url(#glass)"
+                    stroke="#dba5f4"
+                    stroke-width="2"/>
+
+                    <!-- Reflejos -->
+
+                    <path d="
+                        M88 150
+                        L88 234
+                        Q88 255 103 259
+                    "
+                    stroke="white"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    fill="none"
+                    opacity=".25"/>
+
+                    <path d="M232 154 L232 226"
+                          stroke="white"
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          opacity=".15"/>
+
+                    <!-- Tapa rosa -->
+
+                    <rect x="101" y="43"
+                          width="118" height="32"
+                          rx="8"
+                          fill="url(#lid)"
+                          stroke="#ffd0e8"/>
+
+                    <g id="lidLines"></g>
+
+                    <!-- Listón morado -->
+
+                    <path d="M109 86 H211"
+                          stroke="#c18aff"
+                          stroke-width="12"/>
+
+                    <path d="
+                        M160 86
+                        C95 33 100 111 160 86
+                        C225 33 220 111 160 86
+                        M160 86 L136 120
+                        M160 86 L184 120
+                    "
+                    stroke="url(#ribbon)"
+                    stroke-width="12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="#8f4fc2"/>
+
+                    <circle cx="160" cy="86"
+                            r="9"
+                            fill="#e1aaff"/>
+
+                    <!-- Etiqueta -->
+
+                    <rect x="113" y="165"
+                          width="94" height="48"
+                          rx="7"
+                          fill="#30173e"
+                          stroke="#d8a5ee"
+                          opacity=".96"/>
+
+                    <text x="160" y="184"
+                          fill="#ffd1ec"
+                          font-family="Georgia"
+                          font-size="13"
+                          text-anchor="middle">
+                        Para mi
+                    </text>
+
+                    <text x="160" y="201"
+                          fill="#ffd1ec"
+                          font-family="Georgia"
+                          font-size="15"
+                          text-anchor="middle">
+                        princesa ♡
+                    </text>
+
+                </svg>
+
+                <!-- SIETE ESTRELLAS EN EL PISO -->
+
+                <div class="floor" id="floor">
+
+                    <div class="floor-glow"></div>
+
+                </div>
+
+            </div>
+
+            <p id="instruction">
+                Presiona las siete estrellitas del suelo.
+            </p>
+
+            <div class="counter">
+
+                ✧ <span id="score">0</span> / 7 estrellitas ✧
+
+            </div>
+
+            <!-- AGRADECIMIENTOS -->
+
+            <div class="message-card" id="messageCard" hidden>
+
+                <div class="message-star" id="messageStar">★</div>
+
+                <p id="starNumber"></p>
+
+                <p id="starMessage" aria-live="polite"></p>
+
+            </div>
+
+            <!-- FINAL -->
+
+            <section id="final" hidden>
+
+                <div class="final-heart">♥</div>
+
+                <h2 class="highlight">
+                    Gracias por llegar a mi vida.
+                </h2>
+
+                <p class="message">
+                    Si tuviera que poner una estrella
+                    por cada cosa que quiero agradecerte,
+                    no me alcanzaría este frasquito.
+                </p>
+
+                <p class="message">
+                    Gracias por todos estos meses a tu lado,
+                    por cada recuerdo y por cada momento bonito.
+                </p>
+
+                <p class="message">
+                    Te amo muchísimo,
+                    mi hermosa gotita rosa. 🩷
+                </p>
+
+                <div class="tomorrow">
+
+                    Y prepárate, mi princesa...
+
+                    <br><br>
+
+                    Porque mañana no será
+                    un día cualquiera. ♡
+
+                </div>
+
+                <p class="message">
+                    Todavía te esperan 16 sorpresas más...
+                </p>
+
+            </section>
+
+        </section>
+
+        <a class="back" href="../index.html">
+            ← Volver al calendario
+        </a>
+
+    </main>
+
+    <script>
+
+        const unlockDate = Date.UTC(2026, 11, 8, 6, 0, 0);
+
+        const locked = document.getElementById("locked");
+        const unlocked = document.getElementById("unlocked");
+        const countdown = document.getElementById("countdown");
+
+        const jarStars = document.getElementById("jarStars");
+        const lidLines = document.getElementById("lidLines");
+        const floor = document.getElementById("floor");
+
+        const messageCard = document.getElementById("messageCard");
+        const starNumber = document.getElementById("starNumber");
+        const starMessage = document.getElementById("starMessage");
+        const messageStar = document.getElementById("messageStar");
+
+        const score = document.getElementById("score");
+        const instruction = document.getElementById("instruction");
+        const final = document.getElementById("final");
+
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        const messages = [
+
+            "Gracias por cada abrazo que me hace sentir tan bien.",
+
+            "Gracias por permitirme consentirte y hacerte mis pequeños regalitos.",
+
+            "Gracias por escucharme y por los momentos que compartimos.",
+
+            "Gracias por hacerme sentir querido.",
+
+            "Gracias por motivarme a ser una mejor versión de mí mismo.",
+
+            "Gracias por todos los recuerdos que hemos creado juntos.",
+
+            "Gracias por ser tú, mi hermosa gotita rosa."
+
+        ];
+
+        const colors = [
+            "#ff9ed5",
+            "#d59aff",
+            "#8fd8ff",
+            "#ffc8e9",
+            "#bca1ff",
+            "#e5c4ff",
+            "#ffa9cf"
+        ];
+
+        const opened = new Set();
+
+        let started = false;
+
+        // Cuenta regresiva
+
+        function updateCountdown() {
+
+            const remaining = unlockDate - Date.now();
+
+            if (remaining <= 0) {
+
+                locked.hidden = true;
+                unlocked.hidden = false;
+
+                if (!started) {
+
+                    started = true;
+
+                    createJarStars();
+                    createFloorStars();
+
+                }
+
+                return;
+
+            }
+
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const minutes = Math.floor((remaining / 60000) % 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+
+            countdown.innerHTML = `
+                ${days} días<br>
+                ${hours}h : ${minutes}m : ${seconds}s
+            `;
+
+        }
+
+        // Dibujar una estrella
+
+        function starPoints(outer, inner) {
+
+            const points = [];
+
+            for (let i = 0; i < 10; i++) {
+
+                const angle = i * Math.PI / 5 - Math.PI / 2;
+
+                const radius = i % 2 === 0 ? outer : inner;
+
+                points.push(
+                    Math.cos(angle) * radius + "," +
+                    Math.sin(angle) * radius
+                );
+
+            }
+
+            return points.join(" ");
+
+        }
+
+        // Llenar completamente el frasquito
+
+        function createJarStars() {
+
+            // 70 estrellas decorativas
+
+            for (let i = 0; i < 70; i++) {
+
+                const x = 80 + Math.random() * 160;
+                const y = 91 + Math.random() * 180;
+
+                const size = 7 + Math.random() * 8;
+
+                const rotation = Math.random() * 360;
+
+                const color = colors[
+                    Math.floor(Math.random() * colors.length)
+                ];
+
+                const group = document.createElementNS(
+                    svgNS, "g"
+                );
+
+                group.setAttribute(
+                    "transform",
+                    `translate(${x} ${y}) rotate(${rotation})`
+                );
+
+                group.setAttribute("class", "jar-star");
+
+                group.style.animationDelay =
+                    -Math.random() * 4 + "s";
+
+                group.style.animationDuration =
+                    1.5 + Math.random() * 2 + "s";
+
+                // Brillo
+
+                const glow = document.createElementNS(
+                    svgNS, "polygon"
+                );
+
+                glow.setAttribute(
+                    "points",
+                    starPoints(size + 2, size * .5)
+                );
+
+                glow.setAttribute("fill", color);
+
+                glow.setAttribute(
+                    "filter",
+                    "url(#starGlow)"
+                );
+
+                // Estrella
+
+                const star = document.createElementNS(
+                    svgNS, "polygon"
+                );
+
+                star.setAttribute(
+                    "points",
+                    starPoints(size, size * .45)
+                );
+
+                star.setAttribute("fill", color);
+
+                star.setAttribute("stroke", "#ffffff");
+
+                star.setAttribute("stroke-width", ".5");
+
+                group.appendChild(glow);
+                group.appendChild(star);
+
+                jarStars.appendChild(group);
+
+            }
+
+            // Detalles de la tapa
+
+            for (let i = 0; i < 12; i++) {
+
+                const line = document.createElementNS(
+                    svgNS, "line"
+                );
+
+                line.setAttribute("x1", 109 + i * 9);
+                line.setAttribute("x2", 109 + i * 9);
+                line.setAttribute("y1", 49);
+                line.setAttribute("y2", 68);
+
+                line.setAttribute("stroke", "#913d81");
+                line.setAttribute("stroke-width", "2");
+                line.setAttribute("opacity", ".3");
+
+                lidLines.appendChild(line);
+
+            }
+
+        }
+
+        // Crear las siete estrellas interactivas
+
+        function createFloorStars() {
+
+            messages.forEach((message, index) => {
+
+                const button = document.createElement("button");
+
+                button.className = "floor-star";
+
+                button.setAttribute(
+                    "aria-label",
+                    "Abrir estrellita " + (index + 1)
+                );
+
+                button.style.setProperty(
+                    "--glow",
+                    colors[index]
+                );
+
+                button.innerHTML = `
+                    <svg viewBox="-25 -25 50 50">
+
+                        <polygon
+                            points="${starPoints(22, 10)}"
+                            fill="${colors[index]}"
+                            stroke="#ffffff"
+                            stroke-width="1.2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M-5 -12 L-2 -5 L-10 -5"
+                            stroke="white"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            fill="none"
+                            opacity=".8"
+                        />
+
+                    </svg>
+                `;
+
+                button.querySelector("svg")
+                    .style.animationDelay = index * .2 + "s";
+
+                button.addEventListener("click", () => {
+
+                    openStar(index, button);
+
+                });
+
+                floor.appendChild(button);
+
+            });
+
+        }
+
+        // Revelar agradecimiento
+
+        function openStar(index, button) {
+
+            if (Date.now() < unlockDate) return;
+
+            const isNew = !opened.has(index);
+
+            opened.add(index);
+
+            document.querySelectorAll(".floor-star")
+                .forEach(star => {
+
+                    star.classList.remove("selected");
+
+                });
+
+            button.classList.add("opened", "selected");
+
+            starNumber.textContent =
+                "ESTRELLITA " + (index + 1);
+
+            starMessage.textContent = messages[index];
+
+            messageStar.style.color = colors[index];
+
+            messageCard.hidden = false;
+
+            messageCard.classList.remove("animate");
+
+            void messageCard.offsetWidth;
+
+            messageCard.classList.add("animate");
+
+            score.textContent = opened.size;
+
+            if (isNew) {
+
+                createParticles(8);
+
+            }
+
+            if (opened.size === 7 && final.hidden) {
+
+                instruction.textContent =
+                    "Descubriste todas las estrellitas, mi amor.";
+
+                setTimeout(() => {
+
+                    final.hidden = false;
+
+                    createParticles(60);
+
+                }, 1500);
+
+            }
+
+        }
+
+        // Estrellas y corazones flotantes
+
+        function createParticles(amount) {
+
+            for (let i = 0; i < amount; i++) {
+
+                setTimeout(() => {
+
+                    const particle = document.createElement("span");
+
+                    particle.className = "particle";
+
+                    particle.textContent = [
+                        "★", "✦", "✧", "♡", "♥"
+                    ][Math.floor(Math.random() * 5)];
+
+                    particle.style.color = colors[
+                        Math.floor(Math.random() * colors.length)
+                    ];
+
+                    particle.style.textShadow =
+                        "0 0 12px currentColor";
+
+                    particle.style.left =
+                        Math.random() * 100 + "vw";
+
+                    particle.style.fontSize =
+                        12 + Math.random() * 24 + "px";
+
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 6000);
+
+                }, i * 65);
+
+            }
+
+        }
+
+        // Nieve de fondo
+
+        for (let i = 0; i < 35; i++) {
+
+            const snow = document.createElement("span");
+
+            snow.className = "snowflake";
+
+            snow.textContent = "❄";
+
+            snow.style.left =
+                Math.random() * 100 + "vw";
+
+            snow.style.fontSize =
+                5 + Math.random() * 12 + "px";
+
+            snow.style.opacity = Math.random() * .6;
+
+            snow.style.animationDuration =
+                5 + Math.random() * 10 + "s";
+
+            snow.style.animationDelay =
+                -Math.random() * 15 + "s";
+
+            document.body.appendChild(snow);
+
+        }
+
+        updateCountdown();
+
+        setInterval(updateCountdown, 1000);
+
+    </script>
+
+</body>
+</html>

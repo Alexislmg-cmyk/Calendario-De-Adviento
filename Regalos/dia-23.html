@@ -1,0 +1,2070 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Día 23 | Nuestra Navidad</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(
+        ellipse at center,
+        #30213d,
+        #060711 85%
+    );
+    color: white;
+    font-family: Georgia, serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 95%;
+    max-width: 520px;
+    min-height: 100dvh;
+    margin: auto;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.date {
+    color: #e5c58c;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    color: #ffc1e3;
+    font-size: 29px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px #ff79bd60;
+}
+
+h2 {
+    color: #f8d9a0;
+    line-height: 1.6;
+}
+
+.message {
+    color: #efdaef;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+#countdown {
+    color: #ffc1e3;
+    font-size: 25px;
+    line-height: 1.8;
+    margin: 30px auto;
+}
+
+/* ESCENARIO NAVIDEÑO */
+
+.scene {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    margin: 15px auto;
+    border: 1px solid #d6b87950;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 0 30px #c18aff20;
+}
+
+.scene svg {
+    display: block;
+    width: 100%;
+}
+
+.room-glow {
+    opacity: 0;
+    transition: opacity 3s;
+}
+
+.scene.lit .room-glow {
+    opacity: .8;
+}
+
+/* ESFERAS DEL ÁRBOL */
+
+.tree-ornament {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.tree-ornament.placed {
+    animation: placeOrnament .8s ease both;
+}
+
+.tree-light {
+    opacity: .1;
+    transition: opacity 2s;
+}
+
+.scene.lit .tree-light {
+    animation: blink 2s infinite alternate;
+    animation-delay: var(--delay);
+}
+
+.garland {
+    opacity: .2;
+    transition: opacity 2s;
+}
+
+.scene.lit .garland {
+    opacity: 1;
+}
+
+.tree-star {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.scene.lit .tree-star {
+    animation: starLight 1.5s ease both;
+    filter: drop-shadow(0 0 12px #ffe4a0);
+}
+
+/* GOTITAS */
+
+.breathe {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.blue-position {
+    transform: translate(59px, 317px);
+    transition: transform 2.5s ease-in-out;
+}
+
+.pink-position {
+    transform: translate(301px, 317px);
+    transition: transform 2.5s ease-in-out;
+}
+
+.scene.together .blue-position {
+    transform: translate(143px, 325px);
+}
+
+.scene.together .pink-position {
+    transform: translate(217px, 325px);
+}
+
+.hug {
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+.scene.hugging .hug {
+    opacity: 1;
+}
+
+.heart {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heartbeat 2s infinite;
+}
+
+/* GATITOS */
+
+#cats {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.scene.celebrating #cats {
+    opacity: 1;
+}
+
+.cat-motion {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: catBounce 2s infinite ease-in-out;
+    animation-delay: var(--delay);
+}
+
+.cat-tail {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: tail 1.5s infinite alternate;
+}
+
+/* REGALITO FINAL */
+
+.last-gift {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+}
+
+.scene.last-surprise .last-gift {
+    animation: giftAppear 1.5s ease both;
+}
+
+#giftButton {
+    position: absolute;
+    left: 41%;
+    top: 60%;
+    width: 18%;
+    height: 17%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ESFERAS INTERACTIVAS */
+
+.ornaments {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 25px auto;
+}
+
+.ornament-button {
+    position: relative;
+    width: 49px;
+    height: 49px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: radial-gradient(
+        circle at 30% 25%,
+        white,
+        var(--color) 30%,
+        var(--dark) 90%
+    );
+    box-shadow: 0 0 14px var(--color);
+    transition: opacity .5s, transform .5s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ornament-button::before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 9px;
+    left: 17px;
+    top: -5px;
+    border-radius: 3px;
+    background: #e5c58c;
+}
+
+.ornament-button::after {
+    content: "♡";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 23px;
+}
+
+.ornament-button:disabled {
+    opacity: .2;
+    transform: scale(.75);
+    cursor: default;
+    box-shadow: none;
+}
+
+.progress {
+    width: 85%;
+    height: 7px;
+    background: #ffffff15;
+    border-radius: 20px;
+    margin: 15px auto;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+        90deg,
+        #69ceff,
+        #ff79bd,
+        #f8d9a0
+    );
+    transition: width .5s;
+}
+
+#counter {
+    color: #d6b6ff;
+    font-size: 14px;
+}
+
+#wishCard {
+    min-height: 145px;
+    padding: 15px;
+    margin: 20px auto;
+    border: 1px solid #d6b87940;
+    border-radius: 18px;
+    background: #ffffff06;
+}
+
+#wishTitle {
+    font-size: 21px;
+    margin: 5px auto 15px;
+}
+
+#wishMessage {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #efdaef;
+}
+
+.reveal {
+    animation: appear .7s ease both;
+}
+
+/* ESTRELLA INTERACTIVA */
+
+#starButton {
+    display: block;
+    border: none;
+    background: transparent;
+    color: #ffe4a0;
+    font-size: 75px;
+    text-shadow: 0 0 25px #ffd16b;
+    margin: 10px auto;
+    padding: 0;
+    cursor: pointer;
+    animation: heartbeat 2s infinite;
+    touch-action: manipulation;
+}
+
+/* NIEVE */
+
+.snowflake {
+    position: fixed;
+    top: -30px;
+    color: #f4e7ff;
+    pointer-events: none;
+    z-index: 3;
+    text-shadow: 0 0 8px currentColor;
+    animation: snowfall linear forwards;
+}
+
+.window-snow {
+    animation: windowSnow 5s infinite linear;
+    animation-delay: var(--delay);
+}
+
+/* DEDICATORIA FINAL */
+
+#final {
+    animation: appear 2s ease both;
+}
+
+.final-heart {
+    font-size: 80px;
+    color: #ffc1e3;
+    text-shadow:
+        -10px 0 25px #48baff,
+        10px 0 25px #ff49ac;
+    animation: heartbeat 2s infinite;
+}
+
+.divider {
+    color: #e5c58c;
+    letter-spacing: 8px;
+    margin: 25px auto;
+}
+
+.action,
+.back {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 14px 25px;
+    border: 1px solid #c6a66d;
+    border-radius: 30px;
+    background: #ffffff08;
+    color: #f8d9a0;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.tomorrow {
+    padding: 20px;
+    margin: 25px auto;
+    border: 1px solid #ff9bd560;
+    border-radius: 20px;
+    background: #ff9bd508;
+}
+
+.tomorrow-number {
+    font-size: 65px;
+    color: #ffc1e3;
+    text-shadow: 0 0 20px #ff79bd70;
+}
+
+#giftMessage {
+    color: #ffc1e3;
+    font-size: 17px;
+    line-height: 1.8;
+    min-height: 50px;
+}
+
+/* ANIMACIONES */
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025, .97);
+    }
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes blink {
+    from {
+        opacity: .35;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes placeOrnament {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(.3);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes starLight {
+    from {
+        opacity: 0;
+        transform: translateY(-25px) scale(.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes catBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes tail {
+    from {
+        transform: rotate(-7deg);
+    }
+
+    to {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes giftAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes snowfall {
+    to {
+        transform: translate(var(--drift), 110vh)
+                   rotate(180deg);
+        opacity: .2;
+    }
+}
+
+@keyframes windowSnow {
+    from {
+        transform: translateY(-125px);
+    }
+
+    to {
+        transform: translateY(125px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .breathe,
+    .heart,
+    .cat-motion,
+    .cat-tail,
+    .final-heart,
+    #starButton {
+        animation: none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <p class="date">23 DE DICIEMBRE · 2026</p>
+
+    <!-- REGALO BLOQUEADO -->
+
+    <section id="locked">
+
+        <h1>Una víspera mágica 🔒</h1>
+
+        <p class="message">
+            Nuestra pequeña familia
+            tiene algo que preparar.
+        </p>
+
+        <div id="countdown"></div>
+
+    </section>
+
+    <!-- REGALO DESBLOQUEADO -->
+
+    <section id="unlocked" hidden>
+
+        <h1 id="title">
+            Vamos a decorar nuestro arbolito,
+            mi princesa
+        </h1>
+
+        <p class="message" id="intro">
+            Nuestra Navidad necesita
+            un poquito de tu magia.
+        </p>
+
+        <div class="scene" id="scene">
+
+            <svg viewBox="0 0 360 420"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+
+                    <radialGradient id="room">
+
+                        <stop stop-color="#43344c"/>
+
+                        <stop offset="1"
+                              stop-color="#151425"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="warmLight">
+
+                        <stop stop-color="#ffd69b"
+                              stop-opacity=".5"/>
+
+                        <stop offset="1"
+                              stop-color="#ffd69b"
+                              stop-opacity="0"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="tree"
+                                    x2="100%" y2="100%">
+
+                        <stop stop-color="#438a70"/>
+
+                        <stop offset="1"
+                              stop-color="#123b36"/>
+
+                    </linearGradient>
+
+                    <radialGradient id="blue"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#d2f8ff"/>
+
+                        <stop offset=".4"
+                              stop-color="#55caff"/>
+
+                        <stop offset="1"
+                              stop-color="#1754bc"/>
+
+                    </radialGradient>
+
+                    <radialGradient id="pink"
+                                    cx="30%" cy="20%" r="85%">
+
+                        <stop stop-color="#ffe5f4"/>
+
+                        <stop offset=".4"
+                              stop-color="#ff9cd5"/>
+
+                        <stop offset="1"
+                              stop-color="#b52c85"/>
+
+                    </radialGradient>
+
+                    <linearGradient id="love">
+
+                        <stop stop-color="#69ceff"/>
+
+                        <stop offset="1"
+                              stop-color="#ff79bd"/>
+
+                    </linearGradient>
+
+                    <clipPath id="windowClip">
+
+                        <rect x="20" y="30"
+                              width="103" height="125"
+                              rx="5"/>
+
+                    </clipPath>
+
+                </defs>
+
+                <!-- HABITACIÓN -->
+
+                <rect width="360" height="420"
+                      fill="url(#room)"/>
+
+                <rect y="320" width="360" height="100"
+                      fill="#211b2e"/>
+
+                <ellipse cx="180" cy="363"
+                         rx="165" ry="37"
+                         fill="#715073"
+                         opacity=".4"/>
+
+                <!-- VENTANA -->
+
+                <rect x="20" y="30"
+                      width="103" height="125"
+                      rx="5"
+                      fill="#101d38"
+                      stroke="#82718c"
+                      stroke-width="5"/>
+
+                <g clip-path="url(#windowClip)">
+
+                    <circle cx="91" cy="57"
+                            r="16"
+                            fill="#fff0cb"/>
+
+                    <g id="windowSnow"></g>
+
+                </g>
+
+                <path d="M71 30 V155 M20 93 H123"
+                      stroke="#82718c"
+                      stroke-width="4"/>
+
+                <!-- CUADRO NAVIDEÑO -->
+
+                <rect x="271" y="36"
+                      width="68" height="74"
+                      rx="4"
+                      fill="#634759"
+                      stroke="#d6b879"
+                      stroke-width="3"/>
+
+                <text x="305" y="59"
+                      text-anchor="middle"
+                      font-size="11"
+                      fill="#f8d9a0">
+                    NUESTRA
+                </text>
+
+                <text x="305" y="76"
+                      text-anchor="middle"
+                      font-size="12"
+                      fill="#f8d9a0">
+                    NAVIDAD
+                </text>
+
+                <text x="305" y="97"
+                      text-anchor="middle"
+                      font-size="18"
+                      fill="#ffc1e3">♡</text>
+
+                <!-- LUZ CÁLIDA -->
+
+                <ellipse class="room-glow"
+                         cx="180" cy="185"
+                         rx="180" ry="200"
+                         fill="url(#warmLight)"/>
+
+                <!-- ÁRBOL DE NAVIDAD -->
+
+                <rect x="166" y="246"
+                      width="28" height="55"
+                      rx="5"
+                      fill="#85593e"/>
+
+                <path d="
+                    M180 44
+                    L123 134 H146
+                    L99 200 H128
+                    L77 269 H283
+                    L232 200 H261
+                    L214 134 H237Z
+                "
+                fill="url(#tree)"/>
+
+                <path class="garland"
+                      d="
+                          M135 126 Q184 158 225 139
+                          M115 194 Q181 227 246 197
+                          M96 252 Q180 281 265 248
+                      "
+                      stroke="#dfbd7a"
+                      stroke-width="3"
+                      fill="none"/>
+
+                <g id="treeLights"></g>
+
+                <g id="treeOrnaments"></g>
+
+                <!-- ESTRELLA -->
+
+                <path class="tree-star"
+                      d="
+                          M180 17
+                          L187 34 L206 35
+                          L191 47 L196 65
+                          L180 54 L164 65
+                          L169 47 L154 35
+                          L173 34Z
+                      "
+                      fill="#ffe4a0"
+                      stroke="#fff3cb"
+                      stroke-width="2"/>
+
+                <!-- REGALITOS -->
+
+                <g id="presents"></g>
+
+                <!-- GOTITAS NAVIDEÑAS -->
+
+                <g id="characters"></g>
+
+                <!-- ABRACITO -->
+
+                <g class="hug">
+
+                    <path d="M153 337 Q180 355 217 337"
+                          stroke="url(#blue)"
+                          stroke-width="12"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <path d="M207 346 Q180 366 143 346"
+                          stroke="url(#pink)"
+                          stroke-width="12"
+                          stroke-linecap="round"
+                          fill="none"/>
+
+                    <g transform="translate(180 254)">
+
+                        <path class="heart"
+                              d="
+                                  M0 12
+                                  C-30 -5 -15 -23 0 -10
+                                  C15 -23 30 -5 0 12Z
+                              "
+                              fill="url(#love)"/>
+
+                    </g>
+
+                </g>
+
+                <!-- CINCO GATITOS -->
+
+                <g id="cats"></g>
+
+                <!-- REGALO DEL DÍA 24 -->
+
+                <g class="last-gift">
+
+                    <rect x="151" y="267"
+                          width="58" height="52"
+                          rx="5"
+                          fill="#e47eb5"
+                          stroke="#ffd2e9"
+                          stroke-width="2"/>
+
+                    <rect x="147" y="263"
+                          width="66" height="13"
+                          rx="4"
+                          fill="#ffb3da"/>
+
+                    <path d="M180 264 V319"
+                          stroke="#f8d9a0"
+                          stroke-width="7"/>
+
+                    <path d="
+                        M180 263
+                        Q147 234 155 254
+                        Q161 266 180 263
+                        Q213 234 205 254
+                        Q199 266 180 263
+                    "
+                    fill="none"
+                    stroke="#f8d9a0"
+                    stroke-width="5"/>
+
+                    <rect x="162" y="280"
+                          width="36" height="30"
+                          rx="5"
+                          fill="#51263e"/>
+
+                    <text x="180" y="300"
+                          text-anchor="middle"
+                          font-size="20"
+                          fill="#ffe4a0">24</text>
+
+                    <text x="210" y="281"
+                          font-size="15">🔒</text>
+
+                </g>
+
+                <text x="180" y="409"
+                      text-anchor="middle"
+                      font-size="11"
+                      letter-spacing="2"
+                      fill="#f4d7e8">
+                    NUESTRA NAVIDAD ♡
+                </text>
+
+            </svg>
+
+            <button id="giftButton"
+                    aria-label="Regalo del día 24"
+                    hidden>
+            </button>
+
+        </div>
+
+        <!-- COLOCAR ESFERAS -->
+
+        <section id="interaction">
+
+            <p id="counter">
+                0 de 7 esferas colocadas
+            </p>
+
+            <div class="progress">
+
+                <div id="progressFill"></div>
+
+            </div>
+
+            <div class="ornaments"
+                 id="ornamentButtons">
+            </div>
+
+            <div id="wishCard">
+
+                <h2 id="wishTitle">
+                    Siete deseos navideños
+                </h2>
+
+                <p id="wishMessage">
+                    Presiona cada esferita
+                    para colocarla en nuestro arbolito
+                    y descubrir un deseo para nosotros.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- COLOCAR ESTRELLA -->
+
+        <section id="starSection" hidden>
+
+            <h2>
+                Solamente falta una cosita...
+            </h2>
+
+            <p class="message">
+                Coloca la estrella, mi princesa.
+            </p>
+
+            <button id="starButton"
+                    aria-label="Colocar estrella">
+                ★
+            </button>
+
+        </section>
+
+        <p class="message"
+           id="celebrationMessage"
+           hidden>
+        </p>
+
+        <p id="giftMessage" hidden></p>
+
+        <!-- DEDICATORIA FINAL -->
+
+        <section id="final" hidden>
+
+            <div class="divider">✧ ★ ✧</div>
+
+            <h2>
+                Mira qué bonito quedó
+                nuestro arbolito, mi princesa.
+            </h2>
+
+            <p class="message">
+                Nuestras dos gotitas,
+                nuestros cinco gatitos
+                y un montón de regalitos.
+            </p>
+
+            <p class="message">
+                Qué bonito sería algún día
+                decorar nuestro propio arbolito
+                de Navidad juntos.
+            </p>
+
+            <p class="message">
+                Poner las esferas,
+                encender las lucecitas
+                y cuidar que nuestros cinco gatitos
+                no terminen tirándolo.
+                JAJAJAJA.
+            </p>
+
+            <div class="divider">✧ ♡ ✧</div>
+
+            <p class="message">
+                Durante estos 23 días intenté
+                regalarte un pedacito
+                de todo lo bonito que siento por ti.
+            </p>
+
+            <p class="message">
+                Cada fotografía,
+                cada corazoncito,
+                cada animación y cada palabra
+                fueron preparados pensando en ti.
+            </p>
+
+            <p class="message">
+                Espero haberte sacado
+                muchas sonrisitas,
+                mi hermosa princesa.
+            </p>
+
+            <div class="final-heart">♥</div>
+
+            <h2>
+                Pero todavía me queda
+                algo más que decirte...
+            </h2>
+
+            <div class="tomorrow">
+
+                <div style="font-size:55px">🎁</div>
+
+                <div class="tomorrow-number">24</div>
+
+                <p>Tu último regalito</p>
+
+                <p id="tomorrowStatus">
+                    Disponible mañana a las 00:00 🔒
+                </p>
+
+                <p id="tomorrowCountdown"></p>
+
+                <a class="action"
+                   id="tomorrowLink"
+                   href="dia-24.html"
+                   hidden>
+                    Abrir mi último regalito ♡
+                </a>
+
+            </div>
+
+            <h2>
+                Nos vemos mañana,
+                mi hermosa gotita rosa.
+            </h2>
+
+            <p class="message">
+                Te amo muchísimo, Karina.
+            </p>
+
+            <p class="message">
+                Con amor, tu gotita azul. 💙
+            </p>
+
+            <div class="divider">✧ ★ ✧</div>
+
+            <p class="message">
+                Todavía te espera una sorpresa más...
+            </p>
+
+            <button class="action" id="replay">
+                Volver a decorar nuestro arbolito ♡
+            </button>
+
+        </section>
+
+    </section>
+
+    <a class="back" href="../index.html">
+        ← Volver al calendario
+    </a>
+
+</main>
+
+<script>
+
+const unlockDate = Date.UTC(2026, 11, 23, 6, 0, 0);
+
+const finalUnlockDate =
+    Date.UTC(2026, 11, 24, 6, 0, 0);
+
+const locked = document.getElementById("locked");
+const unlocked = document.getElementById("unlocked");
+const countdown = document.getElementById("countdown");
+
+const scene = document.getElementById("scene");
+const title = document.getElementById("title");
+const intro = document.getElementById("intro");
+
+const interaction =
+    document.getElementById("interaction");
+
+const ornamentButtons =
+    document.getElementById("ornamentButtons");
+
+const treeOrnaments =
+    document.getElementById("treeOrnaments");
+
+const wishCard = document.getElementById("wishCard");
+const wishTitle = document.getElementById("wishTitle");
+const wishMessage = document.getElementById("wishMessage");
+
+const counter = document.getElementById("counter");
+
+const progressFill =
+    document.getElementById("progressFill");
+
+const starSection =
+    document.getElementById("starSection");
+
+const starButton =
+    document.getElementById("starButton");
+
+const celebrationMessage =
+    document.getElementById("celebrationMessage");
+
+const giftButton =
+    document.getElementById("giftButton");
+
+const giftMessage =
+    document.getElementById("giftMessage");
+
+const final = document.getElementById("final");
+
+let placed = new Set();
+let timers = [];
+let started = false;
+let celebrating = false;
+let snowInterval = null;
+
+/* LOS SIETE DESEOS */
+
+const wishes = [
+
+    {
+        title: "Nuestro primer deseo",
+        color: "#ff9bcf",
+        dark: "#a52e71",
+        x: 180,
+        y: 95,
+        message:
+            "Que sigamos compartiendo muchísimas " +
+            "sonrisas y momentos bonitos."
+    },
+
+    {
+        title: "Nuestro segundo deseo",
+        color: "#75c7ff",
+        dark: "#205aa5",
+        x: 153,
+        y: 142,
+        message:
+            "Que nunca nos falten las ganas de " +
+            "escucharnos y comprendernos."
+    },
+
+    {
+        title: "Nuestro tercer deseo",
+        color: "#d9a1ff",
+        dark: "#773d9e",
+        x: 207,
+        y: 151,
+        message:
+            "Que tengamos muchos abracitos, " +
+            "besitos y ratitos acostaditos juntos."
+    },
+
+    {
+        title: "Nuestro cuarto deseo",
+        color: "#f4cf8d",
+        dark: "#ad672d",
+        x: 133,
+        y: 194,
+        message:
+            "Que podamos seguir cumpliendo " +
+            "nuestras metas y celebrando nuestros logros."
+    },
+
+    {
+        title: "Nuestro quinto deseo",
+        color: "#ff85ac",
+        dark: "#a92b5e",
+        x: 225,
+        y: 205,
+        message:
+            "Que nuestra pequeña familia del Rey León " +
+            "tenga mucha salud y muchísimos apapachos."
+    },
+
+    {
+        title: "Nuestro sexto deseo",
+        color: "#a9b7ff",
+        dark: "#5255aa",
+        x: 112,
+        y: 248,
+        message:
+            "Que sigamos creando recuerdos " +
+            "que algún día podamos mirar con una sonrisa."
+    },
+
+    {
+        title: "Nuestro séptimo deseo",
+        color: "#f7b7e5",
+        dark: "#a83e86",
+        x: 192,
+        y: 249,
+        message:
+            "Que esta sea una de muchas Navidades " +
+            "que podamos compartir, mi princesa."
+    }
+
+];
+
+function random(min, max) {
+
+    return min + Math.random() * (max - min);
+
+}
+
+function later(callback, delay) {
+
+    timers.push(setTimeout(callback, delay));
+
+}
+
+function formatTime(remaining) {
+
+    const days =
+        Math.floor(remaining / 86400000);
+
+    const hours =
+        Math.floor(remaining / 3600000) % 24;
+
+    const minutes =
+        Math.floor(remaining / 60000) % 60;
+
+    const seconds =
+        Math.floor(remaining / 1000) % 60;
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+}
+
+/* CUENTA REGRESIVA */
+
+function updateCountdown() {
+
+    const remaining = unlockDate - Date.now();
+
+    if (remaining <= 0) {
+
+        locked.hidden = true;
+        unlocked.hidden = false;
+
+        if (!started) {
+
+            started = true;
+
+            createOrnaments();
+
+        }
+
+    } else {
+
+        countdown.textContent =
+            formatTime(remaining);
+
+    }
+
+    const tomorrowRemaining =
+        finalUnlockDate - Date.now();
+
+    const tomorrowStatus =
+        document.getElementById("tomorrowStatus");
+
+    const tomorrowCountdown =
+        document.getElementById("tomorrowCountdown");
+
+    const tomorrowLink =
+        document.getElementById("tomorrowLink");
+
+    if (tomorrowRemaining <= 0) {
+
+        tomorrowStatus.textContent =
+            "¡Tu último regalito ya está disponible! ♡";
+
+        tomorrowCountdown.textContent = "";
+
+        tomorrowLink.hidden = false;
+
+    } else {
+
+        tomorrowStatus.textContent =
+            "Disponible el 24 de diciembre a las 00:00 🔒";
+
+        tomorrowCountdown.textContent =
+            formatTime(tomorrowRemaining);
+
+        tomorrowLink.hidden = true;
+
+    }
+
+}
+
+/* NIEVE DE LA VENTANA */
+
+let windowSnow = "";
+
+for (let i = 0; i < 35; i++) {
+
+    windowSnow += `
+        <circle class="window-snow"
+                cx="${random(23, 120)}"
+                cy="${random(30, 155)}"
+                r="${random(.6, 2)}"
+                fill="white"
+                opacity=".8"
+                style="--delay:${random(-5, 0)}s"/>
+    `;
+
+}
+
+document.getElementById("windowSnow")
+    .innerHTML = windowSnow;
+
+/* LUCES DEL ÁRBOL */
+
+let lights = "";
+
+const lightColors = [
+    "#ff9bd5",
+    "#69ceff",
+    "#d9b6ff",
+    "#ffe4a0"
+];
+
+for (let i = 0; i < 36; i++) {
+
+    const y = random(90, 260);
+
+    const width =
+        (y - 44) * .39;
+
+    const x =
+        180 + random(-width, width);
+
+    const color =
+        lightColors[i % lightColors.length];
+
+    lights += `
+        <circle class="tree-light"
+                cx="${x}"
+                cy="${y}"
+                r="3.2"
+                fill="${color}"
+                style="
+                    --delay:${random(-2, 0)}s;
+                    filter:drop-shadow(0 0 5px ${color});
+                "/>
+    `;
+
+}
+
+document.getElementById("treeLights")
+    .innerHTML = lights;
+
+/* DIBUJAR REGALITOS */
+
+function present(x, y, w, h, color) {
+
+    return `
+        <g transform="translate(${x} ${y})">
+
+            <rect width="${w}"
+                  height="${h}"
+                  rx="3"
+                  fill="${color}"/>
+
+            <rect x="-3" y="-3"
+                  width="${w + 6}"
+                  height="9"
+                  rx="3"
+                  fill="${color}"
+                  stroke="#ffffff30"/>
+
+            <path d="
+                M${w / 2} 0 V${h}
+                M0 12 H${w}
+            "
+            stroke="#f8d69b"
+            stroke-width="5"/>
+
+            <path d="
+                M${w / 2} 0
+                q-20 -18 -15 -2
+                q4 7 15 2
+                q20 -18 15 -2
+                q-4 7 -15 2
+            "
+            stroke="#f8d69b"
+            stroke-width="3"
+            fill="none"/>
+
+        </g>
+    `;
+
+}
+
+document.getElementById("presents").innerHTML =
+
+    present(91, 282, 42, 34, "#bc73ac")
+
+    + present(220, 280, 43, 36, "#6a9ed0")
+
+    + present(265, 294, 30, 26, "#a38bdb");
+
+/* NUESTRAS GOTITAS CON GORRITOS */
+
+function drop(color, positionClass) {
+
+    const hatColor =
+        color === "blue"
+        ? "#438dcc"
+        : "#e67bb1";
+
+    const glow =
+        color === "blue"
+        ? "#48baff"
+        : "#ff79bd";
+
+    return `
+        <g class="${positionClass}">
+
+            <g transform="scale(.83)">
+
+                <g class="breathe"
+                   style="filter:drop-shadow(0 0 8px ${glow})">
+
+                    <g fill="url(#${color})">
+
+                        <ellipse cy="15"
+                                 rx="26" ry="31"/>
+
+                        <ellipse cx="-14" cy="40"
+                                 rx="13" ry="10"/>
+
+                        <ellipse cx="14" cy="40"
+                                 rx="13" ry="10"/>
+
+                        <ellipse cx="-27" cy="14"
+                                 rx="9" ry="16"/>
+
+                        <ellipse cx="27" cy="14"
+                                 rx="9" ry="16"/>
+
+                        <ellipse cy="-27"
+                                 rx="39" ry="39"/>
+
+                    </g>
+
+                    <ellipse cx="-15" cy="-44"
+                             rx="13" ry="7"
+                             fill="white"
+                             opacity=".55"/>
+
+                    <g fill="#10101e">
+
+                        <ellipse cx="-12" cy="-24"
+                                 rx="4.5" ry="9"/>
+
+                        <ellipse cx="12" cy="-24"
+                                 rx="4.5" ry="9"/>
+
+                    </g>
+
+                    <!-- GORRITO NAVIDEÑO -->
+
+                    <path d="
+                        M-35 -48
+                        Q-22 -104 23 -83
+                        L37 -54Z
+                    "
+                    fill="${hatColor}"/>
+
+                    <rect x="-39" y="-57"
+                          width="78" height="13"
+                          rx="6"
+                          fill="#fff2f5"/>
+
+                    <circle cx="24" cy="-83"
+                            r="10"
+                            fill="#fff2f5"/>
+
+                </g>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+document.getElementById("characters").innerHTML =
+
+    drop("blue", "blue-position")
+
+    + drop("pink", "pink-position");
+
+/* NUESTROS CINCO GATITOS */
+
+function cat(x, y, scale, color, stripe, type, delay) {
+
+    let markings = "";
+
+    if (type === "tabby") {
+
+        markings = `
+            <path d="
+                M-13 -19 L-10 -10
+                M0 -22 V-11
+                M13 -19 L10 -10
+                M-24 -4 L-16 -1
+                M24 -4 L16 -1
+                M-14 20 L-10 29
+                M5 20 L10 29
+            "
+            fill="none"
+            stroke="${stripe}"
+            stroke-width="4"
+            stroke-linecap="round"/>
+        `;
+
+    }
+
+    if (type === "calico") {
+
+        markings = `
+            <path d="
+                M-23 -17
+                Q-5 -28 -5 -8
+                Q-9 4 -25 -1Z
+            "
+            fill="#96939e"/>
+
+            <path d="
+                M8 -21
+                Q28 -16 24 4
+                Q10 5 8 -21Z
+            "
+            fill="#e9a04c"/>
+
+            <ellipse cx="-10" cy="23"
+                     rx="12" ry="9"
+                     fill="#e9a04c"/>
+        `;
+
+    }
+
+    return `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+
+            <g class="cat-motion"
+               style="--delay:${delay}s">
+
+                <path class="cat-tail"
+                      d="M18 30 Q46 31 36 8"
+                      stroke="${color}"
+                      stroke-width="10"
+                      stroke-linecap="round"
+                      fill="none"/>
+
+                <ellipse cy="25"
+                         rx="27" ry="23"
+                         fill="${color}"/>
+
+                <path d="
+                    M-23 -7 L-23 -33 L-4 -18
+                    M23 -7 L23 -33 L4 -18
+                "
+                fill="${color}"
+                stroke="${color}"
+                stroke-width="3"
+                stroke-linejoin="round"/>
+
+                <path d="
+                    M-19 -25 L-19 -10 L-9 -18
+                    M19 -25 L19 -10 L9 -18
+                "
+                fill="#eab0b7"/>
+
+                <ellipse rx="26" ry="23"
+                         fill="${color}"/>
+
+                ${markings}
+
+                <ellipse cx="-10" cy="-2"
+                         rx="3.5" ry="5"
+                         fill="#302631"/>
+
+                <ellipse cx="10" cy="-2"
+                         rx="3.5" ry="5"
+                         fill="#302631"/>
+
+                <path d="M-3 8 Q0 5 3 8 L0 11Z"
+                      fill="#e58d9e"/>
+
+                <path d="
+                    M0 11 Q-4 16 -8 12
+                    M0 11 Q4 16 8 12
+                "
+                stroke="#302631"
+                stroke-width="1.5"
+                fill="none"/>
+
+                <ellipse cx="-13" cy="43"
+                         rx="11" ry="6"
+                         fill="${color}"/>
+
+                <ellipse cx="13" cy="43"
+                         rx="11" ry="6"
+                         fill="${color}"/>
+
+            </g>
+
+        </g>
+    `;
+
+}
+
+document.getElementById("cats").innerHTML =
+
+    // Simba
+
+    cat(
+        40, 363, .57,
+        "#e9a04c", "#ba702e",
+        "tabby", 0
+    )
+
+    // Nala
+
+    + cat(
+        107, 376, .52,
+        "#fff3e7", "#96939e",
+        "calico", -.5
+    )
+
+    // Kiara
+
+    + cat(
+        180, 377, .49,
+        "#99959e", "#53515c",
+        "tabby", -1
+    )
+
+    // Kopa
+
+    + cat(
+        253, 376, .52,
+        "#99959e", "#53515c",
+        "tabby", -1.5
+    )
+
+    // Kion
+
+    + cat(
+        320, 363, .57,
+        "#c7c4c9", "#b8b4bd",
+        "plain", -2
+    );
+
+/* CREAR ESFERITAS */
+
+function createOrnaments() {
+
+    ornamentButtons.innerHTML = "";
+
+    treeOrnaments.innerHTML = "";
+
+    wishes.forEach((wish, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "ornament-button";
+
+        button.style.setProperty(
+            "--color",
+            wish.color
+        );
+
+        button.style.setProperty(
+            "--dark",
+            wish.dark
+        );
+
+        button.setAttribute(
+            "aria-label",
+            `Colocar esfera ${index + 1}`
+        );
+
+        button.addEventListener("click", () => {
+
+            placeOrnament(index, button);
+
+        });
+
+        ornamentButtons.appendChild(button);
+
+        treeOrnaments.insertAdjacentHTML(
+            "beforeend",
+            `
+                <g transform="translate(${wish.x} ${wish.y})">
+
+                    <g class="tree-ornament"
+                       id="ornament-${index}">
+
+                        <circle r="10"
+                                fill="${wish.color}"
+                                style="
+                                    filter:drop-shadow(
+                                        0 0 6px ${wish.color}
+                                    );
+                                "/>
+
+                        <rect x="-3" y="-13"
+                              width="6" height="5"
+                              rx="1"
+                              fill="#f8d9a0"/>
+
+                        <ellipse cx="-3" cy="-4"
+                                 rx="3" ry="2"
+                                 fill="white"
+                                 opacity=".6"/>
+
+                        <path d="
+                            M0 5
+                            C-8 0 -4 -5 0 -1
+                            C4 -5 8 0 0 5Z
+                        "
+                        fill="white"
+                        opacity=".8"/>
+
+                    </g>
+
+                </g>
+            `
+        );
+
+    });
+
+}
+
+/* COLOCAR UNA ESFERA */
+
+function placeOrnament(index, button) {
+
+    if (
+        celebrating ||
+        placed.has(index) ||
+        Date.now() < unlockDate
+    ) return;
+
+    placed.add(index);
+
+    button.disabled = true;
+
+    document.getElementById(`ornament-${index}`)
+        .classList.add("placed");
+
+    const wish = wishes[index];
+
+    wishTitle.textContent = wish.title;
+
+    wishTitle.style.color = wish.color;
+
+    wishMessage.textContent = wish.message;
+
+    wishCard.style.borderColor =
+        wish.color + "70";
+
+    wishCard.classList.remove("reveal");
+
+    void wishCard.offsetWidth;
+
+    wishCard.classList.add("reveal");
+
+    counter.textContent =
+        `${placed.size} de 7 esferas colocadas`;
+
+    progressFill.style.width =
+        `${placed.size / 7 * 100}%`;
+
+    if (placed.size === 7) {
+
+        later(() => {
+
+            starSection.hidden = false;
+
+            starSection.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        }, 1500);
+
+    }
+
+}
+
+/* ENCENDER EL ÁRBOL */
+
+starButton.addEventListener("click", () => {
+
+    if (
+        celebrating ||
+        placed.size !== 7 ||
+        Date.now() < unlockDate
+    ) return;
+
+    celebrating = true;
+
+    starButton.disabled = true;
+
+    interaction.hidden = true;
+
+    starSection.hidden = true;
+
+    celebrationMessage.hidden = false;
+
+    scene.classList.add("lit");
+
+    title.textContent =
+        "¡Mira nuestro arbolito, mi princesa!";
+
+    intro.textContent =
+        "Qué bonita quedó nuestra Navidad.";
+
+    celebrationMessage.textContent =
+        "Todas nuestras lucecitas están brillando. ♡";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    startSnow();
+
+    later(() => {
+
+        scene.classList.add("celebrating");
+
+        celebrationMessage.textContent =
+            "¡Y llegaron nuestros cinco gatitos!";
+
+    }, 2500);
+
+    later(() => {
+
+        scene.classList.add("together");
+
+        celebrationMessage.textContent =
+            "Ven aquí, mi hermosa gotita rosa.";
+
+    }, 5000);
+
+    later(() => {
+
+        scene.classList.add("hugging");
+
+    }, 7700);
+
+    later(() => {
+
+        scene.classList.add("last-surprise");
+
+        giftButton.hidden = false;
+
+        giftMessage.hidden = false;
+
+        giftMessage.textContent =
+            "Espera... Todavía hay un regalito " +
+            "debajo de nuestro árbol.";
+
+        celebrationMessage.textContent =
+            "Presiona el regalito rosa, mi princesa.";
+
+    }, 9500);
+
+});
+
+/* REGALO DEL DÍA 24 */
+
+giftButton.addEventListener("click", () => {
+
+    if (!celebrating) return;
+
+    if (Date.now() >= finalUnlockDate) {
+
+        window.location.href = "dia-24.html";
+
+        return;
+
+    }
+
+    giftMessage.textContent =
+        "JAJAJAJA, todavía no, mi princesa. " +
+        "Este regalito es para mañana. 🔒";
+
+    if (final.hidden) {
+
+        later(() => {
+
+            final.hidden = false;
+
+            final.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 1500);
+
+    }
+
+});
+
+/* NIEVE NAVIDEÑA */
+
+function createSnowflake() {
+
+    const flake =
+        document.createElement("span");
+
+    flake.className = "snowflake";
+
+    flake.textContent =
+        Math.random() > .7 ? "❄" : "·";
+
+    flake.style.left =
+        random(0, 100) + "vw";
+
+    flake.style.fontSize =
+        random(8, 20) + "px";
+
+    flake.style.color =
+        Math.random() > .5
+        ? "#ffc1e3"
+        : "#c9dcff";
+
+    flake.style.setProperty(
+        "--drift",
+        random(-60, 60) + "px"
+    );
+
+    const duration = random(5, 9);
+
+    flake.style.animationDuration =
+        duration + "s";
+
+    document.body.appendChild(flake);
+
+    setTimeout(() => {
+
+        flake.remove();
+
+    }, duration * 1000);
+
+}
+
+function startSnow() {
+
+    clearInterval(snowInterval);
+
+    snowInterval =
+        setInterval(createSnowflake, 200);
+
+}
+
+/* REPETIR REGALITO */
+
+document.getElementById("replay")
+    .addEventListener("click", () => {
+
+        timers.forEach(timer => clearTimeout(timer));
+
+        timers = [];
+
+        clearInterval(snowInterval);
+
+        snowInterval = null;
+
+        placed.clear();
+
+        celebrating = false;
+
+        scene.className = "scene";
+
+        title.textContent =
+            "Vamos a decorar nuestro arbolito, mi princesa";
+
+        intro.textContent =
+            "Nuestra Navidad necesita un poquito de tu magia.";
+
+        counter.textContent =
+            "0 de 7 esferas colocadas";
+
+        progressFill.style.width = "0%";
+
+        wishTitle.textContent =
+            "Siete deseos navideños";
+
+        wishTitle.style.color = "";
+
+        wishMessage.textContent =
+            "Presiona cada esferita para colocarla " +
+            "en nuestro arbolito y descubrir " +
+            "un deseo para nosotros.";
+
+        wishCard.style.borderColor = "";
+
+        interaction.hidden = false;
+
+        starSection.hidden = true;
+
+        starButton.disabled = false;
+
+        celebrationMessage.hidden = true;
+
+        giftButton.hidden = true;
+
+        giftMessage.hidden = true;
+
+        final.hidden = true;
+
+        document.querySelectorAll(".snowflake")
+            .forEach(flake => flake.remove());
+
+        createOrnaments();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</body>
+</html>
